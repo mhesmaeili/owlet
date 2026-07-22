@@ -3,15 +3,15 @@ package com.owlet.api.service.base;
 import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.mapper.base.CrudMapper;
 import com.owlet.api.repository.base.BaseRepository;
-import com.owlet.api.security.CurrentUserService;
+import com.owlet.api.security.AuditableService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public abstract class CrudServiceImpl<
 
     protected final MAPPER mapper;
 
-    protected final CurrentUserService currentUserService;
+    protected final AuditableService auditableService;
 
     @Override
     @Transactional(readOnly = true)
@@ -108,11 +108,29 @@ public abstract class CrudServiceImpl<
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DTO> search(
             String keyword,
             Pageable pageable) {
 
-        return getAll(pageable);
+
+        Specification<ENTITY> specification =
+                buildSearchSpecification(keyword);
+
+
+        if (specification == null) {
+
+            return getAll(pageable);
+
+        }
+
+
+        return repository
+                .findAll(
+                        specification,
+                        pageable
+                )
+                .map(mapper::toDto);
 
     }
 
@@ -120,9 +138,14 @@ public abstract class CrudServiceImpl<
     public List<DTO> create(
             List<CREATE> list) {
 
-        return list.stream()
-                .map(this::create)
-                .toList();
+        List<ENTITY> entities =
+                list.stream()
+                        .map(mapper::toEntity)
+                        .toList();
+
+        entities = repository.saveAll(entities);
+
+        return mapper.toDto(entities);
 
     }
 
@@ -133,14 +156,18 @@ public abstract class CrudServiceImpl<
 
     @Override
     public long count() {
-        return repository.count();
+        return repository.countByDeletedFalse();
     }
 
     protected ENTITY findEntity(ID id) {
 
         return repository
                 .findByIdAndDeletedFalse(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                entityClass().getSimpleName()
+                                        + " not found : "
+                                        + id));
 
     }
 
@@ -173,8 +200,13 @@ public abstract class CrudServiceImpl<
         if (isSoftDelete()) {
 
             entity.setDeleted(true);
-            entity.setDeletedAt(OffsetDateTime.now());
-            entity.setDeletedBy(currentUserService.getCurrentUserId());
+            entity.setDeletedAt(
+                    auditableService.now()
+            );
+
+            entity.setDeletedBy(
+                    auditableService.currentUserId()
+            );
 
             repository.save(entity);
 
@@ -222,6 +254,15 @@ public abstract class CrudServiceImpl<
 
     protected boolean isSoftDelete() {
         return true;
+    }
+
+    protected abstract Class<ENTITY> entityClass();
+
+    protected Specification<ENTITY> buildSearchSpecification(
+            String keyword) {
+
+        return null;
+
     }
 
 }

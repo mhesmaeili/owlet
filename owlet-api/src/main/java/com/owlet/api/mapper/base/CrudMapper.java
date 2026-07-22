@@ -21,4 +21,5 @@ public interface CrudMapper<
             @MappingTarget ENTITY entity);
 
 
+    List<ENTITY> toEntity(List<CREATE> dto);
 }

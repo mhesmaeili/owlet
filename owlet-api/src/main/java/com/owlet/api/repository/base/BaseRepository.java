@@ -25,4 +25,6 @@ public interface BaseRepository<
     Page<ENTITY> findAllByDeletedFalse(Pageable pageable);
 
     boolean existsByIdAndDeletedFalse(ID id);
+
+    long countByDeletedFalse();
 }

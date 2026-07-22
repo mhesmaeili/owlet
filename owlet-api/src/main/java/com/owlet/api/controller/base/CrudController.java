@@ -1,6 +1,8 @@
 package com.owlet.api.controller.base;
 
 import com.owlet.api.service.base.CrudService;
+import com.owlet.common.response.ApiResponse;
+import com.owlet.common.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,51 +25,102 @@ public abstract class CrudController<
             UPDATE> service;
 
     @GetMapping("/{id}")
-    public DTO get(@PathVariable ID id) {
+    public ApiResponse<DTO> get(
+            @PathVariable ID id) {
 
-        return service.get(id);
+
+        return ApiResponse.success(
+                service.get(id)
+        );
+
     }
 
     @GetMapping
-    public List<DTO> getAll() {
+    public ApiResponse<List<DTO>> getAll() {
 
-        return service.getAll();
+
+        return ApiResponse.success(
+                service.getAll()
+        );
+
     }
 
     @GetMapping("/page")
-    public Page<DTO> getAll(Pageable pageable){
+    public ApiResponse<PageResponse<DTO>> getPage(
+            Pageable pageable) {
 
-        return service.getAll(pageable);
+
+        Page<DTO> page =
+                service.getAll(pageable);
+
+
+        return ApiResponse.success(
+                PageResponse.of(page)
+        );
+
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<PageResponse<DTO>> search(
+            @RequestParam(required = false)
+            String keyword,
+
+            Pageable pageable) {
+
+
+        Page<DTO> page =
+                service.search(
+                        keyword,
+                        pageable
+                );
+
+
+        return ApiResponse.success(
+                PageResponse.of(page)
+        );
 
     }
 
     @PostMapping
-    public DTO create(
+    public ApiResponse<DTO> create(
             @RequestBody CREATE dto) {
 
-        return service.create(dto);
+
+        return ApiResponse.success(
+                service.create(dto)
+        );
+
     }
 
     @PutMapping("/{id}")
-    public DTO update(
+    public ApiResponse<DTO> update(
             @PathVariable ID id,
             @RequestBody UPDATE dto) {
 
-        return service.update(id, dto);
+
+        return ApiResponse.success(
+                service.update(id,dto)
+        );
+
     }
 
     @DeleteMapping("/{id}")
-    public void delete(
+    public ApiResponse<Void> delete(
             @PathVariable ID id) {
 
+
         service.delete(id);
+
+
+        return ApiResponse.success(null);
+
     }
 
     @PostMapping("/batch")
-    public List<DTO> create(
-            @RequestBody List<CREATE> dto){
+    public ApiResponse<List<DTO>> create(
+            @RequestBody List<CREATE> dto) {
 
-        return service.create(dto);
+        return ApiResponse.success(service.create(dto));
 
     }
 
