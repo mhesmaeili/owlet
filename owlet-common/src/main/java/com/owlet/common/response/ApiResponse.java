@@ -1,7 +1,15 @@
 package com.owlet.common.response;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
+import java.time.OffsetDateTime;
+
+
+@Getter
+@Builder
+@AllArgsConstructor
 public class ApiResponse<T> {
 
     private boolean success;
@@ -10,5 +18,33 @@ public class ApiResponse<T> {
 
     private T data;
 
-    private LocalDateTime timestamp;
+    private OffsetDateTime timestamp;
+
+
+    public static <T> ApiResponse<T> success(
+            T data) {
+
+        return ApiResponse.<T>builder()
+                .success(true)
+                .message("Success")
+                .data(data)
+                .timestamp(
+                        OffsetDateTime.now()
+                )
+                .build();
+    }
+
+
+    public static <T> ApiResponse<T> error(
+            String message) {
+
+        return ApiResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .timestamp(
+                        OffsetDateTime.now()
+                )
+                .build();
+    }
+
 }
