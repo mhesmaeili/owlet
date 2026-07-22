@@ -2,6 +2,8 @@ package com.owlet.api.controller.base;
 
 import com.owlet.api.service.base.CrudService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -32,6 +34,13 @@ public abstract class CrudController<
         return service.getAll();
     }
 
+    @GetMapping("/page")
+    public Page<DTO> getAll(Pageable pageable){
+
+        return service.getAll(pageable);
+
+    }
+
     @PostMapping
     public DTO create(
             @RequestBody CREATE dto) {
@@ -52,6 +61,14 @@ public abstract class CrudController<
             @PathVariable ID id) {
 
         service.delete(id);
+    }
+
+    @PostMapping("/batch")
+    public List<DTO> create(
+            @RequestBody List<CREATE> dto){
+
+        return service.create(dto);
+
     }
 
 }

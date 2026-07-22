@@ -3,11 +3,15 @@ package com.owlet.api.service.base;
 import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.mapper.base.CrudMapper;
 import com.owlet.api.repository.base.BaseRepository;
+import com.owlet.api.security.CurrentUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,57 +21,207 @@ public abstract class CrudServiceImpl<
         ID extends Serializable,
         DTO,
         CREATE,
-        UPDATE>
+        UPDATE,
+        REPOSITORY extends BaseRepository<ENTITY, ID>,
+        MAPPER extends CrudMapper<ENTITY, DTO, CREATE, UPDATE>>
         implements CrudService<ID, DTO, CREATE, UPDATE> {
 
-    protected final BaseRepository<ENTITY, ID> repository;
+    protected final REPOSITORY repository;
 
-    protected final CrudMapper<
-            ENTITY,
-            DTO,
-            CREATE,
-            UPDATE> mapper;
+    protected final MAPPER mapper;
+
+    protected final CurrentUserService currentUserService;
 
     @Override
     @Transactional(readOnly = true)
     public DTO get(ID id) {
 
-        ENTITY entity = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        ENTITY entity = findEntity(id);
 
-        return mapper.toDto(entity);
+        return beforeReturn(toDto(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<DTO> getAll() {
 
-        return mapper.toDto(repository.findAll());
+        return toDto(findAllEntities());
     }
 
     @Override
     public DTO create(CREATE dto) {
 
+        validateCreate(dto);
+
+        beforeCreate(dto);
+
         ENTITY entity = mapper.toEntity(dto);
 
-        return mapper.toDto(repository.save(entity));
+        entity = beforeSave(entity);
+
+        entity = saveEntity(entity);
+
+        afterCreate(entity);
+
+        return beforeReturn(toDto(entity));
     }
 
     @Override
     public DTO update(ID id, UPDATE dto) {
 
-        ENTITY entity = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        ENTITY entity = findEntity(id);
+
+        validateUpdate(entity, dto);
+
+        beforeUpdate(entity, dto);
 
         mapper.update(dto, entity);
 
-        return mapper.toDto(repository.save(entity));
+        entity = beforeSave(entity);
+
+        entity = saveEntity(entity);
+
+        afterUpdate(entity);
+
+        return beforeReturn(toDto(entity));
     }
 
     @Override
     public void delete(ID id) {
 
-        repository.deleteById(id);
+        ENTITY entity = findEntity(id);
+
+        beforeDelete(entity);
+
+        doDelete(entity);
+
+        afterDelete(entity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DTO> getAll(Pageable pageable) {
+
+        return repository
+                .findAllByDeletedFalse(pageable)
+                .map(mapper::toDto);
+    }
+
+    @Override
+    public Page<DTO> search(
+            String keyword,
+            Pageable pageable) {
+
+        return getAll(pageable);
+
+    }
+
+    @Override
+    public List<DTO> create(
+            List<CREATE> list) {
+
+        return list.stream()
+                .map(this::create)
+                .toList();
+
+    }
+
+    @Override
+    public boolean exists(ID id) {
+        return repository.existsByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public long count() {
+        return repository.count();
+    }
+
+    protected ENTITY findEntity(ID id) {
+
+        return repository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+    }
+
+    protected List<ENTITY> findAllEntities() {
+
+        return repository.findAllByDeletedFalse();
+
+    }
+
+    protected ENTITY saveEntity(ENTITY entity) {
+
+        return repository.save(entity);
+
+    }
+
+    protected DTO toDto(ENTITY entity) {
+
+        return mapper.toDto(entity);
+
+    }
+
+    protected List<DTO> toDto(List<ENTITY> entities) {
+
+        return mapper.toDto(entities);
+
+    }
+
+    protected void doDelete(ENTITY entity) {
+
+        if (isSoftDelete()) {
+
+            entity.setDeleted(true);
+            entity.setDeletedAt(OffsetDateTime.now());
+            entity.setDeletedBy(currentUserService.getCurrentUserId());
+
+            repository.save(entity);
+
+        } else {
+
+            repository.delete(entity);
+
+        }
+
+    }
+
+    protected void beforeCreate(CREATE dto) {
+    }
+
+    protected void afterCreate(ENTITY entity) {
+    }
+
+    protected void beforeUpdate(ENTITY entity, UPDATE dto) {
+    }
+
+    protected void afterUpdate(ENTITY entity) {
+    }
+
+    protected void beforeDelete(ENTITY entity) {
+    }
+
+    protected void afterDelete(ENTITY entity) {
+    }
+
+    protected ENTITY beforeSave(ENTITY entity) {
+        return entity;
+    }
+
+    protected DTO beforeReturn(DTO dto) {
+        return dto;
+    }
+
+    protected void validateCreate(CREATE dto) {
+    }
+
+    protected void validateUpdate(
+            ENTITY entity,
+            UPDATE dto) {
+    }
+
+    protected boolean isSoftDelete() {
+        return true;
     }
 
 }

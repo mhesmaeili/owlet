@@ -14,10 +14,11 @@ public interface CrudMapper<
 
     List<DTO> toDto(List<ENTITY> entities);
 
-    ENTITY toEntity(CREATE dto);
+    ENTITY toEntity(CREATE create);
 
     void update(
-            UPDATE dto,
+            UPDATE update,
             @MappingTarget ENTITY entity);
+
 
 }

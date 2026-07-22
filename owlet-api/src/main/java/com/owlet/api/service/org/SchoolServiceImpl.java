@@ -4,6 +4,7 @@ import com.owlet.api.domain.org.School;
 import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.mapper.org.SchoolMapper;
 import com.owlet.api.repository.org.SchoolRepository;
+import com.owlet.api.security.CurrentUserService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,16 @@ public class SchoolServiceImpl extends CrudServiceImpl<
         UUID,
         SchoolDto,
         SchoolDto,
-        SchoolDto>
+        SchoolDto,
+        SchoolRepository,
+        SchoolMapper>
         implements SchoolService {
 
     public SchoolServiceImpl(
             SchoolRepository repository,
-            SchoolMapper mapper) {
+            SchoolMapper mapper,
+            CurrentUserService currentUserService) {
 
-        super(repository, mapper);
+        super(repository, mapper ,  currentUserService);
     }
 }
