@@ -1,7 +1,9 @@
 package com.owlet.api.service.org.impl;
 
 import com.owlet.api.domain.org.School;
+import com.owlet.api.dto.org.SchoolCreateRequest;
 import com.owlet.api.dto.org.SchoolDto;
+import com.owlet.api.dto.org.SchoolUpdateRequest;
 import com.owlet.api.mapper.org.SchoolMapper;
 import com.owlet.api.repository.org.SchoolRepository;
 import com.owlet.api.repository.specification.SpecificationBuilder;
@@ -20,8 +22,8 @@ public class SchoolServiceImpl extends CrudServiceImpl<
         School,
         UUID,
         SchoolDto,
-        SchoolDto,
-        SchoolDto,
+        SchoolCreateRequest,
+        SchoolUpdateRequest,
         SchoolRepository,
         SchoolMapper>
         implements SchoolService {

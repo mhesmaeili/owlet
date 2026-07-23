@@ -4,7 +4,7 @@ import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.mapper.base.CrudMapper;
 import com.owlet.api.repository.base.BaseRepository;
 import com.owlet.api.security.AuditableService;
-import jakarta.persistence.EntityNotFoundException;
+import com.owlet.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +57,7 @@ public abstract class CrudServiceImpl<
 
         ENTITY entity = mapper.toEntity(dto);
 
-        entity = beforeSave(entity);
+        entity = beforeCreateSave(entity , dto);
 
         entity = saveEntity(entity);
 
@@ -77,7 +77,7 @@ public abstract class CrudServiceImpl<
 
         mapper.update(dto, entity);
 
-        entity = beforeSave(entity);
+        entity = beforeUpdateSave(entity , dto);
 
         entity = saveEntity(entity);
 
@@ -164,7 +164,7 @@ public abstract class CrudServiceImpl<
         return repository
                 .findByIdAndDeletedFalse(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(
+                        new NotFoundException(
                                 entityClass().getSimpleName()
                                         + " not found : "
                                         + id));
@@ -236,7 +236,18 @@ public abstract class CrudServiceImpl<
     protected void afterDelete(ENTITY entity) {
     }
 
-    protected ENTITY beforeSave(ENTITY entity) {
+    protected ENTITY beforeCreateSave(
+            ENTITY entity,
+            CREATE dto) {
+
+        return entity;
+    }
+
+
+    protected ENTITY beforeUpdateSave(
+            ENTITY entity,
+            UPDATE dto) {
+
         return entity;
     }
 

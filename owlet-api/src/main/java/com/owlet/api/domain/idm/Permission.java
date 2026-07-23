@@ -1,6 +1,6 @@
 package com.owlet.api.domain.idm;
 
-import com.owlet.api.domain.base.BaseEntity;
+import com.owlet.api.domain.base.UuidEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,15 +10,12 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "permission", schema = "idm")
-public class Permission extends BaseEntity<UUID> {
-
-
+public class Permission extends UuidEntity {
 
     @Size(max = 200)
     @NotNull

@@ -1,19 +1,17 @@
 package com.owlet.api.domain.idm;
 
-import com.owlet.api.domain.base.BaseEntity;
+import com.owlet.api.domain.base.UuidEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @Entity
 @Table(name = "role_permission", schema = "idm")
-public class RolePermission extends BaseEntity<UUID> {
+public class RolePermission extends UuidEntity {
 
 
     @NotNull

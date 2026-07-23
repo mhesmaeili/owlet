@@ -1,23 +1,19 @@
 package com.owlet.api.domain.idm;
 
-import com.owlet.api.domain.base.BaseEntity;
-import com.owlet.api.domain.ref.ReferenceItem;
+import com.owlet.api.domain.base.UuidEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "account_role", schema = "idm")
-public class AccountRole extends BaseEntity<UUID> {
+public class AccountRole extends UuidEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")

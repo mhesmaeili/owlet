@@ -1,56 +1,36 @@
 package com.owlet.api.controller.idm;
 
+import com.owlet.api.controller.base.CrudController;
 import com.owlet.api.dto.idm.AccountCreateRequest;
 import com.owlet.api.dto.idm.AccountDto;
+import com.owlet.api.dto.idm.AccountUpdateRequest;
+import com.owlet.api.security.CurrentUser;
 import com.owlet.api.service.idm.AccountService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+@Tag(name = "AccountController")
 @RestController
-@RequestMapping("/idm/api/accounts")
-@RequiredArgsConstructor
-public class AccountController {
+@RequestMapping("/api/idm/account")
+public class AccountController extends CrudController<
+        UUID,
+        AccountDto,
+        AccountCreateRequest,
+        AccountUpdateRequest> {
 
-    private final AccountService accountService;
-
-    @PostMapping
-    public AccountDto create(
-            @Valid @RequestBody AccountCreateRequest request) {
-
-        return accountService.create(request);
+    public AccountController(AccountService service) {
+        super(service);
     }
 
-    @PutMapping("/{id}")
-    public AccountDto update(
-            @PathVariable UUID id,
-            @Valid @RequestBody AccountCreateRequest request) {
-
-        return accountService.update(id, request);
+    @GetMapping("/me")
+    public CurrentUser me(
+            @AuthenticationPrincipal CurrentUser currentUser
+    ) {
+        return currentUser;
     }
-
-    @GetMapping("/{id}")
-    public AccountDto getById(
-            @PathVariable UUID id) {
-
-        return accountService.findById(id);
-    }
-
-    @GetMapping
-    public Page<AccountDto> findAll(Pageable pageable) {
-
-        return accountService.findAll(pageable);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(
-            @PathVariable UUID id) {
-
-        accountService.delete(id);
-    }
-
 }

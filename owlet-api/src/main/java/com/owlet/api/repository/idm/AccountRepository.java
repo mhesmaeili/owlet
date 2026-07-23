@@ -1,20 +1,16 @@
 package com.owlet.api.repository.idm;
 
 import com.owlet.api.domain.idm.Account;
+import com.owlet.api.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface AccountRepository extends JpaRepository<Account, UUID> {
-
-    Optional<Account> findByUsernameAndDeletedFalse(String username);
-
-    Optional<Account> findByIdAndDeletedFalse(UUID id);
+public interface AccountRepository  extends BaseRepository<Account, UUID> {
 
     boolean existsByUsername(String username);
 
@@ -25,7 +21,6 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
     Page<Account> findAllByDeletedFalse(Pageable pageable);
 
     Optional<Account> findByUsername(String username);
-
 
     @Query("""
         select distinct a

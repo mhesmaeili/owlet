@@ -1,6 +1,6 @@
 package com.owlet.api.domain.org;
 
-import com.owlet.api.domain.base.BaseEntity;
+import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.idm.Account;
 import com.owlet.api.domain.ref.ReferenceItem;
 import jakarta.persistence.*;
@@ -11,16 +11,13 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "school", schema = "org")
-public class School extends BaseEntity<UUID> {
+public class School extends UuidEntity {
 
-    @Id
-    private UUID id;
 
     @Size(max = 100)
     @NotNull

@@ -23,9 +23,8 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class BaseEntity<PK extends Serializable> implements Serializable {
 
-    @Id
+    @Transient
     private PK id;
-
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

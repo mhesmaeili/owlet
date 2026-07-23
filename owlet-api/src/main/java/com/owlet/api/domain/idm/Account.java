@@ -1,6 +1,6 @@
 package com.owlet.api.domain.idm;
 
-import com.owlet.api.domain.base.BaseEntity;
+import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.ref.ReferenceItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "account", schema = "idm")
-public class Account extends BaseEntity<UUID> {
+public class Account extends UuidEntity {
 
     @Size(max = 100)
     @NotNull

@@ -1,11 +1,10 @@
 package com.owlet.api.repository.idm;
 
 import com.owlet.api.domain.idm.AccountRole;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.owlet.api.repository.base.BaseRepository;
 
 import java.util.UUID;
 
-public interface AccountRoleRepository extends JpaRepository<AccountRole, UUID> {
+public interface AccountRoleRepository extends BaseRepository<AccountRole, UUID> {
     void deleteByAccountId(UUID accountId);
-
 }

@@ -3,15 +3,18 @@ package com.owlet.api.mapper.idm;
 import com.owlet.api.domain.idm.Account;
 import com.owlet.api.dto.idm.AccountCreateRequest;
 import com.owlet.api.dto.idm.AccountDto;
+import com.owlet.api.dto.idm.AccountUpdateRequest;
+import com.owlet.api.mapper.base.BaseMapperConfig;
+import com.owlet.api.mapper.base.CrudMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(
-        componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
-public interface AccountMapper {
+@Mapper(config = BaseMapperConfig.class)
+public interface AccountMapper extends CrudMapper<
+        Account,
+        AccountDto,
+        AccountCreateRequest,
+        AccountUpdateRequest> {
 
 
     @Mapping(target = "id", ignore = true)
@@ -23,9 +26,5 @@ public interface AccountMapper {
     @Mapping(target = "lastLoginAt", ignore = true)
     @Mapping(target = "passwordChangedAt", ignore = true)
     Account toEntity(AccountCreateRequest request);
-
-
-    //@Mapping(target = "roles", ignore = true)
-    AccountDto toDto(Account account);
 
 }

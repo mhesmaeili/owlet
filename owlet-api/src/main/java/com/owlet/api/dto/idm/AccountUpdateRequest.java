@@ -1,10 +1,11 @@
 package com.owlet.api.dto.idm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.owlet.api.dto.BaseDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,9 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountDto extends BaseDto<UUID> {
+public class AccountUpdateRequest {
 
-    private String username;
+    private String password;
 
     private String mobile;
 
@@ -29,10 +30,10 @@ public class AccountDto extends BaseDto<UUID> {
 
     private UUID avatarMediaId;
 
+    private UUID genderId;
+
     private LocalDate birthDate;
 
-    private Boolean active;
-
-    private Boolean locked;
+    private List<UUID> roleIds;
 
 }

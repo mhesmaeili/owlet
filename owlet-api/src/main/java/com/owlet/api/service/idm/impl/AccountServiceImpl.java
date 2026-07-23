@@ -5,16 +5,16 @@ import com.owlet.api.domain.idm.AccountRole;
 import com.owlet.api.domain.idm.Role;
 import com.owlet.api.dto.idm.AccountCreateRequest;
 import com.owlet.api.dto.idm.AccountDto;
+import com.owlet.api.dto.idm.AccountUpdateRequest;
 import com.owlet.api.mapper.idm.AccountMapper;
 import com.owlet.api.repository.idm.AccountRepository;
 import com.owlet.api.repository.idm.AccountRoleRepository;
 import com.owlet.api.repository.idm.RoleRepository;
+import com.owlet.api.security.AuditableService;
+import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.idm.AccountService;
 import com.owlet.common.exception.BusinessException;
 import com.owlet.common.exception.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,184 +24,120 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends CrudServiceImpl<
+        Account,
+        UUID,
+        AccountDto,
+        AccountCreateRequest,
+        AccountUpdateRequest,
+        AccountRepository,
+        AccountMapper>
+        implements AccountService {
 
-    private final AccountRepository accountRepository;
 
     private final RoleRepository roleRepository;
-
     private final AccountRoleRepository accountRoleRepository;
-
     private final PasswordEncoder passwordEncoder;
 
-    private final AccountMapper accountMapper;
+
+    public AccountServiceImpl(
+            AccountRepository repository,
+            AccountMapper mapper,
+            AuditableService auditableService,
+            RoleRepository roleRepository,
+            AccountRoleRepository accountRoleRepository,
+            PasswordEncoder passwordEncoder) {
+
+        super(repository, mapper, auditableService);
+
+        this.roleRepository = roleRepository;
+        this.accountRoleRepository = accountRoleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
-    public AccountDto create(AccountCreateRequest request) {
-
-        validateCreateRequest(request);
-
-        Account account = accountMapper.toEntity(request);
-
-        account.setId(UUID.randomUUID());
-
-        account.setPasswordHash(
-                passwordEncoder.encode(request.getPassword()));
-
-        account.setActive(true);
-
-        account.setLocked(false);
-
-        account.setFailedLoginCount(0);
-
-        account.setLastLoginAt(null);
-
-        account.setPasswordChangedAt(OffsetDateTime.now());
-
-        Account savedAccount =
-                accountRepository.save(account);
-
-        assignRoles(savedAccount, request.getRoleIds());
-
-        return accountMapper.toDto(savedAccount);
-
+    protected Class<Account> entityClass() {
+        return Account.class;
     }
 
-    // ----------------------------------------------------------------------
 
-    private void assignRoles(
-            Account account,
-            List<UUID> roleIds) {
+    @Override
+    protected void validateCreate(AccountCreateRequest request) {
 
-        if (roleIds == null || roleIds.isEmpty()) {
-            return;
-        }
-
-        for (UUID roleId : roleIds) {
-
-            Role role = roleRepository.findById(roleId)
-
-                    .orElseThrow(() ->
-                            new NotFoundException(
-                                    "Role not found : " + roleId));
-
-            AccountRole accountRole = new AccountRole();
-
-            accountRole.setId(UUID.randomUUID());
-
-            accountRole.setAccount(account);
-
-            accountRole.setRole(role);
-
-            accountRole.setAssignedAt(OffsetDateTime.now());
-
-            accountRole.setActive(true);
-
-            accountRoleRepository.save(accountRole);
-
-        }
-
-    }
-
-    // ----------------------------------------------------------------------
-
-    private void validateCreateRequest(
-            AccountCreateRequest request) {
-
-        if (accountRepository.existsByUsername(request.getUsername())) {
+        if (repository.existsByUsername(request.getUsername())) {
 
             throw new BusinessException(
                     "Username already exists.");
-
         }
 
+
         if (request.getEmail() != null
-                && accountRepository.existsByEmail(request.getEmail())) {
+                && repository.existsByEmail(request.getEmail())) {
 
             throw new BusinessException(
                     "Email already exists.");
-
         }
 
+
         if (request.getMobile() != null
-                && accountRepository.existsByMobile(request.getMobile())) {
+                && repository.existsByMobile(request.getMobile())) {
 
             throw new BusinessException(
                     "Mobile already exists.");
-
         }
-
     }
 
     @Override
-    public AccountDto update(
-            UUID id,
+    protected Account beforeCreateSave(
+            Account account,
             AccountCreateRequest request) {
 
-        Account account = accountRepository
-                .findByIdAndDeletedFalse(id)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                "Account not found : " + id));
-
-
-        if (request.getEmail() != null
-                && !request.getEmail().equals(account.getEmail())
-                && accountRepository.existsByEmail(request.getEmail())) {
-
-            throw new BusinessException(
-                    "Email already exists.");
-
-        }
-
-
-        if (request.getMobile() != null
-                && !request.getMobile().equals(account.getMobile())
-                && accountRepository.existsByMobile(request.getMobile())) {
-
-            throw new BusinessException(
-                    "Mobile already exists.");
-
-        }
-
-
-        /*accountMapper.updateEntity(
-                request,
-                account
-        );*/
-
-
-        if (request.getPassword() != null
-                && !request.getPassword().isBlank()) {
+        if (request.getPassword() != null) {
 
             account.setPasswordHash(
-                    passwordEncoder.encode(
-                            request.getPassword()));
+                    passwordEncoder.encode(request.getPassword())
+            );
+        }
+
+        account.setActive(true);
+        account.setLocked(false);
+        account.setFailedLoginCount(0);
+
+        return account;
+    }
+
+    @Override
+    protected Account beforeUpdateSave(
+            Account account,
+            AccountUpdateRequest request) {
+
+        if (request.getPassword() != null) {
+
+            account.setPasswordHash(
+                    passwordEncoder.encode(request.getPassword())
+            );
 
             account.setPasswordChangedAt(
                     OffsetDateTime.now());
-
         }
 
-
-        Account updated =
-                accountRepository.save(account);
-
-
-        if (request.getRoleIds() != null) {
-
-            updateRoles(
-                    updated,
-                    request.getRoleIds());
-
-        }
-
-
-        return accountMapper.toDto(updated);
-
+        return account;
     }
+
+
+    @Override
+    protected void afterUpdate(Account account) {
+
+        updateRoles(
+                account,
+                account.getAccountRoles()
+                        .stream()
+                        .map(x -> x.getRole().getId())
+                        .toList());
+    }
+
 
     private void updateRoles(
             Account account,
@@ -212,12 +148,24 @@ public class AccountServiceImpl implements AccountService {
                 account.getId());
 
 
+        assignRoles(account, roleIds);
+    }
+
+    private void assignRoles(
+            Account account,
+            List<UUID> roleIds) {
+
+
+        if (roleIds == null || roleIds.isEmpty()) {
+            return;
+        }
+
+
         for (UUID roleId : roleIds) {
 
 
             Role role =
                     roleRepository.findById(roleId)
-
                             .orElseThrow(() ->
                                     new NotFoundException(
                                             "Role not found : " + roleId));
@@ -228,74 +176,15 @@ public class AccountServiceImpl implements AccountService {
 
 
             accountRole.setId(UUID.randomUUID());
-
             accountRole.setAccount(account);
-
             accountRole.setRole(role);
-
             accountRole.setAssignedAt(
                     OffsetDateTime.now());
-
             accountRole.setActive(true);
 
 
             accountRoleRepository.save(accountRole);
-
         }
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<AccountDto> findAll(
-            Pageable pageable) {
-
-
-        return accountRepository
-                .findAllByDeletedFalse(pageable)
-
-                .map(accountMapper::toDto);
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public AccountDto findById(UUID id) {
-
-
-        Account account =
-                accountRepository
-                        .findByIdAndDeletedFalse(id)
-                        .orElseThrow(() ->
-                                new NotFoundException(
-                                        "Account not found : " + id));
-
-
-        return accountMapper.toDto(account);
-
-    }
-
-    @Override
-    public void delete(UUID id) {
-
-
-        Account account =
-                accountRepository
-                        .findByIdAndDeletedFalse(id)
-
-                        .orElseThrow(() ->
-                                new NotFoundException(
-                                        "Account not found : " + id));
-
-
-        account.setDeleted(true);
-
-        account.setDeletedAt(
-                OffsetDateTime.now());
-
-
-        accountRepository.save(account);
-
     }
 
 }

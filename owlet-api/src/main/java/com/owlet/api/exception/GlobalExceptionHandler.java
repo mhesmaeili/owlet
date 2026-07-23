@@ -18,4 +18,14 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handle(Exception ex) {
+
+        ex.printStackTrace();
+
+        return ResponseEntity
+                .internalServerError()
+                .body(ApiResponse.error("Internal Server Error"));
+    }
+
 }
