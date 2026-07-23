@@ -1,6 +1,7 @@
 package com.owlet.api.domain.ref;
 
 import com.owlet.api.domain.base.BaseEntity;
+import com.owlet.api.domain.base.UuidEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,10 +15,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "reference_item", schema = "ref")
-public class ReferenceItem extends BaseEntity<UUID> {
-
-    @Id
-    private UUID id;
+public class ReferenceItem extends UuidEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

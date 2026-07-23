@@ -1,6 +1,10 @@
 package com.owlet.api.domain.ref;
 
-import jakarta.persistence.*;
+import com.owlet.api.domain.base.UuidEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -9,16 +13,12 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "reference_type", schema = "ref")
-public class ReferenceType {
-    @Id
-    @Column(name = "id", nullable = false)
-    private UUID id;
+public class ReferenceType extends UuidEntity {
 
     @NotNull
     @ColumnDefault("0")
