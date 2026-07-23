@@ -37,4 +37,10 @@ public class ReferenceItemImpl extends CrudServiceImpl<
     protected Class<ReferenceItem> entityClass() {
         return ReferenceItem.class;
     }
+
+    @Override
+    protected ReferenceItem beforeCreateSave(ReferenceItem entity, ReferenceItemDto dto) {
+        entity.setActive(true);
+        return super.beforeCreateSave(entity, dto);
+    }
 }

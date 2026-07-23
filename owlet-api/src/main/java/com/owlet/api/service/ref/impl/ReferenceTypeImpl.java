@@ -37,4 +37,10 @@ public class ReferenceTypeImpl extends CrudServiceImpl<
     protected Class<ReferenceType> entityClass() {
         return ReferenceType.class;
     }
+
+    @Override
+    protected ReferenceType beforeCreateSave(ReferenceType entity, ReferenceTypeDto dto) {
+        entity.setActive(true);
+        return super.beforeCreateSave(entity, dto);
+    }
 }
