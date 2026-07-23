@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Tag(name = "SchoolController")
 @RestController
-@RequestMapping("org/school")
+@RequestMapping("/api/org/school")
 public class SchoolController extends CrudController<
         UUID,
         SchoolDto,

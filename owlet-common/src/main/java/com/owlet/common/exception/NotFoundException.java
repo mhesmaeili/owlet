@@ -1,7 +1,7 @@
 package com.owlet.common.exception;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends BaseException {
     public NotFoundException(String message) {
-        super(message);
+        super(404, message);
     }
 }

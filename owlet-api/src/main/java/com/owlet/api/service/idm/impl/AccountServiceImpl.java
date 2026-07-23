@@ -11,7 +11,7 @@ import com.owlet.api.repository.idm.AccountRoleRepository;
 import com.owlet.api.repository.idm.RoleRepository;
 import com.owlet.api.service.idm.AccountService;
 import com.owlet.common.exception.BusinessException;
-import jakarta.persistence.EntityNotFoundException;
+import com.owlet.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
             Role role = roleRepository.findById(roleId)
 
                     .orElseThrow(() ->
-                            new EntityNotFoundException(
+                            new NotFoundException(
                                     "Role not found : " + roleId));
 
             AccountRole accountRole = new AccountRole();
@@ -143,7 +143,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findByIdAndDeletedFalse(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(
+                        new NotFoundException(
                                 "Account not found : " + id));
 
 
@@ -151,7 +151,7 @@ public class AccountServiceImpl implements AccountService {
                 && !request.getEmail().equals(account.getEmail())
                 && accountRepository.existsByEmail(request.getEmail())) {
 
-            throw new IllegalArgumentException(
+            throw new BusinessException(
                     "Email already exists.");
 
         }
@@ -161,7 +161,7 @@ public class AccountServiceImpl implements AccountService {
                 && !request.getMobile().equals(account.getMobile())
                 && accountRepository.existsByMobile(request.getMobile())) {
 
-            throw new IllegalArgumentException(
+            throw new BusinessException(
                     "Mobile already exists.");
 
         }
@@ -219,7 +219,7 @@ public class AccountServiceImpl implements AccountService {
                     roleRepository.findById(roleId)
 
                             .orElseThrow(() ->
-                                    new EntityNotFoundException(
+                                    new NotFoundException(
                                             "Role not found : " + roleId));
 
 
@@ -267,7 +267,7 @@ public class AccountServiceImpl implements AccountService {
                 accountRepository
                         .findByIdAndDeletedFalse(id)
                         .orElseThrow(() ->
-                                new EntityNotFoundException(
+                                new NotFoundException(
                                         "Account not found : " + id));
 
 
@@ -284,7 +284,7 @@ public class AccountServiceImpl implements AccountService {
                         .findByIdAndDeletedFalse(id)
 
                         .orElseThrow(() ->
-                                new EntityNotFoundException(
+                                new NotFoundException(
                                         "Account not found : " + id));
 
 

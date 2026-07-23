@@ -1,29 +1,21 @@
 package com.owlet.api.exception;
 
-import com.owlet.common.exception.ApiError;
-import com.owlet.common.exception.BusinessException;
+import com.owlet.common.exception.BaseException;
+import com.owlet.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.OffsetDateTime;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<?> handle(
-            BusinessException ex
-    ) {
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiResponse<Void>> handle(
+            BaseException ex) {
 
         return ResponseEntity
-                .badRequest()
-                .body(
-                        ApiError.builder()
-                                .status(1)
-                                .message(ex.getMessage())
-                                .timestamp(OffsetDateTime.now())
-                                .build()
-                );
+                .status(ex.getStatus())
+                .body(ApiResponse.error(ex.getMessage()));
     }
+
 }

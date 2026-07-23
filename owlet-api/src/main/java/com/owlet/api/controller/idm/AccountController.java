@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/idm/api/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 

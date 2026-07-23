@@ -1,4 +1,4 @@
-package com.owlet.api.service.org;
+package com.owlet.api.service.org.impl;
 
 import com.owlet.api.domain.org.School;
 import com.owlet.api.dto.org.SchoolDto;
@@ -7,11 +7,11 @@ import com.owlet.api.repository.org.SchoolRepository;
 import com.owlet.api.repository.specification.SpecificationBuilder;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
+import com.owlet.api.service.org.SchoolService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
