@@ -20,8 +20,7 @@ public class School extends UuidEntity {
 
 
     @Size(max = 100)
-    @NotNull
-    @Column(name = "code", nullable = false, length = 100)
+    @Column(name = "code", nullable = true, length = 100)
     private String code;
 
     @Size(max = 300)
@@ -91,7 +90,7 @@ public class School extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
     @Size(max = 1000)
     @Column(name = "description", length = 1000)

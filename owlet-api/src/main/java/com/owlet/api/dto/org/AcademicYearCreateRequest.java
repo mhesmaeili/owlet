@@ -1,24 +1,21 @@
-package com.owlet.api.dto.ref;
+package com.owlet.api.dto.org;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.owlet.api.dto.BaseDto;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.UUID;
-
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReferenceTypeDto extends BaseDto<UUID> {
-    @NotNull
-    private String code;
-    @NotNull
+public class AcademicYearCreateRequest {
     private String title;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String description;
 }

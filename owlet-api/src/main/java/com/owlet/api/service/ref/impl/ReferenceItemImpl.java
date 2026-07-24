@@ -1,6 +1,7 @@
 package com.owlet.api.service.ref.impl;
 
 import com.owlet.api.domain.ref.ReferenceItem;
+import com.owlet.api.dto.ref.ReferenceItemCreateRequest;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.mapper.ref.ReferenceItemMapper;
 import com.owlet.api.repository.ref.ReferenceItemRepository;
@@ -18,8 +19,8 @@ public class ReferenceItemImpl extends CrudServiceImpl<
         ReferenceItem,
         UUID,
         ReferenceItemDto,
-        ReferenceItemDto,
-        ReferenceItemDto,
+        ReferenceItemCreateRequest,
+        ReferenceItemCreateRequest,
         ReferenceItemRepository,
         ReferenceItemMapper>
         implements ReferenceItemService {
@@ -38,9 +39,4 @@ public class ReferenceItemImpl extends CrudServiceImpl<
         return ReferenceItem.class;
     }
 
-    @Override
-    protected ReferenceItem beforeCreateSave(ReferenceItem entity, ReferenceItemDto dto) {
-        entity.setActive(true);
-        return super.beforeCreateSave(entity, dto);
-    }
 }

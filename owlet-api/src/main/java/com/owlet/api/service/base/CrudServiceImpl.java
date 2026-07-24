@@ -178,7 +178,7 @@ public abstract class CrudServiceImpl<
     }
 
     protected ENTITY saveEntity(ENTITY entity) {
-
+        //entity.setDeleted(false);
         return repository.save(entity);
 
     }

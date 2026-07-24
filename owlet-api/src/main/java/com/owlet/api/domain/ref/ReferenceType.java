@@ -42,7 +42,7 @@ public class ReferenceType extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "referenceType")
     private Set<ReferenceItem> referenceItems = new LinkedHashSet<>();

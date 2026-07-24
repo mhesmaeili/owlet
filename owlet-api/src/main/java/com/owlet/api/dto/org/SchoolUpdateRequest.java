@@ -1,6 +1,7 @@
 package com.owlet.api.dto.org;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.owlet.api.service.base.helper.EntityIdDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,24 +24,22 @@ public class SchoolUpdateRequest {
     private String title;
 
     @NotNull
-    private UUID schoolTypeId;
-
-    private UUID parentSchoolId;
-
-    private UUID managerAccountId;
-
-    private String nationalCode;
-
-    private String economicCode;
-
-    private String phone;
-
-    private String mobile;
+    private EntityIdDto schoolType;
 
     @Email
     private String email;
 
     private String website;
+
+    private String phone;
+
+    private String mobile;
+
+    private EntityIdDto parentSchool;
+
+    private EntityIdDto managerAccount;
+
+    private String economicCode;
 
     private String province;
 

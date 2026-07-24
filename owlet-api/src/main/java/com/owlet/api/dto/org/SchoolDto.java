@@ -5,6 +5,7 @@ import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SchoolDto extends BaseDto<UUID> {
     private String code;
@@ -22,7 +23,7 @@ public class SchoolDto extends BaseDto<UUID> {
     private ReferenceItemDto schoolType;
     private AccountDto managerAccount;
 
-    private String nationalCode;
+
     private String economicCode;
 
     private String phone;

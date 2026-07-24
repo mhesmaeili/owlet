@@ -2,9 +2,9 @@ package com.owlet.api.dto.ref;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import jakarta.validation.constraints.NotBlank;
+import com.owlet.api.service.base.helper.EntityIdDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
@@ -12,17 +12,15 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReferenceItemDto extends BaseDto<UUID> {
-
+public class ReferenceItemCreateRequest {
+    @NotNull
     private String code;
-    @NotBlank
+    @NotNull
     private String title;
-    @NotBlank
     private String titleFa;
-    @NotBlank
+    @NotNull
     private Integer sortOrder;
-    @NotBlank
-    ReferenceTypeDto referenceType;
+    private EntityIdDto referenceType;
 }

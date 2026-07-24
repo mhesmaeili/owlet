@@ -1,6 +1,7 @@
 package com.owlet.api.controller.ref;
 
 import com.owlet.api.controller.base.CrudController;
+import com.owlet.api.dto.ref.ReferenceTypeCreateRequest;
 import com.owlet.api.dto.ref.ReferenceTypeDto;
 import com.owlet.api.service.ref.ReferenceTypeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,8 +16,8 @@ import java.util.UUID;
 public class ReferenceTypeController extends CrudController<
         UUID,
         ReferenceTypeDto,
-        ReferenceTypeDto,
-        ReferenceTypeDto> {
+        ReferenceTypeCreateRequest,
+        ReferenceTypeCreateRequest> {
 
     public ReferenceTypeController(ReferenceTypeService service) {
         super(service);

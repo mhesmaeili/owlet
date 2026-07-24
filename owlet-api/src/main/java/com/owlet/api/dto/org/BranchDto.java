@@ -1,8 +1,8 @@
-package com.owlet.api.dto.ref;
+package com.owlet.api.dto.org;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import jakarta.validation.constraints.NotBlank;
+import com.owlet.api.dto.idm.AccountDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,15 +14,21 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReferenceItemDto extends BaseDto<UUID> {
+public class BranchDto extends BaseDto<UUID> {
+    private SchoolDto school;
+
 
     private String code;
-    @NotBlank
+
+
     private String title;
-    @NotBlank
-    private String titleFa;
-    @NotBlank
-    private Integer sortOrder;
-    @NotBlank
-    ReferenceTypeDto referenceType;
+
+
+    private AccountDto managerAccount;
+
+
+    private String phone;
+
+
+    private String mobile;
 }

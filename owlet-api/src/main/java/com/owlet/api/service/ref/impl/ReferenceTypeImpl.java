@@ -1,6 +1,7 @@
 package com.owlet.api.service.ref.impl;
 
 import com.owlet.api.domain.ref.ReferenceType;
+import com.owlet.api.dto.ref.ReferenceTypeCreateRequest;
 import com.owlet.api.dto.ref.ReferenceTypeDto;
 import com.owlet.api.mapper.ref.ReferenceTypeMapper;
 import com.owlet.api.repository.ref.ReferenceTypeRepository;
@@ -18,8 +19,8 @@ public class ReferenceTypeImpl extends CrudServiceImpl<
         ReferenceType,
         UUID,
         ReferenceTypeDto,
-        ReferenceTypeDto,
-        ReferenceTypeDto,
+        ReferenceTypeCreateRequest,
+        ReferenceTypeCreateRequest,
         ReferenceTypeRepository,
         ReferenceTypeMapper>
         implements ReferenceTypeService {
@@ -38,9 +39,4 @@ public class ReferenceTypeImpl extends CrudServiceImpl<
         return ReferenceType.class;
     }
 
-    @Override
-    protected ReferenceType beforeCreateSave(ReferenceType entity, ReferenceTypeDto dto) {
-        entity.setActive(true);
-        return super.beforeCreateSave(entity, dto);
-    }
 }

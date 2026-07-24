@@ -3,6 +3,7 @@ package com.owlet.api.controller.base;
 import com.owlet.api.service.base.CrudService;
 import com.owlet.common.response.ApiResponse;
 import com.owlet.common.response.PageResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +84,7 @@ public abstract class CrudController<
 
     @PostMapping
     public ApiResponse<DTO> create(
-            @RequestBody CREATE dto) {
+            @Valid @RequestBody CREATE dto) {
 
 
         return ApiResponse.success(
@@ -95,7 +96,7 @@ public abstract class CrudController<
     @PutMapping("/{id}")
     public ApiResponse<DTO> update(
             @PathVariable ID id,
-            @RequestBody UPDATE dto) {
+            @Valid @RequestBody UPDATE dto) {
 
 
         return ApiResponse.success(
@@ -118,7 +119,7 @@ public abstract class CrudController<
 
     @PostMapping("/batch")
     public ApiResponse<List<DTO>> create(
-            @RequestBody List<CREATE> dto) {
+            @Valid @RequestBody List<CREATE> dto) {
 
         return ApiResponse.success(service.create(dto));
 

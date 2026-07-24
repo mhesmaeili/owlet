@@ -23,13 +23,11 @@ public class ReferenceItem extends UuidEntity {
     private ReferenceType referenceType;
 
     @Size(max = 100)
-    @NotNull
-    @Column(name = "code", nullable = false, length = 100)
+    @Column(name = "code", nullable = true, length = 100)
     private String code;
 
     @Size(max = 200)
-    @NotNull
-    @Column(name = "title", nullable = false, length = 200)
+    @Column(name = "title", nullable = true, length = 200)
     private String title;
 
     @Size(max = 200)
@@ -56,6 +54,6 @@ public class ReferenceItem extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
 }
