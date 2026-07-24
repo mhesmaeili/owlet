@@ -18,6 +18,8 @@ import java.util.UUID;
 public class RoleCreateRequest {
 
     @NotBlank
+    private String code;
+    @NotBlank
     private String title;
     @NotNull
     private String systemRole;

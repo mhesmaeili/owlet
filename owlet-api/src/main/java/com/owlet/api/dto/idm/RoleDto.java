@@ -18,6 +18,7 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleDto extends BaseDto<UUID> {
 
+    private String code;
     private String title;
     private String description;
     private Boolean systemRole;
