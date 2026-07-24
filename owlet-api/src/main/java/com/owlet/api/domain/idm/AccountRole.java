@@ -24,9 +24,8 @@ public class AccountRole extends UuidEntity {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "assigned_at", nullable = false)
+    @Column(name = "assigned_at")
     private OffsetDateTime assignedAt;
 
     @Column(name = "expired_at")
