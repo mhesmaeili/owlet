@@ -43,7 +43,7 @@ public class Classroom extends UuidEntity {
 
     @ColumnDefault("true")
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
