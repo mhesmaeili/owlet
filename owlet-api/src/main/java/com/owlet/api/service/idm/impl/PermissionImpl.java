@@ -29,8 +29,7 @@ public class PermissionImpl extends CrudServiceImpl<
     public PermissionImpl(
             PermissionRepository repository,
             PermissionMapper mapper,
-            AuditableService auditableService,
-            PermissionRepository PermissionRepository) {
+            AuditableService auditableService) {
 
         super(repository, mapper, auditableService);
     }

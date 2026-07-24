@@ -29,8 +29,7 @@ public class RoleImpl extends CrudServiceImpl<
     public RoleImpl(
             RoleRepository repository,
             RoleMapper mapper,
-            AuditableService auditableService,
-            RoleRepository roleRepository) {
+            AuditableService auditableService) {
 
         super(repository, mapper, auditableService);
     }
