@@ -28,8 +28,7 @@ public class Permission extends UuidEntity {
     private String title;
 
     @Size(max = 100)
-    @NotNull
-    @Column(name = "module", nullable = false, length = 100)
+    @Column(name = "module", length = 100)
     private String module;
 
     @Size(max = 1000)
@@ -39,7 +38,7 @@ public class Permission extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY)
     private Set<RolePermission> rolePermissions = new LinkedHashSet<>();
