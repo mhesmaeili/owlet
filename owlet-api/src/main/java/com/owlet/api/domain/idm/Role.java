@@ -21,11 +21,6 @@ import java.util.Set;
 public class Role extends UuidEntity {
 
 
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "code", nullable = false, length = 100)
-    private String code;
-
     @Size(max = 200)
     @NotNull
     @Column(name = "title", nullable = false, length = 200)
@@ -43,7 +38,7 @@ public class Role extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "role")
     private Set<AccountRole> accountRoles = new LinkedHashSet<>();
