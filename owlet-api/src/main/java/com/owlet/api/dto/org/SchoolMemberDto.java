@@ -1,13 +1,17 @@
-package com.owlet.api.dto.idm;
+package com.owlet.api.dto.org;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
+import com.owlet.api.dto.idm.AccountDto;
+import com.owlet.api.dto.idm.RoleDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -16,9 +20,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RolePermissionDto extends BaseDto<UUID> {
+public class SchoolMemberDto extends BaseDto<UUID> {
 
+    private SchoolDto school;
     private RoleDto role;
-    private PermissionDto permission;
-    private Boolean granted;
+    private AccountDto account;
+    private Boolean active;
+    private String description;
 }

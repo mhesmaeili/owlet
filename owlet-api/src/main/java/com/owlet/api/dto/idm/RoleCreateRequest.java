@@ -18,7 +18,7 @@ public class RoleCreateRequest {
     @NotBlank
     private String title;
     @NotNull
-    private String systemRole;
+    private Boolean systemRole;
     private String description;
 
 
