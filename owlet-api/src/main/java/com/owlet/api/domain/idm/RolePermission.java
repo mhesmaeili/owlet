@@ -27,6 +27,6 @@ public class RolePermission extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "granted", nullable = false)
-    private Boolean granted = false;
+    private Boolean granted = true;
 
 }
