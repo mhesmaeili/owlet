@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.idm.RoleDto;
-import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
