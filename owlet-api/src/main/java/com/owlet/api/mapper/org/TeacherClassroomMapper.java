@@ -1,8 +1,6 @@
 package com.owlet.api.mapper.org;
 
-import com.owlet.api.domain.org.Classroom;
 import com.owlet.api.domain.org.TeacherClassroom;
-import com.owlet.api.dto.org.ClassroomCreateRequest;
 import com.owlet.api.dto.org.TeacherClassroomCreateRequest;
 import com.owlet.api.dto.org.TeacherClassroomDto;
 import com.owlet.api.mapper.base.BaseMapperConfig;
