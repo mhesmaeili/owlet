@@ -1,7 +1,9 @@
 package com.owlet.api.dto.org;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.owlet.api.domain.idm.Account;
 import com.owlet.api.dto.BaseDto;
+import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +30,8 @@ public class ClassroomDto extends BaseDto<UUID> {
     private ReferenceItemDto grade;
 
     private AcademicYearDto academicYears;
+
+    private AccountDto teacherAccount;
 
     private Integer capacity;
 

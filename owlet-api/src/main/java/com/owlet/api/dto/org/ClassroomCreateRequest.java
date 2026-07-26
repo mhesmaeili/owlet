@@ -32,6 +32,9 @@ public class ClassroomCreateRequest {
     @NotNull
     private EntityIdDto academicYears;
 
+    @NotNull
+    private EntityIdDto teacherAccount;
+
     private Integer capacity;
 
     private String description;

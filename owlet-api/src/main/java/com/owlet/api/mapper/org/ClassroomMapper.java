@@ -25,6 +25,9 @@ public interface ClassroomMapper extends CrudMapper<
     @Mapping(target = "academicYears",
             source = "academicYears",
             qualifiedByName = "toReference")
+    @Mapping(target = "teacherAccount",
+            source = "teacherAccount",
+            qualifiedByName = "toReference")
     @Override
     Classroom toEntity(ClassroomCreateRequest ClassroomCreateRequest);
 
@@ -36,6 +39,9 @@ public interface ClassroomMapper extends CrudMapper<
             qualifiedByName = "toReference")
     @Mapping(target = "academicYears",
             source = "academicYears",
+            qualifiedByName = "toReference")
+    @Mapping(target = "teacherAccount",
+            source = "teacherAccount",
             qualifiedByName = "toReference")
     @Override
     void update(ClassroomCreateRequest classroomCreateRequest, @MappingTarget Classroom Classroom);
