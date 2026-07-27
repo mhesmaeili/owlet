@@ -35,21 +35,20 @@ public class Session extends UuidEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "session_status_id", nullable = false)
+    @JoinColumn(name = "session_status_id", nullable = true)
     private ReferenceItem sessionStatus;
 
     @Size(max = 100)
     @Column(name = "code", length = 100)
     private String code;
 
+    @NotNull
     @Size(max = 300)
-    @Column(name = "title", length = 300)
+    @Column(name = "title", length = 300, nullable = false)
     private String title;
 
-    @NotNull
-    @Column(name = "session_date", nullable = false)
+    @Column(name = "session_date")
     private LocalDate sessionDate;
 
     @Column(name = "start_time")
@@ -67,9 +66,9 @@ public class Session extends UuidEntity {
     @Column(name = "teacher_summary", length = Integer.MAX_VALUE)
     private String teacherSummary;
 
-    @NotNull
+
     @ColumnDefault("false")
-    @Column(name = "finalized", nullable = false)
+    @Column(name = "finalized")
     private Boolean finalized = false;
 
     @Column(name = "finalized_at")
