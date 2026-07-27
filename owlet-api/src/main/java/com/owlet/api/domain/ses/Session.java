@@ -36,7 +36,7 @@ public class Session extends UuidEntity {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "session_status_id", nullable = true)
+    @JoinColumn(name = "session_status_id")
     private ReferenceItem sessionStatus;
 
     @Size(max = 100)
