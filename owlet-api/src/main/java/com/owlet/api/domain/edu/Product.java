@@ -1,8 +1,9 @@
 package com.owlet.api.domain.edu;
 
 import com.owlet.api.domain.base.UuidEntity;
-import com.owlet.api.domain.ref.ReferenceItem;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -31,18 +32,6 @@ public class Product extends UuidEntity {
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grade_id")
-    private ReferenceItem grade;
-
-    @Column(name = "age_from")
-    private Short ageFrom;
-
-    @Column(name = "age_to")
-    private Short ageTo;
-
-    @Column(name = "estimated_duration")
-    private Integer estimatedDuration;
 
     @NotNull
     @ColumnDefault("true")
