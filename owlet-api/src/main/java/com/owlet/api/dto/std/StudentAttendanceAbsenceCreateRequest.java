@@ -2,6 +2,7 @@ package com.owlet.api.dto.std;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.service.base.helper.EntityIdDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +19,13 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentAttendanceAbsenceCreateRequest {
 
-
+    @NotNull
     private EntityIdDto studentClassroom;
 
+    @NotNull
     private LocalDate attendanceDate;
 
+    @NotNull
     private Boolean present;
 
 }
