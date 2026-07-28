@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Tag(name = "TeacherObservationController")
 @RestController
-@RequestMapping("/api/ses/TeacherObservation")
+@RequestMapping("/api/ses/teacherObservation")
 public class TeacherObservationController extends CrudController<
         UUID,
         TeacherObservationDto,
