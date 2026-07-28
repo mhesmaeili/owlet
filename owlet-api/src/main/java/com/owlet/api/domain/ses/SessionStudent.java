@@ -46,4 +46,17 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "ai_processed")
     private Boolean aiProcessed = false;
 
+    @Column(name = "point")
+    private Integer point;
+
+    @Column(name = "time_base")
+    private Boolean timeBase;
+
+    @Column(name = "number")
+    private Integer number;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_evaluation_id")
+    private ReferenceItem stateEvaluation;
+
 }

@@ -28,4 +28,9 @@ public class SessionStudentCreateRequest {
     private Boolean present;
     private Boolean completed;
 
+    private Integer point;
+    private Boolean timeBase;
+    private Integer number;
+    private EntityIdDto stateEvaluation;
+
 }
