@@ -1,8 +1,8 @@
 package com.owlet.api.dto.ses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.owlet.api.dto.BaseDto;
-import com.owlet.api.dto.std.StudentDto;
+import com.owlet.api.service.base.helper.EntityIdDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,11 +17,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionStudentDto extends BaseDto<UUID> {
+public class SessionStudentCreateRequest {
 
-    private SessionDto session;
-    private StudentDto student;
+    @NotNull
+    private EntityIdDto session;
+    @NotNull
+    private EntityIdDto student;
     private OffsetDateTime attendanceTime;
+    @NotNull
     private Boolean present;
     private Boolean completed;
 

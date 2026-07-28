@@ -26,9 +26,8 @@ public class SessionStudent extends UuidEntity {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "attendance_status_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attendance_status_id")
     private ReferenceItem attendanceStatus;
 
     @Column(name = "attendance_time")
@@ -39,14 +38,12 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "present", nullable = false)
     private Boolean present = false;
 
-    @NotNull
     @ColumnDefault("false")
-    @Column(name = "completed", nullable = false)
+    @Column(name = "completed")
     private Boolean completed = false;
 
-    @NotNull
     @ColumnDefault("false")
-    @Column(name = "ai_processed", nullable = false)
+    @Column(name = "ai_processed")
     private Boolean aiProcessed = false;
 
 }
