@@ -1,5 +1,7 @@
 package com.owlet.api.storage.service;
 
+import com.owlet.api.storage.StorageObject;
+
 import java.io.InputStream;
 import java.security.DigestInputStream;
 
@@ -11,7 +13,7 @@ public interface StorageService {
             String objectKey,
             String contentType);
 
-    InputStream download(
+    StorageObject download(
             String objectKey);
 
     void delete(

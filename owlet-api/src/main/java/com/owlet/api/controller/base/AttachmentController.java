@@ -4,6 +4,7 @@ import com.owlet.api.dto.base.AttachmentCreateRequest;
 import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.service.base.AttachmentService;
 import com.owlet.api.service.base.helper.EntityIdDto;
+import com.owlet.api.storage.StorageObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
@@ -58,28 +59,37 @@ public class AttachmentController extends CrudController<
     public ResponseEntity<InputStreamResource> download(
             @PathVariable UUID id) {
 
-        AttachmentDto attachment = service.get(id);
-
-        InputStream inputStream =
+        StorageObject object =
                 attachmentService.download(id);
 
         return ResponseEntity.ok()
+
                 .contentType(
                         MediaType.parseMediaType(
-                                attachment.getMimeType()))
+                                object.contentType()))
+
                 .contentLength(
-                        attachment.getSize())
+                        object.contentLength())
+
+                .eTag(object.etag())
+
+                .lastModified(
+                        object.lastModified().toEpochMilli())
+
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.attachment()
+
+                        ContentDisposition
+                                .attachment()
                                 .filename(
-                                        attachment.getFilename(),
+                                        object.filename(),
                                         StandardCharsets.UTF_8)
                                 .build()
                                 .toString())
+
                 .body(
                         new InputStreamResource(
-                                inputStream));
+                                object.inputStream()));
 
     }
 

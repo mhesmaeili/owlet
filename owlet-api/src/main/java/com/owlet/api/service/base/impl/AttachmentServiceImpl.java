@@ -9,13 +9,14 @@ import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.AttachmentService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.storage.ObjectKeyBuilder;
+import com.owlet.api.storage.StorageObject;
 import com.owlet.api.storage.service.StorageService;
 import com.owlet.common.exception.StorageException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.HexFormat;
@@ -129,14 +130,33 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public InputStream download(UUID id) {
+    public StorageObject download(UUID id) {
 
         Attachment attachment =
-                repository.findById(id)
-                        .orElseThrow();
+                repository.findByIdAndDeletedFalse(id)
+                        .orElseThrow(
+                                () -> new EntityNotFoundException(
+                                        "Attachment not found"));
 
-        return storageService.download(
-                attachment.getObjectKey());
+        StorageObject storageObject =
+                storageService.download(
+                        attachment.getObjectKey());
+
+        return new StorageObject(
+
+                storageObject.inputStream(),
+
+                attachment.getFilename(),
+
+                attachment.getMimeType(),
+
+                attachment.getSize(),
+
+                storageObject.etag(),
+
+                storageObject.lastModified()
+
+        );
 
     }
 }

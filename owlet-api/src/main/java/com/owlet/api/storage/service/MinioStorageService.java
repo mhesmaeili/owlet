@@ -1,11 +1,12 @@
 package com.owlet.api.storage.service;
 
 import com.owlet.api.storage.MinioProperties;
+import com.owlet.api.storage.StorageObject;
+import com.owlet.common.exception.StorageException;
 import io.minio.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.security.DigestInputStream;
 
 @Service
@@ -45,19 +46,35 @@ public class MinioStorageService implements StorageService {
     }
 
     @Override
-    public InputStream download(String objectKey) {
-
+    public StorageObject download(String objectKey) {
         try {
+            StatObjectResponse stat =
+                    minioClient.statObject(
+                            StatObjectArgs.builder()
+                                    .bucket(properties.bucket())
+                                    .object(objectKey)
+                                    .build());
 
-            return minioClient.getObject(
-                    GetObjectArgs.builder()
-                            .bucket(properties.bucket())
-                            .object(objectKey)
-                            .build());
+            GetObjectResponse stream =
+                    minioClient.getObject(
+                            GetObjectArgs.builder()
+                                    .bucket(properties.bucket())
+                                    .object(objectKey)
+                                    .build());
+
+            return new StorageObject(
+                    stream,
+                    objectKey,
+                    stat.contentType(),
+                    stat.size(),
+                    stat.etag(),
+                    stat.lastModified().toInstant());
 
         } catch (Exception ex) {
 
-            throw new RuntimeException(ex);
+            throw new StorageException(
+                    "Cannot download object",
+                    ex);
 
         }
 
