@@ -62,3 +62,12 @@ springdoc:
     try-it-out-enabled: true
 
   default-produces-media-type: application/json
+
+
+storage:
+  minio:
+    endpoint: http://localhost:11000
+    access-key: minioadmin
+    secret-key: minioadmin123
+    bucket: attachments
+    secure: false
