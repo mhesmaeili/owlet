@@ -6,15 +6,19 @@ import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.mapper.base.AttachmentMapper;
 import com.owlet.api.repository.base.AttachmentRepository;
 import com.owlet.api.security.AuditableService;
-import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.AttachmentService;
+import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.storage.ObjectKeyBuilder;
 import com.owlet.api.storage.service.StorageService;
+import com.owlet.common.exception.StorageException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,11 +63,22 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
 
         try {
 
+            MessageDigest digest =
+                    MessageDigest.getInstance("SHA-256");
+
+            DigestInputStream dis =
+                    new DigestInputStream(
+                            file.getInputStream(),
+                            digest);
+
             storageService.upload(
-                    file.getInputStream(),
+                    dis,
                     file.getSize(),
                     objectKey,
                     file.getContentType());
+
+            byte[] hash = digest.digest();
+            String sha256 = HexFormat.of().formatHex(hash);
 
             Attachment attachment = mapper.toEntity(request);
 
@@ -75,16 +90,21 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
 
             attachment.setObjectKey(objectKey);
 
+            attachment.setSha256(sha256);
+
             attachment = repository.save(attachment);
 
             return mapper.toDto(attachment);
 
         } catch (Exception ex) {
 
-            storageService.delete(objectKey);
+            try {
+                storageService.delete(objectKey);
+            } catch (Exception ignored) {
+            }
 
-            throw new RuntimeException(
-                    "Uploading attachment failed",
+            throw new StorageException(
+                    "Upload failed",
                     ex);
 
         }

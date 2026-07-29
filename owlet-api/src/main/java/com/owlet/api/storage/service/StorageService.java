@@ -1,11 +1,12 @@
 package com.owlet.api.storage.service;
 
 import java.io.InputStream;
+import java.security.DigestInputStream;
 
 public interface StorageService {
 
     String upload(
-            InputStream inputStream,
+            DigestInputStream dis,
             long size,
             String objectKey,
             String contentType);

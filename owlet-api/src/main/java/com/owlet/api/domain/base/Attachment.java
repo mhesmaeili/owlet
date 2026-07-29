@@ -44,4 +44,7 @@ public class Attachment extends UuidEntity {
     @JoinColumn(name = "category_id")
     private ReferenceItem category;
 
+    @Size(max = 1024)
+    @Column(name = "sha256", length = 1024)
+    private String sha256;
 }

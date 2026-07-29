@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.security.DigestInputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class MinioStorageService implements StorageService {
 
     @Override
     public String upload(
-            InputStream inputStream,
+            DigestInputStream dis,
             long size,
             String objectKey,
             String contentType) {
@@ -27,7 +28,7 @@ public class MinioStorageService implements StorageService {
                     PutObjectArgs.builder()
                             .bucket(properties.bucket())
                             .object(objectKey)
-                            .stream(inputStream, size, 10L * 1024 * 1024)
+                            .stream(dis, size, 10L * 1024 * 1024)
                             .contentType(contentType)
                             .build());
 
