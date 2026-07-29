@@ -8,9 +8,14 @@ import com.owlet.api.repository.base.AttachmentRepository;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.AttachmentService;
+import com.owlet.api.storage.ObjectKeyBuilder;
+import com.owlet.api.storage.service.StorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,16 +30,93 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
         AttachmentMapper>
         implements AttachmentService {
 
+    private final StorageService storageService;
+
+    private final ObjectKeyBuilder objectKeyBuilder;
+
     public AttachmentServiceImpl(
             AttachmentRepository repository,
             AttachmentMapper mapper,
-            AuditableService auditableService) {
+            AuditableService auditableService, StorageService storageService, ObjectKeyBuilder objectKeyBuilder) {
 
         super(repository, mapper, auditableService);
+        this.storageService = storageService;
+        this.objectKeyBuilder = objectKeyBuilder;
     }
 
     @Override
     protected Class<Attachment> entityClass() {
         return Attachment.class;
+    }
+
+    @Override
+    public AttachmentDto upload(MultipartFile file, AttachmentCreateRequest request) {
+        String objectKey = objectKeyBuilder.build(
+                file.getContentType(),
+                request.getEntityClass(),
+                request.getEntityId(),
+                file.getOriginalFilename());
+
+        try {
+
+            storageService.upload(
+                    file.getInputStream(),
+                    file.getSize(),
+                    objectKey,
+                    file.getContentType());
+
+            Attachment attachment = mapper.toEntity(request);
+
+            attachment.setFilename(file.getOriginalFilename());
+
+            attachment.setMimeType(file.getContentType());
+
+            attachment.setSize(file.getSize());
+
+            attachment.setObjectKey(objectKey);
+
+            attachment = repository.save(attachment);
+
+            return mapper.toDto(attachment);
+
+        } catch (Exception ex) {
+
+            storageService.delete(objectKey);
+
+            throw new RuntimeException(
+                    "Uploading attachment failed",
+                    ex);
+
+        }
+    }
+
+    @Override
+    public List<AttachmentDto> list(String entityClass, UUID entityId) {
+        return repository
+                .findByEntityClassAndEntityIdAndDeletedFalse(
+                        entityClass,
+                        entityId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    protected void beforeDelete(Attachment entity) {
+        storageService.delete(
+                entity.getObjectKey());
+
+    }
+
+    @Override
+    public InputStream download(UUID id) {
+
+        Attachment attachment =
+                repository.findById(id)
+                        .orElseThrow();
+
+        return storageService.download(
+                attachment.getObjectKey());
+
     }
 }

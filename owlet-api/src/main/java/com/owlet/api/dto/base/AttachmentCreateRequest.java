@@ -19,21 +19,12 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttachmentCreateRequest {
 
-    @NotNull
-    private String filename;
-
-    @NotNull
-    private String mimeType;
 
     @NotNull
     private String entityClass;
 
     @NotNull
     private UUID entityId;
-
-    private Long size;
-
-    private String objectKey;
 
     private EntityIdDto category;
 
