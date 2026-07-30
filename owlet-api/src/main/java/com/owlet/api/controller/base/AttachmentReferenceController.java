@@ -1,8 +1,8 @@
 package com.owlet.api.controller.base;
 
-import com.owlet.api.dto.base.AttachmentCreateRequest;
-import com.owlet.api.dto.base.AttachmentDto;
-import com.owlet.api.service.base.AttachmentService;
+import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
+import com.owlet.api.dto.base.AttachmentReferenceDto;
+import com.owlet.api.service.base.AttachmentReferenceService;
 import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.storage.StorageObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,42 +14,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
-@Tag(name = "AttachmentController")
+@Tag(name = "AttachmentReferenceController")
 @RestController
 @RequestMapping("/api/base/attachment")
-public class AttachmentController extends CrudController<
+public class AttachmentReferenceController extends CrudController<
         UUID,
-        AttachmentDto,
-        AttachmentCreateRequest,
-        AttachmentCreateRequest> {
+        AttachmentReferenceDto,
+        AttachmentReferenceCreateRequest,
+        AttachmentReferenceCreateRequest> {
 
-    private final AttachmentService attachmentService;
+    private final AttachmentReferenceService attachmentReferenceService;
 
-    public AttachmentController(AttachmentService service, AttachmentService attachmentService) {
+    public AttachmentReferenceController(AttachmentReferenceService service, AttachmentReferenceService attachmentReferenceService) {
         super(service);
-        this.attachmentService = attachmentService;
+        this.attachmentReferenceService = attachmentReferenceService;
     }
 
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AttachmentDto upload(
+    public AttachmentReferenceDto upload(
             @RequestPart MultipartFile file,
             @RequestParam String entityClass,
             @RequestParam UUID entityId,
             @RequestParam(required = false) UUID categoryId) {
 
-        AttachmentCreateRequest request = AttachmentCreateRequest.builder()
+        AttachmentReferenceCreateRequest request = AttachmentReferenceCreateRequest.builder()
                 .entityClass(entityClass)
                 .entityId(entityId)
                 .category(new EntityIdDto(categoryId))
                 .build();
 
-        return attachmentService.upload(
+        return attachmentReferenceService.upload(
                 file,
                 request);
 
@@ -60,7 +59,7 @@ public class AttachmentController extends CrudController<
             @PathVariable UUID id) {
 
         StorageObject object =
-                attachmentService.download(id);
+                attachmentReferenceService.download(id);
 
         return ResponseEntity.ok()
 
@@ -94,13 +93,13 @@ public class AttachmentController extends CrudController<
     }
 
     @GetMapping("/listByEntity")
-    public List<AttachmentDto> list(
+    public List<AttachmentReferenceDto> list(
 
             @RequestParam String entityClass,
 
             @RequestParam UUID entityId) {
 
-        return attachmentService.list(
+        return attachmentReferenceService.list(
                 entityClass,
                 entityId);
 

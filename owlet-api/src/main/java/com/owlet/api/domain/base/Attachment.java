@@ -24,14 +24,6 @@ public class Attachment extends UuidEntity {
     @Column(name = "mime_type", nullable = false)
     private String mimeType;
 
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "entity_class", nullable = false, length = 100)
-    private String entityClass;
-
-    @NotNull
-    @Column(name = "entity_id", nullable = false)
-    private UUID entityId;
 
     @Column(name = "size")
     private Long size;
@@ -39,10 +31,6 @@ public class Attachment extends UuidEntity {
     @Size(max = 1024)
     @Column(name = "object_key", length = 1024)
     private String objectKey;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private ReferenceItem category;
 
     @Size(max = 1024)
     @Column(name = "sha256", length = 1024)

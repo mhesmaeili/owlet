@@ -1,12 +1,12 @@
 package com.owlet.api.service.base;
 
+import com.owlet.api.domain.base.Attachment;
 import com.owlet.api.dto.base.AttachmentCreateRequest;
 import com.owlet.api.dto.base.AttachmentDto;
+import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.storage.StorageObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.util.List;
 import java.util.UUID;
 
 public interface AttachmentService extends CrudService<
@@ -17,11 +17,7 @@ public interface AttachmentService extends CrudService<
 
     AttachmentDto upload(
             MultipartFile file,
-            AttachmentCreateRequest request);
+            AttachmentReferenceCreateRequest request);
 
-    List<AttachmentDto> list(
-            String entityClass,
-            UUID entityId);
-
-    StorageObject download(UUID id);
+    StorageObject download(Attachment attachment);
 }

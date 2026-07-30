@@ -2,7 +2,8 @@ package com.owlet.api.dto.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import com.owlet.api.dto.ref.ReferenceItemDto;
+import com.owlet.api.service.base.helper.EntityIdDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,14 +18,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AttachmentDto extends BaseDto<UUID> {
+public class AttachmentReferenceCreateRequest extends BaseDto<UUID> {
 
-    private String filename;
+    @NotNull
+    private String entityClass;
 
-    private String mimeType;
+    @NotNull
+    private UUID entityId;
 
-    private Long size;
+    private EntityIdDto category;
 
-    private String objectKey;
+    @NotNull
+    private EntityIdDto attachment;
 
 }

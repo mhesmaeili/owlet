@@ -3,7 +3,9 @@ package com.owlet.api.service.base.impl;
 import com.owlet.api.domain.base.Attachment;
 import com.owlet.api.dto.base.AttachmentCreateRequest;
 import com.owlet.api.dto.base.AttachmentDto;
+import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.mapper.base.AttachmentMapper;
+import com.owlet.api.repository.base.AttachmentReferenceRepository;
 import com.owlet.api.repository.base.AttachmentRepository;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.AttachmentService;
@@ -11,8 +13,8 @@ import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.storage.ObjectKeyBuilder;
 import com.owlet.api.storage.StorageObject;
 import com.owlet.api.storage.service.StorageService;
+import com.owlet.common.exception.ConstraintViolationException;
 import com.owlet.common.exception.StorageException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.HexFormat;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,15 +39,17 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
     private final StorageService storageService;
 
     private final ObjectKeyBuilder objectKeyBuilder;
+    private final AttachmentReferenceRepository attachmentReferenceRepository;
 
     public AttachmentServiceImpl(
             AttachmentRepository repository,
             AttachmentMapper mapper,
-            AuditableService auditableService, StorageService storageService, ObjectKeyBuilder objectKeyBuilder) {
+            AuditableService auditableService, StorageService storageService, ObjectKeyBuilder objectKeyBuilder, AttachmentReferenceRepository attachmentReferenceRepository) {
 
         super(repository, mapper, auditableService);
         this.storageService = storageService;
         this.objectKeyBuilder = objectKeyBuilder;
+        this.attachmentReferenceRepository = attachmentReferenceRepository;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public AttachmentDto upload(MultipartFile file, AttachmentCreateRequest request) {
+    public AttachmentDto upload(MultipartFile file, AttachmentReferenceCreateRequest request) {
         String objectKey = objectKeyBuilder.build(
                 file.getContentType(),
                 request.getEntityClass(),
@@ -81,7 +84,7 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
             byte[] hash = digest.digest();
             String sha256 = HexFormat.of().formatHex(hash);
 
-            Attachment attachment = mapper.toEntity(request);
+            Attachment attachment = new Attachment();
 
             attachment.setFilename(file.getOriginalFilename());
 
@@ -112,31 +115,16 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public List<AttachmentDto> list(String entityClass, UUID entityId) {
-        return repository
-                .findByEntityClassAndEntityIdAndDeletedFalse(
-                        entityClass,
-                        entityId)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
-    }
-
-    @Override
     protected void beforeDelete(Attachment entity) {
+        if (attachmentReferenceRepository.existsByAttachmentAndDeletedFalse(entity)) {
+            throw new ConstraintViolationException("Attachment reference already exists");
+        }
         storageService.delete(
                 entity.getObjectKey());
-
     }
 
     @Override
-    public StorageObject download(UUID id) {
-
-        Attachment attachment =
-                repository.findByIdAndDeletedFalse(id)
-                        .orElseThrow(
-                                () -> new EntityNotFoundException(
-                                        "Attachment not found"));
+    public StorageObject download(Attachment attachment) {
 
         StorageObject storageObject =
                 storageService.download(

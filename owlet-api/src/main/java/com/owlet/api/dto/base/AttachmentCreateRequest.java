@@ -14,18 +14,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttachmentCreateRequest {
 
-
-    @NotNull
-    private String entityClass;
-
-    @NotNull
-    private UUID entityId;
-
-    private EntityIdDto category;
 
 }

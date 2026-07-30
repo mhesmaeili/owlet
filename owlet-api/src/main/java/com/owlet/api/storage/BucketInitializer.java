@@ -44,9 +44,11 @@ public class BucketInitializer {
 
         } catch (Exception e) {
 
-            throw new IllegalStateException(
+            /*throw new IllegalStateException(
                     "Cannot initialize MinIO bucket",
-                    e);
+                    e);*/
+
+            log.error("minio client error", e);
 
         }
 
