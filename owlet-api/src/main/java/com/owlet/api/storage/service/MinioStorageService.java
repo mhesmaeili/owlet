@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.DigestInputStream;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -120,4 +121,29 @@ public class MinioStorageService implements StorageService {
 
     }
 
+    @Override
+    public String generatePresignedUrl(
+            String objectKey,
+            Duration duration) {
+
+        try {
+
+            return minioClient.getPresignedObjectUrl(
+
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Http.Method.GET)
+                            .bucket(properties.bucket())
+                            .object(objectKey)
+                            .expiry((int) duration.toSeconds())
+                            .build());
+
+        } catch (Exception ex) {
+
+            throw new StorageException(
+                    "Cannot generate url",
+                    ex);
+
+        }
+
+    }
 }

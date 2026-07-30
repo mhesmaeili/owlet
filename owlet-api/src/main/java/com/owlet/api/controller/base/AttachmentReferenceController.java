@@ -2,9 +2,11 @@ package com.owlet.api.controller.base;
 
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
+import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.service.base.AttachmentReferenceService;
 import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.storage.StorageObject;
+import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ContentDisposition;
@@ -36,7 +38,7 @@ public class AttachmentReferenceController extends CrudController<
 
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AttachmentReferenceDto upload(
+    public ApiResponse<AttachmentReferenceDto> upload(
             @RequestPart MultipartFile file,
             @RequestParam String entityClass,
             @RequestParam UUID entityId,
@@ -48,9 +50,9 @@ public class AttachmentReferenceController extends CrudController<
                 .category(new EntityIdDto(categoryId))
                 .build();
 
-        return attachmentReferenceService.upload(
+        return ApiResponse.success(attachmentReferenceService.upload(
                 file,
-                request);
+                request));
 
     }
 
@@ -93,16 +95,28 @@ public class AttachmentReferenceController extends CrudController<
     }
 
     @GetMapping("/listByEntity")
-    public List<AttachmentReferenceDto> list(
+    public ApiResponse<List<AttachmentReferenceDto>> list(
 
             @RequestParam String entityClass,
 
             @RequestParam UUID entityId) {
 
-        return attachmentReferenceService.list(
-                entityClass,
-                entityId);
+        return ApiResponse.success
+                (attachmentReferenceService.list(
+                        entityClass,
+                        entityId));
 
+    }
+
+    @GetMapping("/{id}/url")
+    public ApiResponse<AttachmentUrlDto> getUrl(
+            @PathVariable UUID id) {
+
+        AttachmentReferenceDto attachmentReferenceDto =
+                attachmentReferenceService.get(id);
+
+        return ApiResponse.success
+                (attachmentReferenceService.generatePresignedUrl(attachmentReferenceDto));
     }
 
 }

@@ -2,8 +2,8 @@ package com.owlet.api.storage.service;
 
 import com.owlet.api.storage.StorageObject;
 
-import java.io.InputStream;
 import java.security.DigestInputStream;
+import java.time.Duration;
 
 public interface StorageService {
 
@@ -22,4 +22,7 @@ public interface StorageService {
     boolean exists(
             String objectKey);
 
+    String generatePresignedUrl(
+            String objectKey,
+            Duration duration);
 }

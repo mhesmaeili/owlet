@@ -2,6 +2,7 @@ package com.owlet.api.service.base;
 
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
+import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.storage.StorageObject;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,4 +24,6 @@ public interface AttachmentReferenceService extends CrudService<
             UUID entityId);
 
     StorageObject download(UUID id);
+
+    AttachmentUrlDto generatePresignedUrl(AttachmentReferenceDto attachmentReferenceDto);
 }

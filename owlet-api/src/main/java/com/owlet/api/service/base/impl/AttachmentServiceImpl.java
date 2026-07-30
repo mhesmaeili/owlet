@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.time.Duration;
 import java.util.HexFormat;
 import java.util.UUID;
 
@@ -146,5 +147,12 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
 
         );
 
+    }
+
+    @Override
+    public String generatePresignedUrl(String objectKey, Duration duration) {
+        return storageService.generatePresignedUrl(
+                objectKey,
+                duration);
     }
 }

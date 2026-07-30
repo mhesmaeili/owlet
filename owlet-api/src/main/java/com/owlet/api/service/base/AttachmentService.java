@@ -7,6 +7,7 @@ import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.storage.StorageObject;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.util.UUID;
 
 public interface AttachmentService extends CrudService<
@@ -20,4 +21,8 @@ public interface AttachmentService extends CrudService<
             AttachmentReferenceCreateRequest request);
 
     StorageObject download(Attachment attachment);
+
+    String generatePresignedUrl(
+            String objectKey,
+            Duration duration);
 }

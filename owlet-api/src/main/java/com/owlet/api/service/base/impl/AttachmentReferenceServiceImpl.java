@@ -4,6 +4,7 @@ import com.owlet.api.domain.base.AttachmentReference;
 import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
+import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.mapper.base.AttachmentReferenceMapper;
 import com.owlet.api.repository.base.AttachmentReferenceRepository;
 import com.owlet.api.security.AuditableService;
@@ -17,6 +18,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,5 +84,26 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     @Override
     protected void afterDelete(AttachmentReference entity) {
         attachmentService.delete(entity.getAttachment().getId());
+    }
+
+    @Override
+    public AttachmentUrlDto generatePresignedUrl(AttachmentReferenceDto attachmentReferenceDto) {
+        Duration duration = Duration.ofMinutes(2);
+
+        String url = attachmentService.generatePresignedUrl(
+                attachmentReferenceDto.getAttachment().getObjectKey(),
+                duration);
+
+        AttachmentDto attachment = attachmentReferenceDto.getAttachment();
+
+        return AttachmentUrlDto.builder()
+                .attachmentId(attachment.getId())
+                .filename(attachment.getFilename())
+                .contentType(attachment.getMimeType())
+                .size(attachment.getSize())
+                .expiresAt(Instant.now().plus(duration))
+                .url(url)
+                .build();
+
     }
 }
