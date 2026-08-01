@@ -23,7 +23,7 @@ spring:
      # ddl-auto: validate
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         jdbc:
           time_zone: UTC
         #default_schema: school
@@ -66,8 +66,8 @@ springdoc:
 
 storage:
   minio:
-    endpoint: http://localhost:11000
-    access-key: minioadmin
-    secret-key: minioadmin123
+    endpoint: http://localhost:9000
+    access-key: admin
+    secret-key: password123
     bucket: attachments
     secure: false

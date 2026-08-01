@@ -85,21 +85,21 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
             byte[] hash = digest.digest();
             String sha256 = HexFormat.of().formatHex(hash);
 
-            Attachment attachment = new Attachment();
+            return repository.findBySha256AndDeletedFalse(sha256)
+                    .map(mapper::toDto)
+                    .orElseGet(() -> {
 
-            attachment.setFilename(file.getOriginalFilename());
+                        Attachment attachment = new Attachment();
 
-            attachment.setMimeType(file.getContentType());
+                        attachment.setFilename(file.getOriginalFilename());
+                        attachment.setMimeType(file.getContentType());
+                        attachment.setSize(file.getSize());
+                        attachment.setObjectKey(objectKey);
+                        attachment.setSha256(sha256);
 
-            attachment.setSize(file.getSize());
-
-            attachment.setObjectKey(objectKey);
-
-            attachment.setSha256(sha256);
-
-            attachment = repository.save(attachment);
-
-            return mapper.toDto(attachment);
+                        Attachment savedAttachment = repository.save(attachment);
+                        return mapper.toDto(savedAttachment);
+                    });
 
         } catch (Exception ex) {
 
