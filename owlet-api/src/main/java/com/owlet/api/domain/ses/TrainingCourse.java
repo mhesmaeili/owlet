@@ -1,0 +1,33 @@
+package com.owlet.api.domain.ses;
+
+import com.owlet.api.domain.base.UuidEntity;
+import com.owlet.api.domain.edu.Product;
+import com.owlet.api.domain.idm.Account;
+import com.owlet.api.domain.org.Classroom;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "training_course", schema = "ses")
+public class TrainingCourse extends UuidEntity {
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "classroom_id", nullable = false)
+    private Classroom classroom;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "teacher_account_id", nullable = false)
+    private Account teacherAccount;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+}

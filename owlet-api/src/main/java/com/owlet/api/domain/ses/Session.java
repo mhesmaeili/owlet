@@ -20,20 +20,11 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "session", schema = "ses")
 public class Session extends UuidEntity {
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "classroom_id", nullable = false)
-    private Classroom classroom;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "teacher_account_id", nullable = false)
-    private Account teacherAccount;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "training_course_id", nullable = false)
+    private TrainingCourse trainingCourse;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "session_status_id")
