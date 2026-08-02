@@ -1,9 +1,6 @@
 package com.owlet.api.domain.ses;
 
 import com.owlet.api.domain.base.UuidEntity;
-import com.owlet.api.domain.edu.Product;
-import com.owlet.api.domain.idm.Account;
-import com.owlet.api.domain.org.Classroom;
 import com.owlet.api.domain.ref.ReferenceItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
