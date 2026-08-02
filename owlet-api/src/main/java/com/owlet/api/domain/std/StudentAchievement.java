@@ -1,6 +1,7 @@
 package com.owlet.api.domain.std;
 
 import com.owlet.api.domain.base.UuidEntity;
+import com.owlet.api.domain.ref.ReferenceItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -25,5 +26,10 @@ public class StudentAchievement extends UuidEntity {
     @NotNull
     @Column(name = "achievement_date", nullable = false)
     private LocalDate achievementDate;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "achievement_type_id", nullable = false)
+    private ReferenceItem achievementType;
 
 }

@@ -2,6 +2,7 @@ package com.owlet.api.dto.std;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,7 @@ public class StudentAchievementDto extends BaseDto<UUID> {
     private String achievement;
 
     private LocalDate achievementDate;
+
+    private ReferenceItemDto achievementType;
 
 }

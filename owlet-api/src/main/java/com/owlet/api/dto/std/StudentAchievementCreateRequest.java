@@ -24,4 +24,6 @@ public class StudentAchievementCreateRequest {
 
     private LocalDate achievementDate;
 
+    private EntityIdDto achievementType;
+
 }

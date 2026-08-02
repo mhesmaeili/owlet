@@ -20,12 +20,18 @@ public interface StudentAchievementMapper extends CrudMapper<
     @Mapping(target = "student",
             source = "student",
             qualifiedByName = "toReference")
+    @Mapping(target = "achievementType",
+            source = "achievementType",
+            qualifiedByName = "toReference")
     @Override
     StudentAchievement toEntity(StudentAchievementCreateRequest StudentAchievementCreateRequest);
 
 
     @Mapping(target = "student",
             source = "student",
+            qualifiedByName = "toReference")
+    @Mapping(target = "achievementType",
+            source = "achievementType",
             qualifiedByName = "toReference")
     @Override
     void update(StudentAchievementCreateRequest StudentAchievementCreateRequest, @MappingTarget StudentAchievement StudentAchievement);
