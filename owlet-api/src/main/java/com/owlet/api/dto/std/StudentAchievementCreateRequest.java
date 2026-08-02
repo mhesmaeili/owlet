@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentAchievementCreateRequest {
 
-    private EntityIdDto student;
+    private EntityIdDto sessionStudent;
 
     private String achievement;
 

@@ -2,6 +2,7 @@ package com.owlet.api.domain.std;
 
 import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.ref.ReferenceItem;
+import com.owlet.api.domain.ses.SessionStudent;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,8 +17,8 @@ import java.time.LocalDate;
 public class StudentAchievement extends UuidEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @JoinColumn(name = "session_student_id", nullable = false)
+    private SessionStudent sessionStudent;
 
     @NotNull
     @Column(name = "achievement", nullable = false, length = Integer.MAX_VALUE)

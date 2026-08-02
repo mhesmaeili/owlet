@@ -17,8 +17,8 @@ public interface StudentAchievementMapper extends CrudMapper<
         StudentAchievementCreateRequest> {
 
 
-    @Mapping(target = "student",
-            source = "student",
+    @Mapping(target = "sessionStudent",
+            source = "sessionStudent",
             qualifiedByName = "toReference")
     @Mapping(target = "achievementType",
             source = "achievementType",
@@ -27,8 +27,8 @@ public interface StudentAchievementMapper extends CrudMapper<
     StudentAchievement toEntity(StudentAchievementCreateRequest StudentAchievementCreateRequest);
 
 
-    @Mapping(target = "student",
-            source = "student",
+    @Mapping(target = "sessionStudent",
+            source = "sessionStudent",
             qualifiedByName = "toReference")
     @Mapping(target = "achievementType",
             source = "achievementType",
