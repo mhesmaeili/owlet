@@ -59,4 +59,10 @@ public class SessionStudent extends UuidEntity {
     @JoinColumn(name = "state_evaluation_id")
     private ReferenceItem stateEvaluation;
 
+    @Column(name = "ai_result", length = Integer.MAX_VALUE)
+    private String aiResult;
+
+    @Column(name = "short_description", length = Integer.MAX_VALUE)
+    private String shortDescription;
+
 }

@@ -30,5 +30,7 @@ public class SessionStudentDto extends BaseDto<UUID> {
     private Boolean timeBase;
     private Integer number;
     private ReferenceItemDto stateEvaluation;
+    private String shortDescription;
+    private String aiResult;
 
 }

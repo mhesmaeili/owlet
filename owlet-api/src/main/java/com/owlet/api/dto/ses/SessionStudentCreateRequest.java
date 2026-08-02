@@ -32,5 +32,7 @@ public class SessionStudentCreateRequest {
     private Boolean timeBase;
     private Integer number;
     private EntityIdDto stateEvaluation;
+    private String shortDescription;
+    private String aiResult;
 
 }
