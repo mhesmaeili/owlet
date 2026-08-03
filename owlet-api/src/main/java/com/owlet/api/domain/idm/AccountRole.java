@@ -34,6 +34,6 @@ public class AccountRole extends UuidEntity {
     @NotNull
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
 }

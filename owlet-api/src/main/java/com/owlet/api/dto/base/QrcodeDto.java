@@ -27,4 +27,6 @@ public class QrcodeDto extends BaseDto<UUID> {
 
     private OffsetDateTime assignedAt;
 
+    private String code;
+
 }

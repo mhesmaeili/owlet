@@ -3,6 +3,8 @@ package com.owlet.api.domain.base;
 import com.owlet.api.domain.ref.ReferenceItem;
 import com.owlet.api.domain.std.Student;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +25,9 @@ public class Qrcode extends UuidEntity {
 
     @Column(name = "assigned_at")
     private OffsetDateTime assignedAt;
+
+    @Size(max = 20)
+    @Column(name = "code", length = 20)
+    private String code;
 
 }

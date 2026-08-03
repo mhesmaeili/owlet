@@ -24,4 +24,6 @@ public class QrcodeCreateRequest {
 
     private OffsetDateTime assignedAt;
 
+    private String code;
+
 }

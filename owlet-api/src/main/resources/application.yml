@@ -66,8 +66,8 @@ springdoc:
 
 storage:
   minio:
-    endpoint: http://localhost:9000
-    access-key: admin
-    secret-key: password123
+    endpoint: http://localhost:11000
+    access-key: minioadmin
+    secret-key: minioadmin123
     bucket: attachments
     secure: false
