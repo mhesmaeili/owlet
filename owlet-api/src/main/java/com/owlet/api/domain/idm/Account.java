@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
@@ -91,7 +90,7 @@ public class Account extends UuidEntity {
     private String description;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @Filter(name = "deletedFilter")
+    @SQLRestriction("deleted = false")
     private Set<AccountRole> accountRoles = new LinkedHashSet<>();
 
 }
