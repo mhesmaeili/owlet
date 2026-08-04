@@ -1,7 +1,6 @@
 package com.owlet.api.repository.idm;
 
 import com.owlet.api.domain.idm.Account;
-import com.owlet.api.domain.idm.Role;
 import com.owlet.api.dto.idm.RoleDto;
 import com.owlet.api.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
