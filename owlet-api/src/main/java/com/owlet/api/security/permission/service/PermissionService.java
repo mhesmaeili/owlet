@@ -7,29 +7,32 @@ import org.springframework.stereotype.Service;
 public class PermissionService {
 
 
+    private static final String SUPER_ADMIN_ROLE = "Role_Super_Administrator";
+
     public boolean hasPermission(
             Authentication authentication,
             String module,
             String action
     ) {
 
-        if (authentication == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return false;
         }
 
-
-        String authority =
-                module +
-                        ":" +
-                        action;
-
+        // ساخت فرمت پرمیشن‌ها بر اساس استاندارد (مثال: ACCOUNT:CREATE)
+        String exactAuthority = module + ":" + action;
+        String wildcardAuthority = module + ":*";
 
         return authentication
                 .getAuthorities()
                 .stream()
-                .anyMatch(
-                        a -> a.getAuthority()
-                                .equals(authority)
-                );
+                .anyMatch(a -> {
+                    String userAuth = a.getAuthority();
+
+                    // مقایسه بدون حساسیت به حروف کوچک و بزرگ انجام می‌شود
+                    return userAuth.equalsIgnoreCase(SUPER_ADMIN_ROLE) ||
+                            userAuth.equalsIgnoreCase(exactAuthority) ||
+                            userAuth.equalsIgnoreCase(wildcardAuthority);
+                });
     }
 }

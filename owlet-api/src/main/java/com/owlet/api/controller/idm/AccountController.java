@@ -5,6 +5,8 @@ import com.owlet.api.dto.idm.AccountCreateRequest;
 import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.idm.AccountUpdateRequest;
 import com.owlet.api.security.CurrentUser;
+import com.owlet.api.security.permission.annotation.CrudPermission;
+import com.owlet.api.security.permission.enums.Module;
 import com.owlet.api.service.idm.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @Tag(name = "AccountController")
 @RestController
 @RequestMapping("/api/idm/account")
+@CrudPermission(Module.ACCOUNT)
 public class AccountController extends CrudController<
         UUID,
         AccountDto,

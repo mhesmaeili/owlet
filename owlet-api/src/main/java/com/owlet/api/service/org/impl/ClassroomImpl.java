@@ -11,6 +11,7 @@ import com.owlet.api.service.org.ClassroomService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,8 +35,15 @@ public class ClassroomImpl extends CrudServiceImpl<
     }
 
 
+
     @Override
     protected Class<Classroom> entityClass() {
         return Classroom.class;
+    }
+
+    @Override
+    public List<ClassroomDto> findByTitle(String title) {
+        List<Classroom> list = repository.findByTitle(title);
+        return mapper.toDto(list);
     }
 }

@@ -9,11 +9,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "classroom", schema = "org")
+@Filter(name = "deletedFilter")
 public class Classroom extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
