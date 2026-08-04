@@ -1,5 +1,6 @@
 package com.owlet.api.security;
 
+import com.owlet.common.exception.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,11 @@ public class CurrentUserService {
 
         CurrentUser user = getCurrentUser();
 
-        return user == null ? null : user.getUsername();
+        if (user == null) {
+            throw new BadCredentialsException("کاربر احراز هویت نشده است");
+        }
+
+        return user.getUsername();
     }
 
 }

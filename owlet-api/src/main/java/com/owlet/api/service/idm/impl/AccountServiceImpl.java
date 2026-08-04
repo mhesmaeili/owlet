@@ -6,6 +6,7 @@ import com.owlet.api.domain.idm.Role;
 import com.owlet.api.dto.idm.AccountCreateRequest;
 import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.idm.AccountUpdateRequest;
+import com.owlet.api.dto.idm.RoleDto;
 import com.owlet.api.mapper.idm.AccountMapper;
 import com.owlet.api.repository.idm.AccountRepository;
 import com.owlet.api.repository.idm.AccountRoleRepository;
@@ -187,4 +188,8 @@ public class AccountServiceImpl extends CrudServiceImpl<
         }
     }
 
+    @Override
+    public List<RoleDto> findActiveRolesByUsername(String username) {
+        return repository.findActiveRoleDtosByUsername(username);
+    }
 }
