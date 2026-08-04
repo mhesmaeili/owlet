@@ -1,7 +1,6 @@
 package com.owlet.api.service.org;
 
 
-import com.owlet.api.domain.org.Classroom;
 import com.owlet.api.dto.org.ClassroomCreateRequest;
 import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.service.base.CrudService;

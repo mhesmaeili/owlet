@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
 
 @Getter
 @Setter
