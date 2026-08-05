@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Filter;
 
 import java.math.BigDecimal;
 
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "school", schema = "org")
+@Filter(name = "deletedFilter")
 public class School extends UuidEntity {
 
 

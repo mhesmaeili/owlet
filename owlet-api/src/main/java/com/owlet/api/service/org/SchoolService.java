@@ -5,6 +5,7 @@ import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.dto.org.SchoolUpdateRequest;
 import com.owlet.api.service.base.CrudService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SchoolService extends CrudService<
@@ -12,4 +13,6 @@ public interface SchoolService extends CrudService<
         SchoolDto,
         SchoolCreateRequest,
         SchoolUpdateRequest> {
+
+    List<SchoolDto> teacherSteamWorkWithSchool();
 }

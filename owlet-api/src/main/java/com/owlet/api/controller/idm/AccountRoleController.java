@@ -3,6 +3,8 @@ package com.owlet.api.controller.idm;
 import com.owlet.api.controller.base.CrudController;
 import com.owlet.api.dto.idm.AccountRoleCreateRequest;
 import com.owlet.api.dto.idm.AccountRoleDto;
+import com.owlet.api.security.permission.annotation.CrudPermission;
+import com.owlet.api.security.permission.enums.Module;
 import com.owlet.api.service.idm.AccountRoleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Tag(name = "AccountRoleController")
 @RestController
 @RequestMapping("/api/idm/accountRole")
+@CrudPermission(Module.ACCOUNT)
 public class AccountRoleController extends CrudController<
         UUID,
         AccountRoleDto,

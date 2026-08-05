@@ -1,5 +1,6 @@
 package com.owlet.api.service.org.impl;
 
+import com.owlet.api.constant.RoleConst;
 import com.owlet.api.domain.org.School;
 import com.owlet.api.dto.org.SchoolCreateRequest;
 import com.owlet.api.dto.org.SchoolDto;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -52,5 +54,11 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     @Override
     protected Class<School> entityClass() {
         return School.class;
+    }
+
+    @Override
+    public List<SchoolDto> teacherSteamWorkWithSchool() {
+        List<School> list = repository.findSchoolByTeacherId(auditableService.currentUserId() , RoleConst.ROLE_STEAM_TEACHER);
+        return mapper.toDto(list);
     }
 }
