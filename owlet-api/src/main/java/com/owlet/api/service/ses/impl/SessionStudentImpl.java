@@ -11,6 +11,7 @@ import com.owlet.api.service.ses.SessionStudentService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,5 +38,13 @@ public class SessionStudentImpl extends CrudServiceImpl<
     @Override
     protected Class<SessionStudent> entityClass() {
         return SessionStudent.class;
+    }
+
+    @Transactional
+    @Override
+    public List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, boolean present) {
+        List<SessionStudent> list = repository.findBySession_IdAndStudent_IdIn(sessionId, studentIds);
+        list.forEach(ss -> ss.setPresent(true));
+        return mapper.toDto(list);
     }
 }

@@ -5,6 +5,7 @@ import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.service.base.CrudService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SessionStudentService extends CrudService<
@@ -12,4 +13,6 @@ public interface SessionStudentService extends CrudService<
         SessionStudentDto,
         SessionStudentCreateRequest,
         SessionStudentCreateRequest> {
+
+    List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, boolean present);
 }
