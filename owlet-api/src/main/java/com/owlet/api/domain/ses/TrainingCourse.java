@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -28,5 +29,10 @@ public class TrainingCourse extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @NotNull
+    @ColumnDefault("true")
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
 
 }

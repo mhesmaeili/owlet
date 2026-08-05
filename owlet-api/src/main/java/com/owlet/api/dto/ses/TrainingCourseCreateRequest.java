@@ -23,6 +23,7 @@ public class TrainingCourseCreateRequest {
     private EntityIdDto teacherAccount;
     @NotNull
     private EntityIdDto product;
-
+    @NotNull
+    private Boolean active;
 
 }

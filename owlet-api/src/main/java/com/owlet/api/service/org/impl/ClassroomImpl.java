@@ -35,7 +35,6 @@ public class ClassroomImpl extends CrudServiceImpl<
     }
 
 
-
     @Override
     protected Class<Classroom> entityClass() {
         return Classroom.class;
@@ -44,6 +43,12 @@ public class ClassroomImpl extends CrudServiceImpl<
     @Override
     public List<ClassroomDto> findByTitle(String title) {
         List<Classroom> list = repository.findByTitle(title);
+        return mapper.toDto(list);
+    }
+
+    @Override
+    public List<ClassroomDto> teacherSteamClassroom(UUID schoolId) {
+        List<Classroom> list = repository.teacherSteamClassroom(auditableService.currentUserId(), schoolId);
         return mapper.toDto(list);
     }
 }

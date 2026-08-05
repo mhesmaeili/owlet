@@ -15,4 +15,6 @@ public interface ClassroomService extends CrudService<
         ClassroomCreateRequest> {
 
     List<ClassroomDto> findByTitle(String title);
+
+    List<ClassroomDto> teacherSteamClassroom(UUID schoolId);
 }
