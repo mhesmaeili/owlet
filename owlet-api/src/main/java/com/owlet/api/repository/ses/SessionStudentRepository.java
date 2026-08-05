@@ -1,9 +1,7 @@
 package com.owlet.api.repository.ses;
 
 import com.owlet.api.domain.ses.SessionStudent;
-import com.owlet.api.domain.std.Student;
 import com.owlet.api.repository.base.BaseRepository;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
