@@ -3,6 +3,8 @@ package com.owlet.api.controller.ses;
 import com.owlet.api.controller.base.CrudController;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
+import com.owlet.api.repository.specification.FilterNode;
+import com.owlet.api.repository.specification.SearchOperation;
 import com.owlet.api.service.ses.SessionStudentService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,12 +32,12 @@ public class SessionStudentController extends CrudController<
 
     private final SessionStudentService sessionStudentService;
 
-    @PostMapping("/updateAttendance")
+    @PutMapping("/updateAttendance")
     public ApiResponse<List<SessionStudentDto>> updateAttendance(@RequestParam UUID sessionId, @RequestParam boolean present, @RequestBody List<UUID> studentIds) {
         return ApiResponse.success(sessionStudentService.updateAttendance(sessionId, studentIds, present));
     }
 
-    @PostMapping("/updateAttendanceUnique")
+    @PutMapping("/updateAttendanceUnique")
     public ApiResponse<SessionStudentDto> updateAttendance(@RequestParam UUID sessionId, @RequestParam boolean present, @RequestParam UUID studentId) {
         List<UUID> list = new ArrayList<>();
         list.add(studentId);
@@ -49,6 +51,31 @@ public class SessionStudentController extends CrudController<
             Pageable pageable) {
 
         Page<SessionStudentDto> result = sessionStudentService.getStudentsBySession(sessionId, keyword, pageable);
+        return ApiResponse.success(result);
+    }
+
+    @GetMapping("/{sessionId}/students")
+    public ApiResponse<Page<SessionStudentDto>> getSessionStudents1(
+            @PathVariable UUID sessionId,
+            @RequestParam(required = false) String keyword,
+            Pageable pageable) {
+
+        FilterNode filterTree = FilterNode.and(
+
+                FilterNode.condition("session.id", SearchOperation.EQUAL, sessionId),
+
+                FilterNode.or(
+                        FilterNode.condition("point", SearchOperation.GREATER_THAN, 10),
+                        FilterNode.condition("present", SearchOperation.EQUAL, true)
+                )
+        );
+
+        Page<SessionStudentDto> result = sessionStudentService.searchAdvanced(
+                keyword,
+                filterTree,
+                pageable
+        );
+
         return ApiResponse.success(result);
     }
 

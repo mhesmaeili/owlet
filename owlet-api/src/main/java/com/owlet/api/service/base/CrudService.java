@@ -1,5 +1,6 @@
 package com.owlet.api.service.base;
 
+import com.owlet.api.repository.specification.FilterNode;
 import com.owlet.api.repository.specification.SearchCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,5 +36,7 @@ public interface CrudService<
 
     long count();
 
-    Page<DTO> searchAdvanced(String keyword, List<SearchCriteria> filters, Pageable pageable);
+    //Page<DTO> searchAdvanced(String keyword, List<SearchCriteria> filters, Pageable pageable);
+
+    Page<DTO> searchAdvanced(String keyword, FilterNode filterTree, Pageable pageable);
 }

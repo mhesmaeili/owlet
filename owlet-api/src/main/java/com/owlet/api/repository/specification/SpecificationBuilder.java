@@ -1,5 +1,6 @@
 package com.owlet.api.repository.specification;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -30,6 +31,50 @@ public final class SpecificationBuilder {
 
             return cb.or(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    // متد جدید برای خواندن درخت فیلترها
+    public static <T> Specification<T> byNode(FilterNode rootNode) {
+        return (root, query, cb) -> buildPredicate(rootNode, root, cb);
+    }
+
+    // متد بازگشتی (Recursive) برای پیمایش درخت
+    private static <T> Predicate buildPredicate(FilterNode node, Root<T> root, CriteriaBuilder cb) {
+        if (node == null) return null;
+
+        // اگر نود جاری یک "گروه" (دارای فرزند) باشد
+        if (node.getChildren() != null && !node.getChildren().isEmpty()) {
+            List<Predicate> predicates = new ArrayList<>();
+            for (FilterNode child : node.getChildren()) {
+                Predicate p = buildPredicate(child, root, cb);
+                if (p != null) predicates.add(p);
+            }
+
+            if (predicates.isEmpty()) return null;
+
+            Predicate[] predArray = predicates.toArray(new Predicate[0]);
+            return node.getLogicalOperator() == FilterNode.LogicalOperator.OR
+                    ? cb.or(predArray)
+                    : cb.and(predArray);
+        }
+
+        // اگر نود جاری یک "شرط ساده" (Leaf) باشد
+        else if (node.getKey() != null && node.getOperation() != null) {
+            Path<?> path = getPath(root, node.getKey());
+            Object value = node.getValue();
+
+            return switch (node.getOperation()) {
+                case EQUAL -> cb.equal(path, value);
+                case NOT_EQUAL -> cb.notEqual(path, value);
+                case GREATER_THAN -> cb.greaterThan(path.as(Comparable.class), (Comparable) value);
+                case LESS_THAN -> cb.lessThan(path.as(Comparable.class), (Comparable) value);
+                case LIKE -> cb.like(cb.lower(path.as(String.class)), "%" + value.toString().toLowerCase() + "%");
+                case IN -> path.in((Collection<?>) value);
+                case NOT_IN -> cb.not(path.in((Collection<?>) value));
+            };
+        }
+
+        return null;
     }
 
     // متد جدید (برای فیلترهای پویا و پیشرفته)

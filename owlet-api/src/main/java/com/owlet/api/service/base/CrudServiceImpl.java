@@ -3,6 +3,7 @@ package com.owlet.api.service.base;
 import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.mapper.base.CrudMapper;
 import com.owlet.api.repository.base.BaseRepository;
+import com.owlet.api.repository.specification.FilterNode;
 import com.owlet.api.repository.specification.SearchCriteria;
 import com.owlet.api.repository.specification.SpecificationBuilder;
 import com.owlet.api.security.AuditableService;
@@ -59,16 +60,19 @@ public abstract class CrudServiceImpl<
 
     @Override
     @Transactional(readOnly = true)
-    public Page<DTO> searchAdvanced(String keyword, List<SearchCriteria> filters, Pageable pageable) {
+    public Page<DTO> searchAdvanced(String keyword, FilterNode filterTree, Pageable pageable) {
         // فیلتر پایه: حذف‌نشده‌ها
         Specification<ENTITY> spec = (root, query, cb) -> cb.equal(root.get("deleted"), false);
 
-        // ۱. اعمال فیلترهای پویا (IN, EQUAL و ...)
-        if (filters != null && !filters.isEmpty()) {
-            spec = spec.and(SpecificationBuilder.byCriteria(filters));
+        // ۱. اعمال درخت فیلترهای پویا
+        if (filterTree != null) {
+            Specification<ENTITY> treeSpec = SpecificationBuilder.byNode(filterTree);
+            if (treeSpec != null) {
+                spec = spec.and(treeSpec);
+            }
         }
 
-        // ۲. اعمال جستجوی متنی روی فیلدهای مشخص شده (OR)
+        // ۲. اعمال جستجوی متنی (Keyword)
         Specification<ENTITY> keywordSpec = buildSearchSpecification(keyword);
         if (keywordSpec != null) {
             spec = spec.and(keywordSpec);
