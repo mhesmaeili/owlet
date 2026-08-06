@@ -56,7 +56,7 @@ public class SessionStudentController extends AdvancedCrudController<
         return ApiResponse.success(result);
     }
 
-    @GetMapping("/{sessionId}/students")
+    /*@GetMapping("/{sessionId}/students")
     public ApiResponse<Page<SessionStudentDto>> getSessionStudents1(
             @PathVariable UUID sessionId,
             @RequestParam(required = false) String keyword,
@@ -79,6 +79,6 @@ public class SessionStudentController extends AdvancedCrudController<
         );
 
         return ApiResponse.success(result);
-    }
+    }*/
 
 }

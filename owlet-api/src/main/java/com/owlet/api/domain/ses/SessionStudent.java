@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Filter;
 
 import java.time.OffsetDateTime;
 
@@ -15,6 +16,7 @@ import java.time.OffsetDateTime;
 @Setter
 @Entity
 @Table(name = "session_student", schema = "ses")
+@Filter(name = "deletedFilter")
 public class SessionStudent extends UuidEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

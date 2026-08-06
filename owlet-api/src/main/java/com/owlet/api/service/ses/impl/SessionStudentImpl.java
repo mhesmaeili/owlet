@@ -5,6 +5,8 @@ import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.mapper.ses.SessionStudentMapper;
 import com.owlet.api.repository.ses.SessionStudentRepository;
+import com.owlet.api.repository.specification.FilterNode;
+import com.owlet.api.repository.specification.SearchOperation;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.ses.SessionStudentService;
@@ -64,16 +66,10 @@ public class SessionStudentImpl extends CrudServiceImpl<
     @Override
     public Page<SessionStudentDto> getStudentsBySession(UUID sessionId, String keyword, Pageable pageable) {
 
-        Specification<SessionStudent> spec = (root, query, cb) -> cb.and(
-                cb.equal(root.get("deleted"), false),
-                cb.equal(root.get("session").get("id"), sessionId)
+        FilterNode filterTree = FilterNode.and(
+                FilterNode.condition("session.id", SearchOperation.EQUAL, sessionId)
         );
 
-        Specification<SessionStudent> keywordSpec = buildSearchSpecification(keyword);
-        if (keywordSpec != null) {
-            spec = spec.and(keywordSpec);
-        }
-
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+        return searchAdvanced(keyword, filterTree, pageable);
     }
 }
