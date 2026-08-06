@@ -3,6 +3,7 @@ package com.owlet.api.service.base;
 import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.mapper.base.CrudMapper;
 import com.owlet.api.repository.base.BaseRepository;
+import com.owlet.api.repository.specification.FilterExtractor;
 import com.owlet.api.repository.specification.FilterNode;
 import com.owlet.api.repository.specification.SearchCriteria;
 import com.owlet.api.repository.specification.SpecificationBuilder;
@@ -56,6 +57,15 @@ public abstract class CrudServiceImpl<
     @Transactional(readOnly = true)
     public Page<DTO> search(String keyword, Pageable pageable) {
         return searchAdvanced(keyword, null, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DTO> search(String keyword, Object filterDto, Pageable pageable) {
+
+        FilterNode filterTree = FilterExtractor.extract(filterDto);
+
+        return searchAdvanced(keyword, filterTree, pageable);
     }
 
     @Override

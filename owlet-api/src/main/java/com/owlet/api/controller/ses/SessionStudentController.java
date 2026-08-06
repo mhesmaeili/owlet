@@ -1,8 +1,9 @@
 package com.owlet.api.controller.ses;
 
-import com.owlet.api.controller.base.CrudController;
+import com.owlet.api.controller.base.AdvancedCrudController;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
+import com.owlet.api.dto.ses.SessionStudentFilterDto;
 import com.owlet.api.repository.specification.FilterNode;
 import com.owlet.api.repository.specification.SearchOperation;
 import com.owlet.api.service.ses.SessionStudentService;
@@ -19,11 +20,12 @@ import java.util.UUID;
 @Tag(name = "SessionStudentController")
 @RestController
 @RequestMapping("/api/ses/sessionStudent")
-public class SessionStudentController extends CrudController<
+public class SessionStudentController extends AdvancedCrudController<
         UUID,
         SessionStudentDto,
         SessionStudentCreateRequest,
-        SessionStudentCreateRequest> {
+        SessionStudentCreateRequest,
+        SessionStudentFilterDto> {
 
     public SessionStudentController(SessionStudentService service, SessionStudentService sessionStudentService) {
         super(service);

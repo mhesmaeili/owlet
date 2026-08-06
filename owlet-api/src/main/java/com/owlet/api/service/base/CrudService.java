@@ -36,7 +36,8 @@ public interface CrudService<
 
     long count();
 
-    //Page<DTO> searchAdvanced(String keyword, List<SearchCriteria> filters, Pageable pageable);
-
     Page<DTO> searchAdvanced(String keyword, FilterNode filterTree, Pageable pageable);
+
+    Page<DTO> search(String keyword, Object filterDto, Pageable pageable);
+
 }
