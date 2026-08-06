@@ -10,6 +10,9 @@ import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.ses.SessionStudentService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.UUID;
@@ -46,5 +49,31 @@ public class SessionStudentImpl extends CrudServiceImpl<
         List<SessionStudent> list = repository.findBySession_IdAndStudent_IdIn(sessionId, studentIds);
         list.forEach(ss -> ss.setPresent(true));
         return mapper.toDto(list);
+    }
+
+    @Override
+    protected String[] getSearchableFields() {
+        return new String[]{
+                "student.firstName",
+                "student.lastName",
+                "student.studentNo",
+                "student.nationalCode"
+        };
+    }
+
+    @Override
+    public Page<SessionStudentDto> getStudentsBySession(UUID sessionId, String keyword, Pageable pageable) {
+
+        Specification<SessionStudent> spec = (root, query, cb) -> cb.and(
+                cb.equal(root.get("deleted"), false),
+                cb.equal(root.get("session").get("id"), sessionId)
+        );
+
+        Specification<SessionStudent> keywordSpec = buildSearchSpecification(keyword);
+        if (keywordSpec != null) {
+            spec = spec.and(keywordSpec);
+        }
+
+        return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 }

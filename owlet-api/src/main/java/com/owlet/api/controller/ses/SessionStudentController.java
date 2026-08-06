@@ -6,6 +6,8 @@ import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.service.ses.SessionStudentService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,6 +40,16 @@ public class SessionStudentController extends CrudController<
         List<UUID> list = new ArrayList<>();
         list.add(studentId);
         return ApiResponse.success(sessionStudentService.updateAttendance(sessionId, list, present).getFirst());
+    }
+
+    @GetMapping("/{sessionId}/list")
+    public ApiResponse<Page<SessionStudentDto>> getSessionStudents(
+            @PathVariable UUID sessionId,
+            @RequestParam(required = false) String keyword,
+            Pageable pageable) {
+
+        Page<SessionStudentDto> result = sessionStudentService.getStudentsBySession(sessionId, keyword, pageable);
+        return ApiResponse.success(result);
     }
 
 }

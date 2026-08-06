@@ -7,12 +7,10 @@ import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.dto.org.SchoolUpdateRequest;
 import com.owlet.api.mapper.org.SchoolMapper;
 import com.owlet.api.repository.org.SchoolRepository;
-import com.owlet.api.repository.specification.SpecificationBuilder;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.org.SchoolService;
 import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,16 +37,12 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    protected Specification<School> buildSearchSpecification(
-            String keyword) {
-
-
-        return SpecificationBuilder.contains(
-                keyword,
-                "name",
-                "code"
-        );
-
+    protected String[] getSearchableFields() {
+        return new String[]{
+                "title",
+                "code",
+                "schoolType.title"
+        };
     }
 
     @Override
