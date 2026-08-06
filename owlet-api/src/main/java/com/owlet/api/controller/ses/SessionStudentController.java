@@ -4,8 +4,6 @@ import com.owlet.api.controller.base.AdvancedCrudController;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.dto.ses.SessionStudentFilterDto;
-import com.owlet.api.repository.specification.FilterNode;
-import com.owlet.api.repository.specification.SearchOperation;
 import com.owlet.api.service.ses.SessionStudentService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,6 +52,42 @@ public class SessionStudentController extends AdvancedCrudController<
 
         Page<SessionStudentDto> result = sessionStudentService.getStudentsBySession(sessionId, keyword, pageable);
         return ApiResponse.success(result);
+    }
+
+    @PutMapping("/{id}/updatePoint")
+    public ApiResponse<SessionStudentDto> updatePoint(
+            @PathVariable UUID id,
+            @RequestParam Integer point) {
+
+        SessionStudentDto result = sessionStudentService.updatePoint(id, point);
+        return ApiResponse.success("Update process ok", result);
+    }
+
+    @PutMapping("/{id}/updateTimeBase")
+    public ApiResponse<SessionStudentDto> updateTimeBase(
+            @PathVariable UUID id,
+            @RequestParam Boolean timeBase) {
+
+        SessionStudentDto result = sessionStudentService.updateTimeBase(id, timeBase);
+        return ApiResponse.success("Update process ok", result);
+    }
+
+    @PutMapping("/{id}/updateNumber")
+    public ApiResponse<SessionStudentDto> updateNumber(
+            @PathVariable UUID id,
+            @RequestParam Integer number) {
+
+        SessionStudentDto result = sessionStudentService.updateNumber(id, number);
+        return ApiResponse.success("Update process ok", result);
+    }
+
+    @PutMapping("/{id}/updateStateEvaluation")
+    public ApiResponse<SessionStudentDto> updateStateEvaluation(
+            @PathVariable UUID id,
+            @RequestParam UUID stateEvaluationId) {
+
+        SessionStudentDto result = sessionStudentService.updateStateEvaluation(id, stateEvaluationId);
+        return ApiResponse.success("Update process ok", result);
     }
 
     /*@GetMapping("/{sessionId}/students")

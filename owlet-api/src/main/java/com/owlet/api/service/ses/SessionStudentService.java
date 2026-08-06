@@ -19,4 +19,13 @@ public interface SessionStudentService extends CrudService<
     List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, boolean present);
 
     Page<SessionStudentDto> getStudentsBySession(UUID sessionId, String keyword, Pageable pageable);
+
+    SessionStudentDto updatePoint(UUID id, Integer point);
+
+    SessionStudentDto updateTimeBase(UUID id, Boolean timeBase);
+
+    SessionStudentDto updateNumber(UUID id, Integer number);
+
+    SessionStudentDto updateStateEvaluation(UUID id, UUID stateEvaluationId);
+
 }
