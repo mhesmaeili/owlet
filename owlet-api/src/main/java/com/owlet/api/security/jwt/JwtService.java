@@ -35,7 +35,7 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(account.getId().toString())
-                .claim("username", account.getUsername())
+                .claim("username", account.getMobile())
                 .issuedAt(new Date())
                 .expiration(
                         new Date(

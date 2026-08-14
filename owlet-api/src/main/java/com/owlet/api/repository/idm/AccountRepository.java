@@ -42,6 +42,6 @@ public interface AccountRepository  extends BaseRepository<Account, UUID> {
             "FROM Account a " +
             "JOIN a.accountRoles ar " +
             "JOIN ar.role r " +
-            "WHERE a.username = :username AND ar.deleted = false")
+            "WHERE a.mobile = :username AND ar.deleted = false")
     List<RoleDto> findActiveRoleDtosByUsername(@Param("username") String username);
 }
