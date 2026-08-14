@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
 
         Account account = accountRepository
-                .findByUsernameForLogin(username)
+                .findByMobileForLogin(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(username));
 
@@ -76,7 +76,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
                 account.getId(),
 
-                account.getUsername(),
+                account.getMobile(),
 
                 account.getPasswordHash(),
 

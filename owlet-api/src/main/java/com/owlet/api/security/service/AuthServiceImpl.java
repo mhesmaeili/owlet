@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
 
 
         Account account = accountRepository
-                .findByUsername(request.getUsername())
+                .findByMobile(request.getUsername())
                 .orElseThrow(() ->
                         new UnauthorizedException("Username or password incorrect")
                 );

@@ -22,7 +22,7 @@ public interface AccountRepository  extends BaseRepository<Account, UUID> {
 
     Page<Account> findAllByDeletedFalse(Pageable pageable);
 
-    Optional<Account> findByUsername(String username);
+    Optional<Account> findByMobile(String mobile);
 
     @Query("""
         select distinct a
@@ -31,11 +31,11 @@ public interface AccountRepository  extends BaseRepository<Account, UUID> {
         left join fetch ar.role r
         left join fetch r.rolePermissions rp
         left join fetch rp.permission p
-        where a.username = :username
+        where a.mobile = :mobile
         and a.deleted = false
     """)
-    Optional<Account> findByUsernameForLogin(
-            @Param("username") String username
+    Optional<Account> findByMobileForLogin(
+            @Param("mobile") String mobile
     );
 
     @Query("SELECT new com.owlet.api.dto.idm.RoleDto(r.id, r.code) " +
