@@ -5,11 +5,15 @@ import com.owlet.api.domain.org.School;
 import com.owlet.api.dto.org.SchoolCreateRequest;
 import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.dto.org.SchoolUpdateRequest;
+import com.owlet.api.dto.profile.school.TeacherSchoolDto;
 import com.owlet.api.mapper.org.SchoolMapper;
+import com.owlet.api.mapper.profile.school.TeacherSchoolMapper;
 import com.owlet.api.repository.org.SchoolRepository;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
+import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
+import com.owlet.api.service.org.TeacherClassroomService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +35,15 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     public SchoolServiceImpl(
             SchoolRepository repository,
             SchoolMapper mapper,
-            AuditableService auditableService) {
+            AuditableService auditableService, TeacherSchoolMapper teacherSchoolMapper, TeacherClassroomService teacherClassroomService) {
 
-        super(repository, mapper ,  auditableService);
+        super(repository, mapper, auditableService);
+        this.teacherSchoolMapper = teacherSchoolMapper;
+        this.teacherClassroomService = teacherClassroomService;
     }
+
+    protected final TeacherSchoolMapper teacherSchoolMapper;
+    protected final TeacherClassroomService teacherClassroomService;
 
     @Override
     protected String[] getSearchableFields() {
@@ -51,8 +60,13 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public List<SchoolDto> teacherSteamWorkWithSchool() {
-        List<School> list = repository.findSchoolByTeacherId(auditableService.currentUserId() , RoleConst.ROLE_STEAM_TEACHER);
-        return mapper.toDto(list);
+    public List<TeacherSchoolDto> teacherSteamWorkWithSchool() {
+        List<School> list = repository.findSchoolByTeacherId(auditableService.currentUserId(), RoleConst.ROLE_STEAM_TEACHER);
+        List<TeacherSchoolDto> dtos = teacherSchoolMapper.toDto(list);
+        dtos.forEach(teacherSchoolDto -> {
+            teacherSchoolDto.setActiveClasses(teacherClassroomService.countOfActiveClasses(teacherSchoolDto.getId()));
+        });
+
+        return dtos;
     }
 }

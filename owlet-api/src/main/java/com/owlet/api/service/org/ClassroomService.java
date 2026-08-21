@@ -3,6 +3,7 @@ package com.owlet.api.service.org;
 
 import com.owlet.api.dto.org.ClassroomCreateRequest;
 import com.owlet.api.dto.org.ClassroomDto;
+import com.owlet.api.dto.profile.school.ProfileTeacherClassroomDto;
 import com.owlet.api.service.base.CrudService;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface ClassroomService extends CrudService<
 
     List<ClassroomDto> findByTitle(String title);
 
-    List<ClassroomDto> teacherSteamClassroom(UUID schoolId);
+    List<ProfileTeacherClassroomDto> teacherSteamClassroom(UUID schoolId);
+
+    Long countOfActiveClasses(UUID schoolId);
 }

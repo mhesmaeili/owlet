@@ -12,4 +12,5 @@ public interface TeacherClassroomService extends CrudService<
         TeacherClassroomDto,
         TeacherClassroomCreateRequest,
         TeacherClassroomCreateRequest> {
+    Long countOfActiveClasses(UUID schoolId);
 }

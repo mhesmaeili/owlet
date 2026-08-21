@@ -38,4 +38,9 @@ public class TeacherClassroomImpl extends CrudServiceImpl<
     protected Class<TeacherClassroom> entityClass() {
         return TeacherClassroom.class;
     }
+
+    @Override
+    public Long countOfActiveClasses(UUID schoolId) {
+        return repository.countByClassroom_School_IdAndTeacherAccount_IdAndActiveTrue(schoolId, auditableService.currentUserId());
+    }
 }

@@ -1,8 +1,8 @@
 package com.owlet.api.controller.profile.teacher;
 
-import com.owlet.api.domain.ses.TrainingCourse;
 import com.owlet.api.dto.org.ClassroomDto;
-import com.owlet.api.dto.org.SchoolDto;
+import com.owlet.api.dto.profile.school.ProfileTeacherClassroomDto;
+import com.owlet.api.dto.profile.school.TeacherSchoolDto;
 import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
@@ -29,12 +29,12 @@ public class TeacherSteamController {
     private final TrainingCourseService trainingCourseService;
 
     @GetMapping("/schoolList")
-    public ApiResponse<List<SchoolDto>> school() {
+    public ApiResponse<List<TeacherSchoolDto>> school() {
         return ApiResponse.success(schoolService.teacherSteamWorkWithSchool());
     }
 
     @GetMapping("/classroomList")
-    public ApiResponse<List<ClassroomDto>> classroom(@RequestParam UUID schoolId) {
+    public ApiResponse<List<ProfileTeacherClassroomDto>> classroom(@RequestParam UUID schoolId) {
         return ApiResponse.success(classroomService.teacherSteamClassroom(schoolId));
     }
 

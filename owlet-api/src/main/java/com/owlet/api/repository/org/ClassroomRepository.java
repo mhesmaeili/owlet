@@ -22,4 +22,7 @@ public interface ClassroomRepository
             "FROM TeacherClassroom s " +
             "WHERE s.teacherAccount.id = :accountId And s.classroom.school.id=:schoolId And s.active = true")
     List<Classroom> teacherSteamClassroom(@Param("accountId") UUID accountId ,@Param("schoolId") UUID schoolId);
+
+    Long countBySchoolIdAndTeacherAccountIdAndActiveTrue(UUID school_id, UUID teacherAccount_id);
+
 }

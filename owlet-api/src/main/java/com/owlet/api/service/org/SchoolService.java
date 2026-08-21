@@ -3,6 +3,7 @@ package com.owlet.api.service.org;
 import com.owlet.api.dto.org.SchoolCreateRequest;
 import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.dto.org.SchoolUpdateRequest;
+import com.owlet.api.dto.profile.school.TeacherSchoolDto;
 import com.owlet.api.service.base.CrudService;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface SchoolService extends CrudService<
         SchoolCreateRequest,
         SchoolUpdateRequest> {
 
-    List<SchoolDto> teacherSteamWorkWithSchool();
+    List<TeacherSchoolDto> teacherSteamWorkWithSchool();
 }

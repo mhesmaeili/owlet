@@ -28,4 +28,5 @@ public interface SessionStudentService extends CrudService<
 
     SessionStudentDto updateStateEvaluation(UUID id, UUID stateEvaluationId);
 
+    Long countOfStudentByClassroomId(UUID classroomId);
 }

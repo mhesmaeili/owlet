@@ -2,6 +2,8 @@ package com.owlet.api.repository.ses;
 
 import com.owlet.api.domain.ses.SessionStudent;
 import com.owlet.api.repository.base.BaseRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -15,4 +17,9 @@ public interface SessionStudentRepository
             UUID sessionId,
             Collection<UUID> studentIds
     );
+
+    @Query("SELECT COUNT(ss) FROM SessionStudent ss WHERE " +
+            "ss.session.trainingCourse.active=true " +
+            "and ss.session.trainingCourse.classroom.id = :classroomId")
+    long countByClassroomId(@Param("classroomId") UUID classroomId);
 }

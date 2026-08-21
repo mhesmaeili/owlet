@@ -114,4 +114,9 @@ public class SessionStudentImpl extends CrudServiceImpl<
         entity.setStateEvaluation(item.get());
         return toDto(entity);
     }
+
+    @Override
+    public Long countOfStudentByClassroomId(UUID classroomId) {
+        return repository.countByClassroomId(classroomId);
+    }
 }

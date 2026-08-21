@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface TeacherClassroomRepository
         extends BaseRepository<TeacherClassroom, UUID> {
+    Long countByClassroom_School_IdAndTeacherAccount_IdAndActiveTrue(UUID schoolId, UUID teacherAccountId);
 }

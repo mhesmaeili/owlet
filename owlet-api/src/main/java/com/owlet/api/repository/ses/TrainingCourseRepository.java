@@ -18,6 +18,6 @@ public interface TrainingCourseRepository
             "FROM Session s " +
             "WHERE s.trainingCourse.classroom.id = :classroomId " +
             "And s.trainingCourse.teacherAccount.id=:accountId And s.trainingCourse.active = true " +
-            "order by s.title")
+            "order by s.startTime")
     List<Session> teacherSteamCourse(@Param("accountId") UUID accountId,@Param("classroomId") UUID classroomId);
 }
