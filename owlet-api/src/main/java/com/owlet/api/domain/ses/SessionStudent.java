@@ -35,10 +35,9 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "attendance_time")
     private OffsetDateTime attendanceTime;
 
-    @NotNull
     @ColumnDefault("true")
-    @Column(name = "present", nullable = false)
-    private Boolean present = false;
+    @Column(name = "present")
+    private Boolean present = true;
 
     @ColumnDefault("false")
     @Column(name = "completed")

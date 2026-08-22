@@ -18,8 +18,10 @@ public interface SessionStudentRepository
             Collection<UUID> studentIds
     );
 
-    @Query("SELECT COUNT(ss) FROM SessionStudent ss WHERE " +
+    @Query("SELECT COUNT(distinct ss.student) FROM SessionStudent ss WHERE " +
             "ss.session.trainingCourse.active=true " +
             "and ss.session.trainingCourse.classroom.id = :classroomId")
     long countByClassroomId(@Param("classroomId") UUID classroomId);
+
+    List<SessionStudent> findBySession_id(UUID sessionId);
 }

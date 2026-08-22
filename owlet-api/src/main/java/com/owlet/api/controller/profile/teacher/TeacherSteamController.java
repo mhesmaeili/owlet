@@ -4,8 +4,10 @@ import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.dto.profile.school.ProfileTeacherClassroomDto;
 import com.owlet.api.dto.profile.school.TeacherSchoolDto;
 import com.owlet.api.dto.ses.SessionDto;
+import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
+import com.owlet.api.service.ses.SessionStudentService;
 import com.owlet.api.service.ses.TrainingCourseService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +29,7 @@ public class TeacherSteamController {
     private final SchoolService schoolService;
     private final ClassroomService classroomService;
     private final TrainingCourseService trainingCourseService;
+    private final SessionStudentService sessionStudentService;
 
     @GetMapping("/schoolList")
     public ApiResponse<List<TeacherSchoolDto>> school() {
@@ -41,6 +44,11 @@ public class TeacherSteamController {
     @GetMapping("/sessionList")
     public ApiResponse<List<SessionDto>> session(@RequestParam UUID classroomId) {
         return ApiResponse.success(trainingCourseService.teacherSteamCourse(classroomId));
+    }
+
+    @GetMapping("/sessionStudentList")
+    public ApiResponse<List<SessionStudentDto>> sessionStudent(@RequestParam UUID sessionId) {
+        return ApiResponse.success(sessionStudentService.studentListBySessionId(sessionId));
     }
 
 }

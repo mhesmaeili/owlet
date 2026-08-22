@@ -16,7 +16,7 @@ public interface SessionStudentService extends CrudService<
         SessionStudentCreateRequest,
         SessionStudentCreateRequest> {
 
-    List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, boolean present);
+    List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, Boolean present);
 
     Page<SessionStudentDto> getStudentsBySession(UUID sessionId, String keyword, Pageable pageable);
 
@@ -29,4 +29,6 @@ public interface SessionStudentService extends CrudService<
     SessionStudentDto updateStateEvaluation(UUID id, UUID stateEvaluationId);
 
     Long countOfStudentByClassroomId(UUID classroomId);
+
+    List<SessionStudentDto> studentListBySessionId(UUID sessionId);
 }

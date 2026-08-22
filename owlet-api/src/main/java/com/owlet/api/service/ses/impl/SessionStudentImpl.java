@@ -53,9 +53,9 @@ public class SessionStudentImpl extends CrudServiceImpl<
 
     @Transactional
     @Override
-    public List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, boolean present) {
+    public List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, Boolean present) {
         List<SessionStudent> list = repository.findBySession_IdAndStudent_IdIn(sessionId, studentIds);
-        list.forEach(ss -> ss.setPresent(true));
+        list.forEach(ss -> ss.setPresent(present));
         return mapper.toDto(list);
     }
 
@@ -118,5 +118,11 @@ public class SessionStudentImpl extends CrudServiceImpl<
     @Override
     public Long countOfStudentByClassroomId(UUID classroomId) {
         return repository.countByClassroomId(classroomId);
+    }
+
+    @Override
+    public List<SessionStudentDto> studentListBySessionId(UUID sessionId) {
+        List<SessionStudent> list = repository.findBySession_id(sessionId);
+        return  mapper.toDto(list);
     }
 }

@@ -33,7 +33,7 @@ public class SessionStudentController extends AdvancedCrudController<
     private final SessionStudentService sessionStudentService;
 
     @PutMapping("/updateAttendance")
-    public ApiResponse<List<SessionStudentDto>> updateAttendance(@RequestParam UUID sessionId, @RequestParam boolean present, @RequestBody List<UUID> studentIds) {
+    public ApiResponse<List<SessionStudentDto>> updateAttendance(@RequestParam UUID sessionId, @RequestParam(required = false) Boolean present, @RequestBody List<UUID> studentIds) {
         return ApiResponse.success(sessionStudentService.updateAttendance(sessionId, studentIds, present));
     }
 

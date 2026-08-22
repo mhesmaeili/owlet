@@ -24,7 +24,7 @@ public class SessionStudentCreateRequest {
     @NotNull
     private EntityIdDto student;
     private OffsetDateTime attendanceTime;
-    @NotNull
+
     private Boolean present;
     private Boolean completed;
 
