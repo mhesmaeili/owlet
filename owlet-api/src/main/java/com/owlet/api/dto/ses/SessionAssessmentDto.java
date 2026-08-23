@@ -2,7 +2,7 @@ package com.owlet.api.dto.ses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import com.owlet.api.dto.ref.ReferenceItemDto;
+import com.owlet.api.dto.edu.AssessmentTemplateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,6 @@ public class SessionAssessmentDto extends BaseDto<UUID> {
 
 
     private SessionDto session;
-    private ReferenceItemDto assessmentType;
+    private AssessmentTemplateDto assessmentTemplate;
 
 }

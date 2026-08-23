@@ -1,6 +1,5 @@
 package com.owlet.api.domain.ref;
 
-import com.owlet.api.domain.base.BaseEntity;
 import com.owlet.api.domain.base.UuidEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,15 +20,16 @@ public class ReferenceItem extends UuidEntity {
     private ReferenceType referenceType;
 
     @Size(max = 100)
-    @Column(name = "code", nullable = true, length = 100)
+    @Column(name = "code", length = 100)
     private String code;
 
     @Size(max = 200)
-    @Column(name = "title", nullable = true, length = 200)
+    @Column(name = "title", length = 200)
     private String title;
 
+    @NotNull
     @Size(max = 200)
-    @Column(name = "title_fa", length = 200)
+    @Column(name = "title_fa", nullable = false, length = 200)
     private String titleFa;
 
     @Size(max = 500)

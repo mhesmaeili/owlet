@@ -28,5 +28,7 @@ public class SessionCreateRequest {
     private String teacherSummary;
     private Boolean finalized;
     private OffsetDateTime finalizedAt;
+    @NotNull
+    private EntityIdDto sessionType;
 
 }

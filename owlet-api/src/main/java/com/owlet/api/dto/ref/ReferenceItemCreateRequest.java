@@ -15,12 +15,15 @@ import java.util.UUID;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReferenceItemCreateRequest {
-    @NotNull
+
     private String code;
-    @NotNull
+
     private String title;
+    @NotNull
     private String titleFa;
     @NotNull
     private Integer sortOrder;
     private EntityIdDto referenceType;
+
+    private String icon;
 }

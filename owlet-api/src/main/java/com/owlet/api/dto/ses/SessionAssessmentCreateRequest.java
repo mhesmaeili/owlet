@@ -18,6 +18,6 @@ public class SessionAssessmentCreateRequest {
 
 
     private EntityIdDto session;
-    private EntityIdDto assessmentType;
+    private EntityIdDto assessmentTemplate;
 
 }

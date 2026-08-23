@@ -20,11 +20,17 @@ public interface SessionMapper extends CrudMapper<
     @Mapping(target = "trainingCourse",
             source = "trainingCourse",
             qualifiedByName = "toReference")
+    @Mapping(target = "sessionType",
+            source = "sessionType",
+            qualifiedByName = "toReference")
     @Override
     void update(SessionCreateRequest sessionCreateRequest, @MappingTarget Session session);
 
     @Mapping(target = "trainingCourse",
             source = "trainingCourse",
+            qualifiedByName = "toReference")
+    @Mapping(target = "sessionType",
+            source = "sessionType",
             qualifiedByName = "toReference")
     @Override
     Session toEntity(SessionCreateRequest sessionCreateRequest);

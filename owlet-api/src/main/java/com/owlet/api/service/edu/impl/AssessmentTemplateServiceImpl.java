@@ -11,6 +11,7 @@ import com.owlet.api.service.edu.AssessmentTemplateService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,5 +37,10 @@ public class AssessmentTemplateServiceImpl extends CrudServiceImpl<
     @Override
     protected Class<AssessmentTemplate> entityClass() {
         return AssessmentTemplate.class;
+    }
+
+    @Override
+    public List<AssessmentTemplateDto> assessmentByProductAndSessionType(UUID productId, UUID sessionTypeId) {
+        return mapper.toDto(repository.findByProduct_IdAndSessionType_IdAndActiveTrue(productId, sessionTypeId));
     }
 }

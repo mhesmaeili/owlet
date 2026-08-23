@@ -25,4 +25,6 @@ public class ReferenceItemDto extends BaseDto<UUID> {
     private Integer sortOrder;
     @NotBlank
     ReferenceTypeDto referenceType;
+
+    private String icon;
 }

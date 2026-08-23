@@ -18,8 +18,8 @@ public interface SessionAssessmentMapper extends CrudMapper<
         SessionAssessmentCreateRequest> {
 
 
-    @Mapping(target = "assessmentType",
-            source = "assessmentType",
+    @Mapping(target = "assessmentTemplate",
+            source = "assessmentTemplate",
             qualifiedByName = "toReference")
     @Mapping(target = "session",
             source = "session",
@@ -28,8 +28,8 @@ public interface SessionAssessmentMapper extends CrudMapper<
     void update(SessionAssessmentCreateRequest sessionAssessmentCreateRequest, @MappingTarget SessionAssessment sessionAssessment);
 
 
-    @Mapping(target = "assessmentType",
-            source = "assessmentType",
+    @Mapping(target = "assessmentTemplate",
+            source = "assessmentTemplate",
             qualifiedByName = "toReference")
     @Mapping(target = "session",
             source = "session",

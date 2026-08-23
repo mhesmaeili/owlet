@@ -62,4 +62,9 @@ public class Session extends UuidEntity {
     @Column(name = "finalized_at")
     private OffsetDateTime finalizedAt;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "session_type_id", nullable = false)
+    private ReferenceItem sessionType;
+
 }

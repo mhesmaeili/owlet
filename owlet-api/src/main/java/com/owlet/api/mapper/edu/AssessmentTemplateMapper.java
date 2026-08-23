@@ -6,6 +6,8 @@ import com.owlet.api.dto.edu.AssessmentTemplateDto;
 import com.owlet.api.mapper.base.BaseMapperConfig;
 import com.owlet.api.mapper.base.CrudMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = BaseMapperConfig.class)
 public interface AssessmentTemplateMapper extends CrudMapper<
@@ -15,4 +17,17 @@ public interface AssessmentTemplateMapper extends CrudMapper<
         AssessmentTemplateCreateRequest> {
 
 
+    @Mapping(target = "assessmentType",
+            source = "assessmentType",
+            qualifiedByName = "toReference")
+    @Override
+    void update(AssessmentTemplateCreateRequest assessmentTemplateCreateRequest, @MappingTarget AssessmentTemplate assessmentTemplate);
+
+
+
+    @Mapping(target = "assessmentType",
+            source = "assessmentType",
+            qualifiedByName = "toReference")
+    @Override
+    AssessmentTemplate toEntity(AssessmentTemplateCreateRequest assessmentTemplateCreateRequest);
 }

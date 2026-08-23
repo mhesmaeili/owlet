@@ -1,10 +1,12 @@
 package com.owlet.api.controller.profile.teacher;
 
+import com.owlet.api.dto.edu.AssessmentTemplateDto;
 import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.dto.profile.school.ProfileTeacherClassroomDto;
 import com.owlet.api.dto.profile.school.TeacherSchoolDto;
 import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.SessionStudentDto;
+import com.owlet.api.service.edu.AssessmentTemplateService;
 import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
 import com.owlet.api.service.ses.SessionStudentService;
@@ -30,6 +32,7 @@ public class TeacherSteamController {
     private final ClassroomService classroomService;
     private final TrainingCourseService trainingCourseService;
     private final SessionStudentService sessionStudentService;
+    private final AssessmentTemplateService assessmentTemplateService;
 
     @GetMapping("/schoolList")
     public ApiResponse<List<TeacherSchoolDto>> school() {
@@ -49,6 +52,11 @@ public class TeacherSteamController {
     @GetMapping("/sessionStudentList")
     public ApiResponse<List<SessionStudentDto>> sessionStudent(@RequestParam UUID sessionId) {
         return ApiResponse.success(sessionStudentService.studentListBySessionId(sessionId));
+    }
+
+    @GetMapping("/assessmentList")
+    public ApiResponse<List<AssessmentTemplateDto>> assessmentList(@RequestParam UUID productId , @RequestParam UUID sessionTypeId) {
+        return ApiResponse.success(assessmentTemplateService.assessmentByProductAndSessionType(productId , sessionTypeId));
     }
 
 }

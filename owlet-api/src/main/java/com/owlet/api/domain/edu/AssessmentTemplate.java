@@ -1,9 +1,8 @@
 package com.owlet.api.domain.edu;
 
 import com.owlet.api.domain.base.UuidEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.owlet.api.domain.ref.ReferenceItem;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,9 +14,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "assessment_template", schema = "edu")
 public class AssessmentTemplate extends UuidEntity {
-    @Size(max = 100)
-    @Column(name = "code", length = 100)
-    private String code;
 
     @Size(max = 300)
     @NotNull
@@ -35,5 +31,20 @@ public class AssessmentTemplate extends UuidEntity {
     @ColumnDefault("1")
     @Column(name = "version_no")
     private Integer versionNo = 1;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "session_type_id", nullable = false)
+    private ReferenceItem sessionType;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "assessment_type_id", nullable = false)
+    private ReferenceItem assessmentType;
 
 }

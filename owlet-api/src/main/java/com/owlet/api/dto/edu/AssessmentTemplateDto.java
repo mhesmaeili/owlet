@@ -2,6 +2,7 @@ package com.owlet.api.dto.edu;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,6 @@ import java.util.UUID;
 public class AssessmentTemplateDto extends BaseDto<UUID> {
 
 
-    private String code;
-
     private String title;
 
     private String description;
@@ -28,5 +27,7 @@ public class AssessmentTemplateDto extends BaseDto<UUID> {
     private Boolean active;
 
     private Integer versionNo;
+
+    private ReferenceItemDto assessmentType;
 
 }
