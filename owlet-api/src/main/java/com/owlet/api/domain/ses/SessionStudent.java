@@ -1,5 +1,6 @@
 package com.owlet.api.domain.ses;
 
+import com.owlet.api.converter.StringListConverter;
 import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.ref.ReferenceItem;
 import com.owlet.api.domain.std.Student;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Filter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -56,14 +58,20 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "number")
     private Integer number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "state_evaluation_id")
-    private ReferenceItem stateEvaluation;
-
     @Column(name = "ai_result", length = Integer.MAX_VALUE)
     private String aiResult;
 
     @Column(name = "short_description", length = Integer.MAX_VALUE)
     private String shortDescription;
+
+    @Column(name = "point_description", length = Integer.MAX_VALUE)
+    private String pointDescription;
+
+    @Column(name = "state_evaluation", length = Integer.MAX_VALUE)
+    private String stateEvaluation;
+
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "soft_skills_selected", length = Integer.MAX_VALUE)
+    private List<String> softSkillsSelected;
 
 }

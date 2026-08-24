@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponse.builder()
                 .accessToken(token)
                 .tokenType("Bearer")
-                .expiresIn(3600L)
+                .expiresIn(7200L)
                 .build();
 
     }

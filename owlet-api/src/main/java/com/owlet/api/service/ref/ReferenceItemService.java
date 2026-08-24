@@ -4,6 +4,7 @@ import com.owlet.api.dto.ref.ReferenceItemCreateRequest;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.service.base.CrudService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ReferenceItemService extends CrudService<
@@ -11,4 +12,5 @@ public interface ReferenceItemService extends CrudService<
         ReferenceItemDto,
         ReferenceItemCreateRequest,
         ReferenceItemCreateRequest> {
+    List<ReferenceItemDto> loadByTypeCode(String typeCode);
 }

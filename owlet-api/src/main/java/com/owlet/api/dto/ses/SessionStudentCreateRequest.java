@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,8 +32,10 @@ public class SessionStudentCreateRequest {
     private Integer point;
     private Boolean timeBase;
     private Integer number;
-    private EntityIdDto stateEvaluation;
     private String shortDescription;
     private String aiResult;
+    private String pointDescription;
+    private String stateEvaluation;
+    private List<String> softSkillsSelected;
 
 }

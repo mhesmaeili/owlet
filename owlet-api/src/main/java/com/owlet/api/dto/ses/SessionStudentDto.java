@@ -2,7 +2,6 @@ package com.owlet.api.dto.ses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.dto.std.StudentDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -29,8 +29,9 @@ public class SessionStudentDto extends BaseDto<UUID> {
     private Integer point;
     private Boolean timeBase;
     private Integer number;
-    private ReferenceItemDto stateEvaluation;
     private String shortDescription;
     private String aiResult;
-
+    private String pointDescription;
+    private String stateEvaluationSelected;
+    private List<String> softSkillsSelected;
 }

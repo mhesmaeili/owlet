@@ -23,9 +23,6 @@ public interface SessionStudentMapper extends CrudMapper<
     @Mapping(target = "student",
             source = "student",
             qualifiedByName = "toReference")
-    @Mapping(target = "stateEvaluation",
-            source = "stateEvaluation",
-            qualifiedByName = "toReference")
     @Override
     void update(SessionStudentCreateRequest sessionStudentCreateRequest, @MappingTarget SessionStudent sessionStudent);
 
@@ -34,9 +31,6 @@ public interface SessionStudentMapper extends CrudMapper<
             qualifiedByName = "toReference")
     @Mapping(target = "student",
             source = "student",
-            qualifiedByName = "toReference")
-    @Mapping(target = "stateEvaluation",
-            source = "stateEvaluation",
             qualifiedByName = "toReference")
     @Override
     SessionStudent toEntity(SessionStudentCreateRequest sessionStudentCreateRequest);

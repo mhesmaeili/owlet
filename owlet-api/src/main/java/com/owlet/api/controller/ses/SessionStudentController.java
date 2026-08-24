@@ -57,9 +57,10 @@ public class SessionStudentController extends AdvancedCrudController<
     @PutMapping("/{id}/updatePoint")
     public ApiResponse<SessionStudentDto> updatePoint(
             @PathVariable UUID id,
-            @RequestParam Integer point) {
+            @RequestParam Integer point,
+            @RequestParam(required = false) String pointDescription) {
 
-        SessionStudentDto result = sessionStudentService.updatePoint(id, point);
+        SessionStudentDto result = sessionStudentService.updatePoint(id, point , pointDescription);
         return ApiResponse.success("Update process ok", result);
     }
 
@@ -84,9 +85,18 @@ public class SessionStudentController extends AdvancedCrudController<
     @PutMapping("/{id}/updateStateEvaluation")
     public ApiResponse<SessionStudentDto> updateStateEvaluation(
             @PathVariable UUID id,
-            @RequestParam UUID stateEvaluationId) {
+            @RequestBody String stateEvaluation) {
 
-        SessionStudentDto result = sessionStudentService.updateStateEvaluation(id, stateEvaluationId);
+        SessionStudentDto result = sessionStudentService.updateStateEvaluation(id, stateEvaluation);
+        return ApiResponse.success("Update process ok", result);
+    }
+
+    @PutMapping("/{id}/updateSoftSkills")
+    public ApiResponse<SessionStudentDto> updateStateEvaluation(
+            @PathVariable UUID id,
+            @RequestBody List<String> softSkillsSelected) {
+
+        SessionStudentDto result = sessionStudentService.updateSoftSkillsSelected(id, softSkillsSelected);
         return ApiResponse.success("Update process ok", result);
     }
 

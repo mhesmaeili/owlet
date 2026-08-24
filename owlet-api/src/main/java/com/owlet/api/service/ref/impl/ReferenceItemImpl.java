@@ -11,6 +11,7 @@ import com.owlet.api.service.ref.ReferenceItemService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,4 +40,8 @@ public class ReferenceItemImpl extends CrudServiceImpl<
         return ReferenceItem.class;
     }
 
+    @Override
+    public List<ReferenceItemDto> loadByTypeCode(String typeCode) {
+        return toDto(repository.findByReferenceType_CodeAndActiveTrueOrderBySortOrderAsc(typeCode));
+    }
 }

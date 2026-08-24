@@ -20,15 +20,17 @@ public interface SessionStudentService extends CrudService<
 
     Page<SessionStudentDto> getStudentsBySession(UUID sessionId, String keyword, Pageable pageable);
 
-    SessionStudentDto updatePoint(UUID id, Integer point);
+    SessionStudentDto updatePoint(UUID id, Integer point , String pointDescription);
 
     SessionStudentDto updateTimeBase(UUID id, Boolean timeBase);
 
     SessionStudentDto updateNumber(UUID id, Integer number);
 
-    SessionStudentDto updateStateEvaluation(UUID id, UUID stateEvaluationId);
+    SessionStudentDto updateStateEvaluation(UUID id, String stateEvaluation);
 
     Long countOfStudentByClassroomId(UUID classroomId);
 
     List<SessionStudentDto> studentListBySessionId(UUID sessionId);
+
+    SessionStudentDto updateSoftSkillsSelected(UUID id, List<String> softSkillsSelected);
 }
