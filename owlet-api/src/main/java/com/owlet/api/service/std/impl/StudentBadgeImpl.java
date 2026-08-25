@@ -11,6 +11,7 @@ import com.owlet.api.service.std.StudentBadgeService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,5 +38,10 @@ public class StudentBadgeImpl extends CrudServiceImpl<
     @Override
     protected Class<StudentBadge> entityClass() {
         return StudentBadge.class;
+    }
+
+    @Override
+    public List<StudentBadgeDto> getBySessionAndBadge(UUID sessionId, UUID badgeTypeId) {
+        return toDto(repository.findBySessionStudent_Session_IdAndBadgeType_Id(sessionId, badgeTypeId));
     }
 }

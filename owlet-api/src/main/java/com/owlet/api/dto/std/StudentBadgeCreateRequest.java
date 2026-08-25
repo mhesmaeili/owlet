@@ -29,6 +29,5 @@ public class StudentBadgeCreateRequest {
 
     private String description;
 
-    @NotNull
     private LocalDate achievedAt;
 }

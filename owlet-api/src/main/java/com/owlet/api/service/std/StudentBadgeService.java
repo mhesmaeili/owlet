@@ -6,6 +6,7 @@ import com.owlet.api.dto.std.StudentBadgeCreateRequest;
 import com.owlet.api.dto.std.StudentBadgeDto;
 import com.owlet.api.service.base.CrudService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface StudentBadgeService extends CrudService<
@@ -13,4 +14,5 @@ public interface StudentBadgeService extends CrudService<
         StudentBadgeDto,
         StudentBadgeCreateRequest,
         StudentBadgeCreateRequest> {
+    List<StudentBadgeDto> getBySessionAndBadge(UUID sessionId, UUID badgeTypeId);
 }
