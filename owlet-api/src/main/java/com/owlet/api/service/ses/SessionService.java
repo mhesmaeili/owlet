@@ -12,4 +12,5 @@ public interface SessionService extends CrudService<
         SessionDto,
         SessionCreateRequest,
         SessionCreateRequest> {
+    SessionDto finalizeSession(UUID id);
 }

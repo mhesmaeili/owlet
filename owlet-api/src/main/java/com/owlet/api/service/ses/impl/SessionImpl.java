@@ -8,9 +8,11 @@ import com.owlet.api.repository.ses.SessionRepository;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.ses.SessionService;
+import com.owlet.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
@@ -37,5 +39,17 @@ public class SessionImpl extends CrudServiceImpl<
     @Override
     protected Class<Session> entityClass() {
         return Session.class;
+    }
+
+    @Override
+    public SessionDto finalizeSession(UUID id) {
+        Session entity = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Session not found"));
+
+        entity.setFinalized(true);
+        entity.setFinalizedAt(OffsetDateTime.now());
+
+        repository.save(entity);
+        return mapper.toDto(entity);
     }
 }
