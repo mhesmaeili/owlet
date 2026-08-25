@@ -3,6 +3,7 @@ package com.owlet.api.dto.ses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.idm.AccountDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.dto.std.StudentDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,5 +29,9 @@ public class TeacherObservationDto extends BaseDto<UUID> {
     private StudentDto student;
 
     private SessionStudentDto sessionStudent;
+
+    private ReferenceItemDto positive;
+    private ReferenceItemDto negative;
+    private ReferenceItemDto neutral;
 
 }

@@ -2,6 +2,7 @@ package com.owlet.api.domain.ses;
 
 import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.idm.Account;
+import com.owlet.api.domain.ref.ReferenceItem;
 import com.owlet.api.domain.std.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -18,8 +19,7 @@ public class TeacherObservation extends UuidEntity {
     @JoinColumn(name = "teacher_account_id")
     private Account teacherAccount;
 
-    @NotNull
-    @Column(name = "observation", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "observation", length = Integer.MAX_VALUE)
     private String observation;
 
 
@@ -30,5 +30,17 @@ public class TeacherObservation extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "session_student_id")
     private SessionStudent sessionStudent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "positive_id")
+    private ReferenceItem positive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "negative_id")
+    private ReferenceItem negative;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "neutral_id")
+    private ReferenceItem neutral;
 
 }

@@ -26,6 +26,15 @@ public interface TeacherObservationMapper extends CrudMapper<
     @Mapping(target = "sessionStudent",
             source = "sessionStudent",
             qualifiedByName = "toReference")
+    @Mapping(target = "positive",
+            source = "positive",
+            qualifiedByName = "toReference")
+    @Mapping(target = "negative",
+            source = "negative",
+            qualifiedByName = "toReference")
+    @Mapping(target = "neutral",
+            source = "neutral",
+            qualifiedByName = "toReference")
     @Override
     void update(TeacherObservationCreateRequest TeacherObservationCreateRequest, @MappingTarget TeacherObservation TeacherObservation);
 
@@ -37,6 +46,15 @@ public interface TeacherObservationMapper extends CrudMapper<
             qualifiedByName = "toReference")
     @Mapping(target = "sessionStudent",
             source = "sessionStudent",
+            qualifiedByName = "toReference")
+    @Mapping(target = "positive",
+            source = "positive",
+            qualifiedByName = "toReference")
+    @Mapping(target = "negative",
+            source = "negative",
+            qualifiedByName = "toReference")
+    @Mapping(target = "neutral",
+            source = "neutral",
             qualifiedByName = "toReference")
     @Override
     TeacherObservation toEntity(TeacherObservationCreateRequest TeacherObservationCreateRequest);
