@@ -33,4 +33,7 @@ public interface SessionStudentService extends CrudService<
     List<SessionStudentDto> studentListBySessionId(UUID sessionId);
 
     SessionStudentDto updateSoftSkillsSelected(UUID id, List<String> softSkillsSelected);
+
+    SessionStudentDto updateElapsedTime(UUID id, Integer elapsedTime);
+
 }

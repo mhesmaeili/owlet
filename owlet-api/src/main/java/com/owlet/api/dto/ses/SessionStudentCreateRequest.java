@@ -37,5 +37,6 @@ public class SessionStudentCreateRequest {
     private String pointDescription;
     private String stateEvaluation;
     private List<String> softSkillsSelected;
+    private Integer elapsedTime;
 
 }

@@ -34,4 +34,5 @@ public class SessionStudentDto extends BaseDto<UUID> {
     private String pointDescription;
     private String stateEvaluationSelected;
     private List<String> softSkillsSelected;
+    private Integer elapsedTime;
 }

@@ -100,6 +100,15 @@ public class SessionStudentController extends AdvancedCrudController<
         return ApiResponse.success("Update process ok", result);
     }
 
+    @PutMapping("/{id}/updateElapsedTime")
+    public ApiResponse<SessionStudentDto> updateElapsedTime(
+            @PathVariable UUID id,
+            @RequestParam Integer elapsedTime) {
+
+        SessionStudentDto result = sessionStudentService.updateElapsedTime(id, elapsedTime);
+        return ApiResponse.success("Update process ok", result);
+    }
+
     /*@GetMapping("/{sessionId}/students")
     public ApiResponse<Page<SessionStudentDto>> getSessionStudents1(
             @PathVariable UUID sessionId,

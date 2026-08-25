@@ -74,4 +74,8 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "soft_skills_selected", length = Integer.MAX_VALUE)
     private List<String> softSkillsSelected;
 
+
+    @Column(name = "elapsed_time")
+    private Integer elapsedTime;
+
 }

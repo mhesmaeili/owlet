@@ -136,4 +136,11 @@ public class SessionStudentImpl extends CrudServiceImpl<
         entity.setSoftSkillsSelected(softSkillsSelected);
         return toDto(entity);
     }
+
+    @Override
+    public SessionStudentDto updateElapsedTime(UUID id, Integer elapsedTime) {
+        SessionStudent entity = findEntity(id);
+        entity.setElapsedTime(elapsedTime);
+        return toDto(entity);
+    }
 }
