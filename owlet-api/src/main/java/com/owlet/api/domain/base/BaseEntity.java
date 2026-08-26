@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -61,4 +60,11 @@ public abstract class BaseEntity<PK extends Serializable> implements Serializabl
     @Version
     @Column(nullable = false)
     private Long version = 0L;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.deleted == null) {
+            this.deleted = false;
+        }
+    }
 }
