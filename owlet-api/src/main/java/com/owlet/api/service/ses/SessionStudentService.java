@@ -36,4 +36,5 @@ public interface SessionStudentService extends CrudService<
 
     SessionStudentDto updateElapsedTime(UUID id, Integer elapsedTime);
 
+    List<SessionStudentDto> getMediaStatusBySession(UUID sessionId);
 }

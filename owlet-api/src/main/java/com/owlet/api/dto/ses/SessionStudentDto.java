@@ -35,4 +35,5 @@ public class SessionStudentDto extends BaseDto<UUID> {
     private String stateEvaluationSelected;
     private List<String> softSkillsSelected;
     private Integer elapsedTime;
+    private OffsetDateTime lastPhotoDate;
 }

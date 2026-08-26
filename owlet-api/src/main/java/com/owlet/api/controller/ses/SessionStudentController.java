@@ -109,6 +109,11 @@ public class SessionStudentController extends AdvancedCrudController<
         return ApiResponse.success("Update process ok", result);
     }
 
+    @GetMapping("/session/{sessionId}/media-status")
+    public ApiResponse<List<SessionStudentDto>> getMediaStatusBySession(@PathVariable UUID sessionId) {
+        return ApiResponse.success(sessionStudentService.getMediaStatusBySession(sessionId));
+    }
+
     /*@GetMapping("/{sessionId}/students")
     public ApiResponse<Page<SessionStudentDto>> getSessionStudents1(
             @PathVariable UUID sessionId,

@@ -24,4 +24,6 @@ public interface SessionStudentRepository
     long countByClassroomId(@Param("classroomId") UUID classroomId);
 
     List<SessionStudent> findBySession_id(UUID sessionId);
+
+    List<SessionStudent> findBySessionId(UUID sessionId);
 }

@@ -4,6 +4,7 @@ import com.owlet.api.domain.ses.SessionStudent;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.mapper.ses.SessionStudentMapper;
+import com.owlet.api.repository.base.AttachmentReferenceRepository;
 import com.owlet.api.repository.ref.ReferenceItemRepository;
 import com.owlet.api.repository.ses.SessionStudentRepository;
 import com.owlet.api.repository.specification.FilterNode;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,13 +37,14 @@ public class SessionStudentImpl extends CrudServiceImpl<
     public SessionStudentImpl(
             SessionStudentRepository repository,
             SessionStudentMapper mapper,
-            AuditableService auditableService, ReferenceItemRepository referenceItemRepository) {
+            AuditableService auditableService, AttachmentReferenceRepository attachmentReferenceRepository) {
 
         super(repository, mapper, auditableService);
-        this.referenceItemRepository = referenceItemRepository;
+
+        this.attachmentReferenceRepository = attachmentReferenceRepository;
     }
 
-    private final ReferenceItemRepository referenceItemRepository;
+    private final AttachmentReferenceRepository attachmentReferenceRepository;
 
 
     @Override
@@ -142,5 +146,26 @@ public class SessionStudentImpl extends CrudServiceImpl<
         SessionStudent entity = findEntity(id);
         entity.setElapsedTime(elapsedTime);
         return toDto(entity);
+    }
+
+    @Override
+    public List<SessionStudentDto> getMediaStatusBySession(UUID sessionId) {
+
+        List<SessionStudent> sessionStudents = repository.findBySessionId(sessionId);
+        List<SessionStudentDto> dtoList = new ArrayList<>();
+
+        for (SessionStudent entity : sessionStudents) {
+            SessionStudentDto dto = mapper.toDto(entity);
+
+            OffsetDateTime globalLastPhotoDate = attachmentReferenceRepository
+                    .findLastPhotoDateByStudentId(entity.getStudent().getId())
+                    .orElse(null);
+
+            dto.setLastPhotoDate(globalLastPhotoDate);
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 }

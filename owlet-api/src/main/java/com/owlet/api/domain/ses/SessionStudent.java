@@ -78,4 +78,7 @@ public class SessionStudent extends UuidEntity {
     @Column(name = "elapsed_time")
     private Integer elapsedTime;
 
+    @Column(name = "last_photo_date")
+    private OffsetDateTime lastPhotoDate;
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +54,30 @@ public class AttachmentReferenceController extends CrudController<
         return ApiResponse.success(attachmentReferenceService.upload(
                 file,
                 request));
+
+    }
+
+    @PostMapping(value = "/uploadGroup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<List<AttachmentReferenceDto>> uploadGroup(
+            @RequestPart MultipartFile file,
+            @RequestParam String entityClass,
+            @RequestParam List<UUID> entityList,
+            @RequestParam(required = false) UUID categoryId) {
+
+        List<AttachmentReferenceDto> list = new ArrayList<>();
+
+        for (UUID entityId : entityList) {
+            AttachmentReferenceCreateRequest request = AttachmentReferenceCreateRequest.builder()
+                    .entityClass(entityClass)
+                    .entityId(entityId)
+                    .category(new EntityIdDto(categoryId))
+                    .build();
+
+            AttachmentReferenceDto upload = attachmentReferenceService.upload(file, request);
+            list.add(upload);
+        }
+
+        return ApiResponse.success(list);
 
     }
 
