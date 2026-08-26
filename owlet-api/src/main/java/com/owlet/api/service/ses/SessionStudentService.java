@@ -1,6 +1,9 @@
 package com.owlet.api.service.ses;
 
 
+import com.owlet.api.domain.ses.TrainingCourse;
+import com.owlet.api.dto.ses.SessionCreateRequest;
+import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.service.base.CrudService;
@@ -37,4 +40,6 @@ public interface SessionStudentService extends CrudService<
     SessionStudentDto updateElapsedTime(UUID id, Integer elapsedTime);
 
     List<SessionStudentDto> getMediaStatusBySession(UUID sessionId);
+
+    void addBySession(List<SessionDto> listAdded, TrainingCourse entity);
 }

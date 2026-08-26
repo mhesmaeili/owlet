@@ -67,4 +67,8 @@ public class Session extends UuidEntity {
     @JoinColumn(name = "session_type_id", nullable = false)
     private ReferenceItem sessionType;
 
+    @ColumnDefault("false")
+    @Column(name = "attendance_submitted")
+    private Boolean attendanceSubmitted = false;
+
 }

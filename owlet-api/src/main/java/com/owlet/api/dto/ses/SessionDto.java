@@ -29,4 +29,5 @@ public class SessionDto extends BaseDto<UUID> {
     private Boolean finalized;
     private OffsetDateTime finalizedAt;
     private ReferenceItemDto sessionType;
+    private Boolean attendanceSubmitted;
 }

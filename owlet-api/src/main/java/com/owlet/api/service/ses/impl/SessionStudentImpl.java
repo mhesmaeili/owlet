@@ -1,17 +1,22 @@
 package com.owlet.api.service.ses.impl;
 
+import com.owlet.api.domain.ses.Session;
 import com.owlet.api.domain.ses.SessionStudent;
+import com.owlet.api.domain.ses.TrainingCourse;
+import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
+import com.owlet.api.dto.std.StudentClassroomDto;
 import com.owlet.api.mapper.ses.SessionStudentMapper;
 import com.owlet.api.repository.base.AttachmentReferenceRepository;
-import com.owlet.api.repository.ref.ReferenceItemRepository;
 import com.owlet.api.repository.ses.SessionStudentRepository;
 import com.owlet.api.repository.specification.FilterNode;
 import com.owlet.api.repository.specification.SearchOperation;
 import com.owlet.api.security.AuditableService;
 import com.owlet.api.service.base.CrudServiceImpl;
+import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.service.ses.SessionStudentService;
+import com.owlet.api.service.std.StudentClassroomService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,14 +42,16 @@ public class SessionStudentImpl extends CrudServiceImpl<
     public SessionStudentImpl(
             SessionStudentRepository repository,
             SessionStudentMapper mapper,
-            AuditableService auditableService, AttachmentReferenceRepository attachmentReferenceRepository) {
+            AuditableService auditableService, AttachmentReferenceRepository attachmentReferenceRepository, StudentClassroomService studentClassroomService) {
 
         super(repository, mapper, auditableService);
 
         this.attachmentReferenceRepository = attachmentReferenceRepository;
+        this.studentClassroomService = studentClassroomService;
     }
 
     private final AttachmentReferenceRepository attachmentReferenceRepository;
+    private final StudentClassroomService studentClassroomService;
 
 
     @Override
@@ -56,7 +63,11 @@ public class SessionStudentImpl extends CrudServiceImpl<
     @Override
     public List<SessionStudentDto> updateAttendance(UUID sessionId, List<UUID> studentIds, Boolean present) {
         List<SessionStudent> list = repository.findBySession_IdAndStudent_IdIn(sessionId, studentIds);
-        list.forEach(ss -> ss.setPresent(present));
+        list.forEach(ss -> {
+            ss.setPresent(present);
+            ss.setAttendanceTime(OffsetDateTime.now());
+        });
+
         return mapper.toDto(list);
     }
 
@@ -167,5 +178,24 @@ public class SessionStudentImpl extends CrudServiceImpl<
         }
 
         return dtoList;
+    }
+
+    @Override
+    public void addBySession(List<SessionDto> listAdded, TrainingCourse entity) {
+        List<StudentClassroomDto> studentClassroomDtos = studentClassroomService.findByClassroomId(entity.getClassroom().getId());
+
+        List<SessionStudentCreateRequest> listForAdd = new ArrayList<>();
+
+        listAdded.forEach(session -> {
+            studentClassroomDtos.forEach(studentClassroomDto -> {
+                SessionStudentCreateRequest dto = new SessionStudentCreateRequest();
+                dto.setSession(new EntityIdDto(session.getId()));
+                dto.setStudent(new EntityIdDto(studentClassroomDto.getStudent().getId()));
+                dto.setPresent(true);
+                listForAdd.add(dto);
+            });
+        });
+
+        create(listForAdd);
     }
 }

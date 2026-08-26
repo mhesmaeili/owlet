@@ -35,4 +35,10 @@ public class SessionController extends CrudController<
         SessionDto result = sessionService.finalizeSession(id);
         return ApiResponse.success("Session finalized successfully", result);
     }
+
+    @PutMapping("/{id}/attendanceSubmitted")
+    public ApiResponse<SessionDto> attendanceSubmittedSession(@PathVariable UUID id) {
+        SessionDto result = sessionService.attendanceSubmitted(id);
+        return ApiResponse.success("Session finalized successfully", result);
+    }
 }

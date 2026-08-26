@@ -30,5 +30,5 @@ public class SessionCreateRequest {
     private OffsetDateTime finalizedAt;
     @NotNull
     private EntityIdDto sessionType;
-
+    private Boolean attendanceSubmitted;
 }
