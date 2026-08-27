@@ -109,26 +109,44 @@ public class AccountServiceImpl extends CrudServiceImpl<
         return account;
     }
 
+// ❌ متد afterUpdate را کلاً از کلاس خود پاک کنید ❌
+    // (این متد باعث می‌شد روی هر ویرایش، نقش‌ها بی‌دلیل پاک و دوباره ساخته شوند)
+
     @Override
     protected Account beforeUpdateSave(
             Account account,
             AccountUpdateRequest request) {
 
+        // 1. آپدیت رمز عبور (مثل قبل)
         if (request.getPassword() != null) {
+            account.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+            account.setPasswordChangedAt(OffsetDateTime.now());
+        }
 
-            account.setPasswordHash(
-                    passwordEncoder.encode(request.getPassword())
-            );
+        // 2. آپدیت نقش‌ها (فقط زمانی اجرا می‌شود که فرانت‌اند لیست نقش‌ها را فرستاده باشد)
+        if (request.getRoleIds() != null) {
 
-            account.setPasswordChangedAt(
-                    OffsetDateTime.now());
+            // الف: حذف نقش‌های قبلی مستقیما از دیتابیس
+            accountRoleRepository.deleteByAccountId(account.getId());
+
+            // ب: ⚠️ شاه‌کلید حل مشکل ⚠️
+            // باید لیست داخل حافظه را هم پاک کنیم تا Hibernate سعی نکند رکوردهای حذف شده را آپدیت کند
+            if (account.getAccountRoles() != null) {
+                account.getAccountRoles().clear();
+            }
+
+            // ج: اجبار دیتابیس به اعمالِ حذف، قبل از ثبت رکوردهای جدید
+            accountRoleRepository.flush();
+
+            // د: تخصیص نقش‌های جدید
+            assignRoles(account, request.getRoleIds());
         }
 
         return account;
     }
 
 
-    @Override
+    /*@Override
     protected void afterUpdate(Account account) {
 
         updateRoles(
@@ -137,7 +155,7 @@ public class AccountServiceImpl extends CrudServiceImpl<
                         .stream()
                         .map(x -> x.getRole().getId())
                         .toList());
-    }
+    }*/
 
 
     private void updateRoles(

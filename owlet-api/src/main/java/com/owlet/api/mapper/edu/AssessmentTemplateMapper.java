@@ -20,6 +20,12 @@ public interface AssessmentTemplateMapper extends CrudMapper<
     @Mapping(target = "assessmentType",
             source = "assessmentType",
             qualifiedByName = "toReference")
+    @Mapping(target = "sessionType",
+            source = "sessionType",
+            qualifiedByName = "toReference")
+    @Mapping(target = "product",
+            source = "product",
+            qualifiedByName = "toReference")
     @Override
     void update(AssessmentTemplateCreateRequest assessmentTemplateCreateRequest, @MappingTarget AssessmentTemplate assessmentTemplate);
 
@@ -27,6 +33,12 @@ public interface AssessmentTemplateMapper extends CrudMapper<
 
     @Mapping(target = "assessmentType",
             source = "assessmentType",
+            qualifiedByName = "toReference")
+    @Mapping(target = "sessionType",
+            source = "sessionType",
+            qualifiedByName = "toReference")
+    @Mapping(target = "product",
+            source = "product",
             qualifiedByName = "toReference")
     @Override
     AssessmentTemplate toEntity(AssessmentTemplateCreateRequest assessmentTemplateCreateRequest);

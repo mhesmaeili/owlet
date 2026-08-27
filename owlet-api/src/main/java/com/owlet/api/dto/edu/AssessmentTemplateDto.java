@@ -1,6 +1,7 @@
 package com.owlet.api.dto.edu;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.owlet.api.domain.edu.Product;
 import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
@@ -29,5 +30,9 @@ public class AssessmentTemplateDto extends BaseDto<UUID> {
     private Integer versionNo;
 
     private ReferenceItemDto assessmentType;
+
+    private ReferenceItemDto sessionType;
+
+    private ProductDto product;
 
 }
