@@ -14,6 +14,7 @@ import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
 import com.owlet.api.service.org.TeacherClassroomService;
+import com.owlet.api.service.ses.TrainingCourseService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -35,15 +36,15 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     public SchoolServiceImpl(
             SchoolRepository repository,
             SchoolMapper mapper,
-            AuditableService auditableService, TeacherSchoolMapper teacherSchoolMapper, TeacherClassroomService teacherClassroomService) {
+            AuditableService auditableService, TeacherSchoolMapper teacherSchoolMapper, TrainingCourseService trainingCourseService) {
 
         super(repository, mapper, auditableService);
         this.teacherSchoolMapper = teacherSchoolMapper;
-        this.teacherClassroomService = teacherClassroomService;
+        this.trainingCourseService = trainingCourseService;
     }
 
     protected final TeacherSchoolMapper teacherSchoolMapper;
-    protected final TeacherClassroomService teacherClassroomService;
+    protected final TrainingCourseService trainingCourseService;
 
     @Override
     protected String[] getSearchableFields() {
@@ -64,7 +65,7 @@ public class SchoolServiceImpl extends CrudServiceImpl<
         List<School> list = repository.findSchoolByTeacherId(auditableService.currentUserId(), RoleConst.ROLE_STEAM_TEACHER);
         List<TeacherSchoolDto> dtos = teacherSchoolMapper.toDto(list);
         dtos.forEach(teacherSchoolDto -> {
-            teacherSchoolDto.setActiveClasses(teacherClassroomService.countOfActiveClasses(teacherSchoolDto.getId()));
+            teacherSchoolDto.setActiveClasses(trainingCourseService.countOfActiveClasses(teacherSchoolDto.getId()));
         });
 
         return dtos;

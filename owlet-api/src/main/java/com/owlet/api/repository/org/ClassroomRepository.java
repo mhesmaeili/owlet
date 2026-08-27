@@ -19,7 +19,7 @@ public interface ClassroomRepository
     List<Classroom> findByTitle(String title);
 
     @Query("SELECT distinct s.classroom " +
-            "FROM TeacherClassroom s " +
+            "FROM TrainingCourse s " +
             "WHERE s.teacherAccount.id = :accountId And s.classroom.school.id=:schoolId And s.active = true")
     List<Classroom> teacherSteamClassroom(@Param("accountId") UUID accountId ,@Param("schoolId") UUID schoolId);
 

@@ -10,9 +10,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -80,5 +83,9 @@ public class SessionStudent extends UuidEntity {
 
     @Column(name = "last_photo_date")
     private OffsetDateTime lastPhotoDate;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "slider_evaluations", columnDefinition = "jsonb")
+    private Map<String, Integer> sliderEvaluations;
 
 }

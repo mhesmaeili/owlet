@@ -4,9 +4,11 @@ import com.owlet.api.controller.base.AdvancedCrudController;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.dto.ses.SessionStudentFilterDto;
+import com.owlet.api.dto.ses.UpdateSliderEvaluationRequest;
 import com.owlet.api.service.ses.SessionStudentService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -112,6 +114,15 @@ public class SessionStudentController extends AdvancedCrudController<
     @GetMapping("/session/{sessionId}/media-status")
     public ApiResponse<List<SessionStudentDto>> getMediaStatusBySession(@PathVariable UUID sessionId) {
         return ApiResponse.success(sessionStudentService.getMediaStatusBySession(sessionId));
+    }
+
+    @PutMapping("/{id}/slider-evaluations")
+    public ApiResponse<SessionStudentDto> updateSliderEvaluations(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateSliderEvaluationRequest request) {
+
+        SessionStudentDto updatedDto = sessionStudentService.updateSliderEvaluations(id, request.getScores());
+        return ApiResponse.success("ارزیابی با موفقیت ثبت شد", updatedDto);
     }
 
     /*@GetMapping("/{sessionId}/students")

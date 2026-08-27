@@ -56,6 +56,11 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     }
 
     @Override
+    public Long countOfActiveClasses(UUID schoolId) {
+        return repository.countDistinctClassroomsBySchoolAndTeacher(schoolId, auditableService.currentUserId());
+    }
+
+    @Override
     protected void afterCreate(TrainingCourse entity) {
         sessionService.addByTrainingCourse(entity);
         super.afterCreate(entity);

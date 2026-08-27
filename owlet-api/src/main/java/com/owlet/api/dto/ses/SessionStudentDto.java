@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -36,4 +37,5 @@ public class SessionStudentDto extends BaseDto<UUID> {
     private List<String> softSkillsSelected;
     private Integer elapsedTime;
     private OffsetDateTime lastPhotoDate;
+    private Map<String, Integer> sliderEvaluations;
 }

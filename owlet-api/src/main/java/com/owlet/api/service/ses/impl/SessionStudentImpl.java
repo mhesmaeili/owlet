@@ -23,9 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -197,5 +195,23 @@ public class SessionStudentImpl extends CrudServiceImpl<
         });
 
         create(listForAdd);
+    }
+
+    @Override
+    public SessionStudentDto updateSliderEvaluations(UUID sessionStudentId, Map<String, Integer> scores) {
+        SessionStudent sessionStudent = repository.findById(sessionStudentId).orElseThrow();
+
+        // گرفتن نمرات قبلی (اگر نال بود یک مپ خالی می‌سازیم)
+        Map<String, Integer> existingScores = sessionStudent.getSliderEvaluations();
+        if (existingScores == null) {
+            existingScores = new HashMap<>();
+        }
+
+        // اضافه کردن یا آپدیت کردن نمرات جدید روی نمرات قبلی (بدون پاک شدن قدیمی‌ها)
+        existingScores.putAll(scores);
+
+        sessionStudent.setSliderEvaluations(existingScores);
+        repository.save(sessionStudent);
+        return mapper.toDto(sessionStudent);
     }
 }

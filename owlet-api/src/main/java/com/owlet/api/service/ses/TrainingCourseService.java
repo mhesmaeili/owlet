@@ -16,4 +16,6 @@ public interface TrainingCourseService extends CrudService<
         TrainingCourseCreateRequest> {
 
     List<SessionDto> teacherSteamCourse(UUID classroomId);
+
+    Long countOfActiveClasses(UUID schoolId);
 }

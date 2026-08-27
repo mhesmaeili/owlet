@@ -7,10 +7,12 @@ import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.SessionStudentCreateRequest;
 import com.owlet.api.dto.ses.SessionStudentDto;
 import com.owlet.api.service.base.CrudService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface SessionStudentService extends CrudService<
@@ -42,4 +44,6 @@ public interface SessionStudentService extends CrudService<
     List<SessionStudentDto> getMediaStatusBySession(UUID sessionId);
 
     void addBySession(List<SessionDto> listAdded, TrainingCourse entity);
+
+    SessionStudentDto updateSliderEvaluations(UUID sessionStudentId, Map<String, Integer> scores);
 }

@@ -20,4 +20,10 @@ public interface TrainingCourseRepository
             "And s.trainingCourse.teacherAccount.id=:accountId And s.trainingCourse.active = true " +
             "order by s.startTime")
     List<Session> teacherSteamCourse(@Param("accountId") UUID accountId,@Param("classroomId") UUID classroomId);
+
+    @Query("SELECT count (distinct s.classroom) " +
+            "FROM TrainingCourse s " +
+            "WHERE s.classroom.school.id = :schoolId " +
+            "And s.active=true And s.teacherAccount.id = :teacherId")
+    Long countDistinctClassroomsBySchoolAndTeacher(UUID schoolId, UUID teacherId);
 }
