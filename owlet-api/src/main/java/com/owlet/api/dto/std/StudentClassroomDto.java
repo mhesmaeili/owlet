@@ -24,4 +24,6 @@ public class StudentClassroomDto extends BaseDto<UUID> {
 
     private ClassroomDto classroom;
 
+    private Boolean active;
+
 }

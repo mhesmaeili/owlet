@@ -105,6 +105,7 @@ public abstract class CrudServiceImpl<
     @Override
     public List<DTO> create(List<CREATE> list) {
         List<ENTITY> entities = list.stream().map(mapper::toEntity).toList();
+        entities = beforeCreateSaveAll(entities, list);
         entities = repository.saveAll(entities);
         return mapper.toDto(entities);
     }
@@ -181,6 +182,7 @@ public abstract class CrudServiceImpl<
     protected ENTITY beforeCreateSave(ENTITY entity, CREATE dto) { return entity; }
     protected ENTITY beforeUpdateSave(ENTITY entity, UPDATE dto) { return entity; }
     protected DTO beforeReturn(DTO dto) { return dto; }
+    protected List<ENTITY> beforeCreateSaveAll(List<ENTITY> entities, List<CREATE> list) {return entities;}
     protected void validateCreate(CREATE dto) {}
     protected void validateUpdate(ENTITY entity, UPDATE dto) {}
     protected boolean isSoftDelete() { return true; }

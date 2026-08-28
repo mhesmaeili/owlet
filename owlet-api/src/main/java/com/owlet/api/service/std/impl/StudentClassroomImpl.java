@@ -44,4 +44,15 @@ public class StudentClassroomImpl extends CrudServiceImpl<
     public List<StudentClassroomDto> findByClassroomId(UUID classroomId) {
         return mapper.toDto(repository.findAllByClassroom_Id(classroomId));
     }
+
+    @Transactional
+    public void updateBatchStatus(List<UUID> ids, Boolean active) {
+        repository.updateStatusByIds(ids, active);
+    }
+
+    @Override
+    protected List<StudentClassroom> beforeCreateSaveAll(List<StudentClassroom> studentClassrooms, List<StudentClassroomCreateRequest> list) {
+        studentClassrooms.forEach(sc -> sc.setActive(true));
+        return super.beforeCreateSaveAll(studentClassrooms, list);
+    }
 }

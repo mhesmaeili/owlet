@@ -47,12 +47,6 @@ public class StudentDto extends BaseDto<UUID> {
 
     private SchoolDto school;
 
-
-    private ClassroomDto classroom;
-
-
-    //private UUID avatarMediaId;
-
     private Boolean active;
 
     private String description;

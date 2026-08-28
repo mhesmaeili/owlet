@@ -38,8 +38,6 @@ public class StudentCreateRequest {
 
     private EntityIdDto school;
 
-    private EntityIdDto classroom;
-
     @NotNull
     private Boolean active;
 

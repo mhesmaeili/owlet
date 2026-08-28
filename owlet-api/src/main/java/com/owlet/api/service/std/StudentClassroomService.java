@@ -14,4 +14,6 @@ public interface StudentClassroomService extends CrudService<
         StudentClassroomCreateRequest,
         StudentClassroomCreateRequest> {
     List<StudentClassroomDto> findByClassroomId(UUID classroomId);
+
+    void updateBatchStatus(List<UUID> ids, Boolean active);
 }

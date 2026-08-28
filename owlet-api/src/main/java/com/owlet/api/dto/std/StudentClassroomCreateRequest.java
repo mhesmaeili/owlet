@@ -23,4 +23,6 @@ public class StudentClassroomCreateRequest {
     @NotNull
     private EntityIdDto classroom;
 
+    private Boolean active;
+
 }

@@ -25,9 +25,6 @@ public interface StudentMapper extends CrudMapper<
     @Mapping(target = "school",
             source = "school",
             qualifiedByName = "toReference")
-    @Mapping(target = "classroom",
-            source = "classroom",
-            qualifiedByName = "toReference")
     @Override
     Student toEntity(StudentCreateRequest studentCreateRequest);
 
@@ -39,9 +36,6 @@ public interface StudentMapper extends CrudMapper<
             qualifiedByName = "toReference")
     @Mapping(target = "school",
             source = "school",
-            qualifiedByName = "toReference")
-    @Mapping(target = "classroom",
-            source = "classroom",
             qualifiedByName = "toReference")
     @Override
     void update(StudentCreateRequest studentCreateRequest, @MappingTarget Student student);

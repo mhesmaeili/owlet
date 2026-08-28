@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -21,5 +22,9 @@ public class StudentClassroom extends UuidEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "classroom_id", nullable = false)
     private Classroom classroom;
+
+    @ColumnDefault("true")
+    @Column(name = "active")
+    private Boolean active = true;
 
 }
