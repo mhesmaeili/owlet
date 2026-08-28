@@ -27,6 +27,7 @@ public class ParentCreateRequest {
 
     private EntityIdDto gender;
 
+    @NotNull
     private String mobile;
 
     private String email;

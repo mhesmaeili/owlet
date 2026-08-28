@@ -41,4 +41,8 @@ public class RoleImpl extends CrudServiceImpl<
     }
 
 
+    @Override
+    public RoleDto getByRoleCode(String code) {
+        return mapper.toDto(repository.findByCodeAndActiveTrue(code));
+    }
 }

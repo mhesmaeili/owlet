@@ -12,4 +12,5 @@ public interface RoleService extends CrudService<
         RoleDto,
         RoleCreateRequest,
         RoleCreateRequest> {
+    RoleDto getByRoleCode(String code);
 }

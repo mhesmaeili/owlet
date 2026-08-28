@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface RoleRepository extends BaseRepository<Role, UUID> {
 
+    Role findByCodeAndActiveTrue(String code);
 }
