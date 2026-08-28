@@ -116,12 +116,12 @@ public class AttachmentServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    protected void beforeDelete(Attachment entity) {
-        if (attachmentReferenceRepository.existsByAttachmentAndDeletedFalse(entity)) {
-            throw new ConstraintViolationException("Attachment reference already exists");
+    protected void doDelete(Attachment entity) {
+        if (!attachmentReferenceRepository.existsByAttachmentAndDeletedFalse(entity)) {
+            storageService.delete(
+                    entity.getObjectKey());
+            super.doDelete(entity);
         }
-        storageService.delete(
-                entity.getObjectKey());
     }
 
     @Override
