@@ -1,10 +1,12 @@
 package com.owlet.api.dto.ses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.owlet.api.domain.ref.ReferenceItem;
 import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.edu.ProductDto;
 import com.owlet.api.dto.idm.AccountDto;
 import com.owlet.api.dto.org.ClassroomDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +28,6 @@ public class TrainingCourseDto extends BaseDto<UUID> {
     private AccountDto teacherAccount;
     private ProductDto product;
     private Boolean active;
+    private ReferenceItemDto trainingStatus;
 
 }

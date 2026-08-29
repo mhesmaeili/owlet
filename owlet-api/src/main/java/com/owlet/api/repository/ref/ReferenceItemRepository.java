@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ReferenceItemRepository
         extends BaseRepository<ReferenceItem, UUID> {
     List<ReferenceItem> findByReferenceType_CodeAndActiveTrueOrderBySortOrderAsc(String typeCode);
+
+    ReferenceItem findByReferenceTypeCodeAndCodeAndActiveTrue(String typeCode, String itemCode);
 }

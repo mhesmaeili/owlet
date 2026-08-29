@@ -1,6 +1,8 @@
 package com.owlet.api.service.std;
 
 
+import com.owlet.api.domain.org.Classroom;
+import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.dto.std.StudentClassroomCreateRequest;
 import com.owlet.api.dto.std.StudentClassroomDto;
 import com.owlet.api.service.base.CrudService;
@@ -16,4 +18,6 @@ public interface StudentClassroomService extends CrudService<
     List<StudentClassroomDto> findByClassroomId(UUID classroomId);
 
     void updateBatchStatus(List<UUID> ids, Boolean active);
+
+    Classroom getClassroomByStudentId(UUID studentId);
 }

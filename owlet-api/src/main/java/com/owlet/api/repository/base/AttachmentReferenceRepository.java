@@ -21,4 +21,9 @@ public interface AttachmentReferenceRepository extends BaseRepository<Attachment
             "WHERE a.entityClass = 'SessionStudent' " +
             "AND a.entityId IN (SELECT ss.id FROM SessionStudent ss WHERE ss.student.id = :studentId)")
     Optional<OffsetDateTime> findLastPhotoDateByStudentId(@Param("studentId") UUID studentId);
+
+    @Query("SELECT a FROM AttachmentReference a " +
+            "WHERE a.entityClass = 'SessionStudent' " +
+            "AND a.entityId IN (SELECT ss.id FROM SessionStudent ss WHERE ss.student.id = :studentId)")
+    List<AttachmentReference> findGalleryOfStudent(UUID studentId);
 }

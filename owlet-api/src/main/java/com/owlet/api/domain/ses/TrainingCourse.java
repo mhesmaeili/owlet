@@ -4,6 +4,7 @@ import com.owlet.api.domain.base.UuidEntity;
 import com.owlet.api.domain.edu.Product;
 import com.owlet.api.domain.idm.Account;
 import com.owlet.api.domain.org.Classroom;
+import com.owlet.api.domain.ref.ReferenceItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -34,5 +35,9 @@ public class TrainingCourse extends UuidEntity {
     @ColumnDefault("true")
     @Column(name = "active", nullable = false)
     private Boolean active = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "training_status_id")
+    private ReferenceItem trainingStatus;
 
 }

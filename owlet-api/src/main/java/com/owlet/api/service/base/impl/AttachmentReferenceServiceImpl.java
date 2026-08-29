@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,7 +89,7 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
 
     @Override
     public AttachmentUrlDto generatePresignedUrl(AttachmentReferenceDto attachmentReferenceDto) {
-        Duration duration = Duration.ofMinutes(2);
+        Duration duration = Duration.ofMinutes(5);
 
         String url = attachmentService.generatePresignedUrl(
                 attachmentReferenceDto.getAttachment().getObjectKey(),
@@ -105,5 +106,19 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
                 .url(url)
                 .build();
 
+    }
+
+    @Override
+    public List<AttachmentUrlDto> generatePresignedUrlGroup(List<AttachmentReferenceDto> attachmentReferenceDtoList) {
+        List<AttachmentUrlDto> list = new ArrayList<>();
+        attachmentReferenceDtoList.forEach(attachmentReferenceDto -> {
+            list.add(generatePresignedUrl(attachmentReferenceDto));
+        });
+        return  list;
+    }
+
+    @Override
+    public List<AttachmentReferenceDto> findByStudentId(UUID studentId) {
+        return mapper.toDto(repository.findGalleryOfStudent(studentId));
     }
 }

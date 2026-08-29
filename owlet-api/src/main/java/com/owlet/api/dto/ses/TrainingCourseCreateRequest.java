@@ -25,5 +25,5 @@ public class TrainingCourseCreateRequest {
     private EntityIdDto product;
     @NotNull
     private Boolean active;
-
+    private EntityIdDto trainingStatus;
 }

@@ -26,4 +26,9 @@ public interface AttachmentReferenceService extends CrudService<
     StorageObject download(UUID id);
 
     AttachmentUrlDto generatePresignedUrl(AttachmentReferenceDto attachmentReferenceDto);
+
+
+    List<AttachmentUrlDto> generatePresignedUrlGroup(List<AttachmentReferenceDto> attachmentReferenceDtoList);
+
+    List<AttachmentReferenceDto> findByStudentId(UUID studentId);
 }

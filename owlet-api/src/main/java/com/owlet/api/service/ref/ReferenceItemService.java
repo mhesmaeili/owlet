@@ -13,4 +13,6 @@ public interface ReferenceItemService extends CrudService<
         ReferenceItemCreateRequest,
         ReferenceItemCreateRequest> {
     List<ReferenceItemDto> loadByTypeCode(String typeCode);
+
+    ReferenceItemDto getByTypeCodeAndItemCode(String typeCode, String itemCode);
 }

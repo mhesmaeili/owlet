@@ -9,6 +9,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.Map;
 
 @Getter
 @Setter
@@ -42,5 +46,12 @@ public class Product extends UuidEntity {
     @ColumnDefault("1")
     @Column(name = "version_no")
     private Integer versionNo = 1;
+
+    @Column(name = "educational_concepts", length = Integer.MAX_VALUE)
+    private String educationalConcepts;
+
+    @Column(name = "developed_skills")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Object> developedSkills;
 
 }

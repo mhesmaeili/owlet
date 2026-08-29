@@ -26,4 +26,11 @@ public interface TrainingCourseRepository
             "WHERE s.classroom.school.id = :schoolId " +
             "And s.active=true And s.teacherAccount.id = :teacherId")
     Long countDistinctClassroomsBySchoolAndTeacher(UUID schoolId, UUID teacherId);
+
+    @Query("SELECT distinct t " +
+            "FROM TrainingCourse t " +
+            "join Session s on s.trainingCourse.id = t.id " +
+            "join SessionStudent ss on ss.session.id=s.id " +
+            "WHERE ss.student.id=:studentId")
+    List<TrainingCourse> findAllByStudentId(@Param("studentId") UUID studentId);
 }

@@ -1,6 +1,8 @@
 package com.owlet.api.service.std.impl;
 
+import com.owlet.api.domain.org.Classroom;
 import com.owlet.api.domain.std.StudentClassroom;
+import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.dto.std.StudentClassroomCreateRequest;
 import com.owlet.api.dto.std.StudentClassroomDto;
 import com.owlet.api.mapper.std.StudentClassroomMapper;
@@ -48,6 +50,12 @@ public class StudentClassroomImpl extends CrudServiceImpl<
     @Transactional
     public void updateBatchStatus(List<UUID> ids, Boolean active) {
         repository.updateStatusByIds(ids, active);
+    }
+
+    @Override
+    public Classroom getClassroomByStudentId(UUID studentId) {
+        StudentClassroom studentClassroom = repository.findByStudentIdAndActiveTrue(studentId);
+        return studentClassroom.getClassroom();
     }
 
     @Override

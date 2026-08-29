@@ -3,7 +3,6 @@ package com.owlet.api.dto.std;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
 import com.owlet.api.dto.idm.AccountDto;
-import com.owlet.api.dto.org.ClassroomDto;
 import com.owlet.api.dto.org.SchoolDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import lombok.AllArgsConstructor;
@@ -50,5 +49,7 @@ public class StudentDto extends BaseDto<UUID> {
     private Boolean active;
 
     private String description;
+
+    private String className;
 
 }

@@ -18,4 +18,6 @@ public interface StudentClassroomRepository
     @Modifying
     @Query("UPDATE StudentClassroom sc SET sc.active = :active WHERE sc.id IN :ids")
     void updateStatusByIds(@Param("ids") List<UUID> ids, @Param("active") Boolean active);
+
+    StudentClassroom findByStudentIdAndActiveTrue(UUID studentId);
 }

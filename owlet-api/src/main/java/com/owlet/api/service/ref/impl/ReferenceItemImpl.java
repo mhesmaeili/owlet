@@ -44,4 +44,9 @@ public class ReferenceItemImpl extends CrudServiceImpl<
     public List<ReferenceItemDto> loadByTypeCode(String typeCode) {
         return toDto(repository.findByReferenceType_CodeAndActiveTrueOrderBySortOrderAsc(typeCode));
     }
+
+    @Override
+    public ReferenceItemDto getByTypeCodeAndItemCode(String typeCode, String itemCode) {
+        return toDto(repository.findByReferenceTypeCodeAndCodeAndActiveTrue(typeCode,itemCode));
+    }
 }

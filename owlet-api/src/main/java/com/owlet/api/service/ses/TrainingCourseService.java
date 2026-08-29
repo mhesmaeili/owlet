@@ -1,6 +1,7 @@
 package com.owlet.api.service.ses;
 
 
+import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.TrainingCourseCreateRequest;
 import com.owlet.api.dto.ses.TrainingCourseDto;
@@ -18,4 +19,8 @@ public interface TrainingCourseService extends CrudService<
     List<SessionDto> teacherSteamCourse(UUID classroomId);
 
     Long countOfActiveClasses(UUID schoolId);
+
+    List<TrainingCourseDto> getByStudentId(UUID studentId);
+
+    List<AttachmentUrlDto> getStudentGallery(UUID studentId);
 }
