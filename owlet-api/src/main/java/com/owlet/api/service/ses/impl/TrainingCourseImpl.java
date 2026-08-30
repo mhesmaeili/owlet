@@ -25,6 +25,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,6 +69,7 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     @Override
     public List<SessionDto> teacherSteamCourse(UUID classroomId) {
         List<Session> list = repository.teacherSteamCourse(auditableService.currentUserId(), classroomId);
+        list.sort(Comparator.comparing(s -> s.getSessionType().getSortOrder()));
         return sessionMapper.toDto(list);
     }
 
