@@ -4,6 +4,7 @@ import com.owlet.api.dto.std.StudentHomeActivityCreateRequest;
 import com.owlet.api.dto.std.StudentHomeActivityDto;
 import com.owlet.api.service.base.CrudService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface StudentHomeActivityService extends CrudService<
@@ -11,4 +12,5 @@ public interface StudentHomeActivityService extends CrudService<
         StudentHomeActivityDto,
         StudentHomeActivityCreateRequest,
         StudentHomeActivityCreateRequest> {
+    StudentHomeActivityDto getByStudentAndCourse(UUID studentId, UUID courseId);
 }

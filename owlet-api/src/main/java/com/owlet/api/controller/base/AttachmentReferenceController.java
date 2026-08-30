@@ -144,4 +144,11 @@ public class AttachmentReferenceController extends CrudController<
                 (attachmentReferenceService.generatePresignedUrl(attachmentReferenceDto));
     }
 
+    @GetMapping("/entityId/{id}")
+    public ApiResponse<List<AttachmentUrlDto>> getByEntityId(
+            @PathVariable UUID id) {
+
+        return ApiResponse.success(attachmentReferenceService.findByEntityId(id));
+    }
+
 }

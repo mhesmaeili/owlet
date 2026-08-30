@@ -4,7 +4,9 @@ import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.dto.profile.parent.StudentGalleryGroupDto;
 import com.owlet.api.dto.ses.TrainingCourseDto;
 import com.owlet.api.dto.std.StudentDto;
+import com.owlet.api.dto.std.StudentHomeActivityDto;
 import com.owlet.api.service.ses.TrainingCourseService;
+import com.owlet.api.service.std.StudentHomeActivityService;
 import com.owlet.api.service.std.StudentParentService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +27,7 @@ public class ParentProfileController {
 
     private final StudentParentService studentParentService;
     private final TrainingCourseService trainingCourseService;
+    private final StudentHomeActivityService studentHomeActivityService;
 
     @GetMapping("/studentInfo")
     public ApiResponse<List<StudentDto>> studentInfo() {
@@ -47,5 +50,10 @@ public class ParentProfileController {
     @GetMapping("/studentGallery")
     public ApiResponse<List<StudentGalleryGroupDto>> studentGallery(@RequestParam UUID studentId , @RequestParam  List<UUID> courseIds) {
         return ApiResponse.success(trainingCourseService.getStudentGallery(studentId , courseIds));
+    }
+
+    @GetMapping("/studentHomeActivity")
+    public ApiResponse<StudentHomeActivityDto> studentHomeActivityByStudentAndCourse(@RequestParam UUID courseId , @RequestParam UUID studentId) {
+        return ApiResponse.success(studentHomeActivityService.getByStudentAndCourse(studentId , courseId));
     }
 }

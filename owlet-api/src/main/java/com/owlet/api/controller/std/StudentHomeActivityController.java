@@ -23,4 +23,5 @@ public class StudentHomeActivityController extends CrudController<
         super(service);
     }
 
+
 }

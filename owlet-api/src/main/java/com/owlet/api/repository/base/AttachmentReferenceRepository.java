@@ -54,4 +54,6 @@ public interface AttachmentReferenceRepository extends BaseRepository<Attachment
             UUID studentId,
             UUID courseId
     );
+
+    List<AttachmentReference> findByEntityIdAndDeletedFalse(UUID entityId);
 }

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -21,15 +19,13 @@ import java.util.Map;
 public class StudentHomeActivityCreateRequest {
 
     @NotNull
-    private EntityIdDto sessionStudent;
-    private Map<String, Object> parentResponse;
+    private EntityIdDto trainingCourse;
+    private Short levelOfEnthusiasm;
+    private EntityIdDto independenceConstruction;
+    private String parentResponse;
+    private EntityIdDto student;
+
     private String description;
 
-    public void addParentResponse(String key, Object value) {
-        if (parentResponse == null) {
-            parentResponse = new HashMap<>();
-        }
-        parentResponse.put(key, value);
-    }
 
 }

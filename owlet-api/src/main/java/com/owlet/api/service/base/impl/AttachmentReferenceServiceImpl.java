@@ -101,6 +101,7 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
 
         return AttachmentUrlDto.builder()
                 .attachmentId(attachment.getId())
+                .attachmentReferenceId(attachmentReferenceDto.getId())
                 .filename(attachment.getFilename())
                 .contentType(attachment.getMimeType())
                 .size(attachment.getSize())
@@ -116,19 +117,24 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
         attachmentReferenceDtoList.forEach(attachmentReferenceDto -> {
             list.add(generatePresignedUrl(attachmentReferenceDto));
         });
-        return  list;
+        return list;
     }
 
     @Override
-    public List<AttachmentReferenceDto> findByStudentId(UUID studentId , Integer limit) {
+    public List<AttachmentReferenceDto> findByStudentId(UUID studentId, Integer limit) {
         Pageable pageable = limit == null
                 ? Pageable.unpaged()
                 : PageRequest.of(0, limit);
-        return mapper.toDto(repository.findGalleryOfStudent(studentId , pageable));
+        return mapper.toDto(repository.findGalleryOfStudent(studentId, pageable));
     }
 
     @Override
     public List<AttachmentReferenceDto> findByStudentIdAndCourseId(UUID studentId, UUID courseId) {
-        return mapper.toDto(repository.findGalleryOfStudentAndCourse(studentId , courseId));
+        return mapper.toDto(repository.findGalleryOfStudentAndCourse(studentId, courseId));
+    }
+
+    @Override
+    public List<AttachmentUrlDto> findByEntityId(UUID entityId) {
+        return generatePresignedUrlGroup(toDto(repository.findByEntityIdAndDeletedFalse(entityId)));
     }
 }

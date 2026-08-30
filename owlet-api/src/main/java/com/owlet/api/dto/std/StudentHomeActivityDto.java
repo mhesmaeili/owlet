@@ -2,7 +2,8 @@ package com.owlet.api.dto.std;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import com.owlet.api.dto.ses.SessionStudentDto;
+import com.owlet.api.dto.ref.ReferenceItemDto;
+import com.owlet.api.dto.ses.TrainingCourseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,11 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentHomeActivityDto extends BaseDto<UUID> {
 
-    private SessionStudentDto sessionStudent;
-    private Map<String, Object> parentResponse;
+    private TrainingCourseDto trainingCourse;
+    private Short levelOfEnthusiasm;
+    private ReferenceItemDto independenceConstruction;
+    private String parentResponse;
+
     private String description;
 
 }

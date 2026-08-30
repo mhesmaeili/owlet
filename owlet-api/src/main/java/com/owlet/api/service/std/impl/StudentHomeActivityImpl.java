@@ -38,4 +38,9 @@ public class StudentHomeActivityImpl extends CrudServiceImpl<
     protected Class<StudentHomeActivity> entityClass() {
         return StudentHomeActivity.class;
     }
+
+    @Override
+    public StudentHomeActivityDto getByStudentAndCourse(UUID studentId, UUID courseId) {
+        return toDto(repository.findByTrainingCourseIdAndStudentId(courseId, studentId));
+    }
 }

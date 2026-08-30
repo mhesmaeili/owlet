@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface StudentHomeActivityRepository
         extends BaseRepository<StudentHomeActivity, UUID> {
+    StudentHomeActivity findByTrainingCourseIdAndStudentId(UUID courseId, UUID studentId);
 }

@@ -16,14 +16,26 @@ public interface StudentHomeActivityMapper extends CrudMapper<
         StudentHomeActivityCreateRequest,
         StudentHomeActivityCreateRequest> {
 
-    @Mapping(target = "sessionStudent",
-            source = "sessionStudent",
+    @Mapping(target = "trainingCourse",
+            source = "trainingCourse",
+            qualifiedByName = "toReference")
+    @Mapping(target = "independenceConstruction",
+            source = "independenceConstruction",
+            qualifiedByName = "toReference")
+    @Mapping(target = "student",
+            source = "student",
             qualifiedByName = "toReference")
     @Override
     StudentHomeActivity toEntity(StudentHomeActivityCreateRequest studentHomeActivityCreateRequest);
 
-    @Mapping(target = "sessionStudent",
-            source = "sessionStudent",
+    @Mapping(target = "trainingCourse",
+            source = "trainingCourse",
+            qualifiedByName = "toReference")
+    @Mapping(target = "independenceConstruction",
+            source = "independenceConstruction",
+            qualifiedByName = "toReference")
+    @Mapping(target = "student",
+            source = "student",
             qualifiedByName = "toReference")
     @Override
     void update(StudentHomeActivityCreateRequest studentHomeActivityCreateRequest, @MappingTarget StudentHomeActivity studentHomeActivity);

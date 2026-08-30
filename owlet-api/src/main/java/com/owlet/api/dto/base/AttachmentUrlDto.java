@@ -10,6 +10,8 @@ public record AttachmentUrlDto(
 
         UUID attachmentId,
 
+        UUID attachmentReferenceId,
+
         String filename,
 
         String contentType,
