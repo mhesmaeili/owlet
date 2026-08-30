@@ -1,6 +1,7 @@
 package com.owlet.api.controller.profile.parent;
 
 import com.owlet.api.dto.base.AttachmentUrlDto;
+import com.owlet.api.dto.profile.parent.StudentGalleryGroupDto;
 import com.owlet.api.dto.ses.TrainingCourseDto;
 import com.owlet.api.dto.std.StudentDto;
 import com.owlet.api.service.ses.TrainingCourseService;
@@ -36,8 +37,15 @@ public class ParentProfileController {
         return ApiResponse.success(trainingCourseService.getByStudentId(studentId));
     }
 
+    @GetMapping("/recentGallery")
+    public ApiResponse<List<AttachmentUrlDto>> recentGallery(
+            @RequestParam UUID studentId,
+            @RequestParam(defaultValue = "2") Integer limit) {
+        return ApiResponse.success(trainingCourseService.getRecentGallery(studentId, limit));
+    }
+
     @GetMapping("/studentGallery")
-    public ApiResponse<List<AttachmentUrlDto>> studentGallery(@RequestParam UUID studentId) {
-        return ApiResponse.success(trainingCourseService.getStudentGallery(studentId));
+    public ApiResponse<List<StudentGalleryGroupDto>> studentGallery(@RequestParam UUID studentId , @RequestParam  List<UUID> courseIds) {
+        return ApiResponse.success(trainingCourseService.getStudentGallery(studentId , courseIds));
     }
 }

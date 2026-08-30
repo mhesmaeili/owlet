@@ -15,6 +15,8 @@ import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.storage.StorageObject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -118,7 +120,15 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public List<AttachmentReferenceDto> findByStudentId(UUID studentId) {
-        return mapper.toDto(repository.findGalleryOfStudent(studentId));
+    public List<AttachmentReferenceDto> findByStudentId(UUID studentId , Integer limit) {
+        Pageable pageable = limit == null
+                ? Pageable.unpaged()
+                : PageRequest.of(0, limit);
+        return mapper.toDto(repository.findGalleryOfStudent(studentId , pageable));
+    }
+
+    @Override
+    public List<AttachmentReferenceDto> findByStudentIdAndCourseId(UUID studentId, UUID courseId) {
+        return mapper.toDto(repository.findGalleryOfStudentAndCourse(studentId , courseId));
     }
 }

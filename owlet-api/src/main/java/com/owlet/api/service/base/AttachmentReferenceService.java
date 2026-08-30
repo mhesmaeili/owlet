@@ -30,5 +30,8 @@ public interface AttachmentReferenceService extends CrudService<
 
     List<AttachmentUrlDto> generatePresignedUrlGroup(List<AttachmentReferenceDto> attachmentReferenceDtoList);
 
-    List<AttachmentReferenceDto> findByStudentId(UUID studentId);
+    List<AttachmentReferenceDto> findByStudentId(UUID studentId , Integer limit);
+
+    List<AttachmentReferenceDto> findByStudentIdAndCourseId(UUID studentId, UUID courseId);
+
 }

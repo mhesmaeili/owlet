@@ -5,6 +5,7 @@ import com.owlet.api.constant.ReferenceType;
 import com.owlet.api.domain.ses.Session;
 import com.owlet.api.domain.ses.TrainingCourse;
 import com.owlet.api.dto.base.AttachmentUrlDto;
+import com.owlet.api.dto.profile.parent.StudentGalleryGroupDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.dto.ses.TrainingCourseCreateRequest;
@@ -19,9 +20,11 @@ import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.service.ref.ReferenceItemService;
 import com.owlet.api.service.ses.SessionService;
 import com.owlet.api.service.ses.TrainingCourseService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,19 +43,21 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     public TrainingCourseImpl(
             TrainingCourseRepository repository,
             TrainingCourseMapper mapper,
-            AuditableService auditableService, SessionMapper sessionMapper, SessionService sessionService, ReferenceItemService referenceItemService, AttachmentReferenceService attachmentReferenceService) {
+            AuditableService auditableService, SessionMapper sessionMapper, SessionService sessionService, ReferenceItemService referenceItemService, AttachmentReferenceService attachmentReferenceService, EntityManager entityManager) {
 
         super(repository, mapper, auditableService);
         this.sessionMapper = sessionMapper;
         this.sessionService = sessionService;
         this.referenceItemService = referenceItemService;
         this.attachmentReferenceService = attachmentReferenceService;
+        this.entityManager = entityManager;
     }
 
     private final SessionMapper sessionMapper;
     private final SessionService sessionService;
     private final ReferenceItemService referenceItemService;
     private final AttachmentReferenceService attachmentReferenceService;
+    private final EntityManager entityManager;
 
 
     @Override
@@ -77,8 +82,22 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     }
 
     @Override
-    public List<AttachmentUrlDto> getStudentGallery(UUID studentId) {
-        return attachmentReferenceService.generatePresignedUrlGroup(attachmentReferenceService.findByStudentId(studentId));
+    public List<StudentGalleryGroupDto> getStudentGallery(UUID studentId, List<UUID> courseIds) {
+        List<StudentGalleryGroupDto> list = new ArrayList<>();
+        courseIds.forEach(courseId -> {
+            List<AttachmentUrlDto> attachmentUrlDtos = attachmentReferenceService.generatePresignedUrlGroup(attachmentReferenceService.findByStudentIdAndCourseId(studentId, courseId));
+
+            TrainingCourse reference = entityManager.getReference(TrainingCourse.class, courseId);
+
+            StudentGalleryGroupDto dto = new StudentGalleryGroupDto(reference.getProduct().getTitle(), attachmentUrlDtos);
+            list.add(dto);
+        });
+        return list;
+    }
+
+    @Override
+    public List<AttachmentUrlDto> getRecentGallery(UUID studentId, Integer limit) {
+        return attachmentReferenceService.generatePresignedUrlGroup(attachmentReferenceService.findByStudentId(studentId, limit));
     }
 
     @Override
