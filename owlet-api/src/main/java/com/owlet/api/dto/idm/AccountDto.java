@@ -28,8 +28,6 @@ public class AccountDto extends BaseDto<UUID> {
 
     private String nationalCode;
 
-    //private UUID avatarMediaId;
-
     private LocalDate birthDate;
 
     private Boolean active;
