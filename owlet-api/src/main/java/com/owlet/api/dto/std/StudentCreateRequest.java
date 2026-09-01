@@ -29,7 +29,6 @@ public class StudentCreateRequest {
     @NotNull
     private String lastName;
 
-    @NotNull
     private String nationalCode;
 
     private LocalDate birthDate;

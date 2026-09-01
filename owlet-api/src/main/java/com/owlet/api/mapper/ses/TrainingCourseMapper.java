@@ -29,6 +29,9 @@ public interface TrainingCourseMapper extends CrudMapper<
     @Mapping(target = "trainingStatus",
             source = "trainingStatus",
             qualifiedByName = "toReference")
+    @Mapping(target = "trainingType",
+            source = "trainingType",
+            qualifiedByName = "toReference")
     @Override
     void update(TrainingCourseCreateRequest trainingCourseCreateRequest, @MappingTarget TrainingCourse trainingCourse);
 
@@ -43,6 +46,9 @@ public interface TrainingCourseMapper extends CrudMapper<
             qualifiedByName = "toReference")
     @Mapping(target = "trainingStatus",
             source = "trainingStatus",
+            qualifiedByName = "toReference")
+    @Mapping(target = "trainingType",
+            source = "trainingType",
             qualifiedByName = "toReference")
     @Override
     TrainingCourse toEntity(TrainingCourseCreateRequest trainingCourseCreateRequest);

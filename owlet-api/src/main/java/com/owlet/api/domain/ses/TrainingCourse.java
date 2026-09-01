@@ -40,4 +40,8 @@ public class TrainingCourse extends UuidEntity {
     @JoinColumn(name = "training_status_id")
     private ReferenceItem trainingStatus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "training_type_id")
+    private ReferenceItem trainingType;
+
 }

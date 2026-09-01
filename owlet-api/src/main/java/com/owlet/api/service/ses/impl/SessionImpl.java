@@ -72,14 +72,16 @@ public class SessionImpl extends CrudServiceImpl<
 
         List<SessionCreateRequest> listAdded = new ArrayList<>();
         referenceItemDtos.forEach(ref -> {
-            SessionCreateRequest sessionDto = new SessionCreateRequest();
-            sessionDto.setTrainingCourse(new EntityIdDto(entity.getId()));
-            sessionDto.setSessionType(new EntityIdDto(ref.getId()));
-            sessionDto.setTitle(ref.getTitleFa());
-            sessionDto.setFinalized(false);
-            sessionDto.setAttendanceSubmitted(false);
+            if (ref.getSortOrder() <= 8) { // تا 8 جلسه اتومات زده می شود
+                SessionCreateRequest sessionDto = new SessionCreateRequest();
+                sessionDto.setTrainingCourse(new EntityIdDto(entity.getId()));
+                sessionDto.setSessionType(new EntityIdDto(ref.getId()));
+                sessionDto.setTitle(ref.getTitleFa());
+                sessionDto.setFinalized(false);
+                sessionDto.setAttendanceSubmitted(false);
 
-            listAdded.add(sessionDto);
+                listAdded.add(sessionDto);
+            }
         });
 
         List<SessionDto> sessionDtos = create(listAdded);

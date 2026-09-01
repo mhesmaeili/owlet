@@ -38,9 +38,8 @@ public class Student extends UuidEntity {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Size(max = 20)
-    @NotNull
-    @Column(name = "national_code", nullable = false, length = 20)
+    @Size(max = 10)
+    @Column(name = "national_code", length = 10)
     private String nationalCode;
 
     @Column(name = "birth_date")

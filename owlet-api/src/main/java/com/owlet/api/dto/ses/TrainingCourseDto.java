@@ -29,5 +29,6 @@ public class TrainingCourseDto extends BaseDto<UUID> {
     private ProductDto product;
     private Boolean active;
     private ReferenceItemDto trainingStatus;
+    private ReferenceItemDto trainingType;
 
 }
