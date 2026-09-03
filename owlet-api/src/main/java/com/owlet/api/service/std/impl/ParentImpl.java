@@ -20,6 +20,7 @@ import com.owlet.api.service.std.ParentService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @Service
@@ -64,8 +65,11 @@ public class ParentImpl extends CrudServiceImpl<
             accountCreateRequest.setLastName(dto.getLastName());
             accountCreateRequest.setUsername(dto.getMobile());
             accountCreateRequest.setMobile(dto.getMobile());
-            accountCreateRequest.setGenderId(dto.getGender().getId());
-            accountCreateRequest.setPassword("1qaz!QAZ");
+            accountCreateRequest.setGender(dto.getGender());
+            accountCreateRequest.setPassword(makePass());
+            accountCreateRequest.setPasswordPlain(accountCreateRequest.getPassword());
+            accountCreateRequest.setPasswordMustChanged(true);
+
             AccountDto accountDto = accountService.create(accountCreateRequest);
 
             AccountRoleCreateRequest accountRoleCreateRequest=new AccountRoleCreateRequest();
@@ -76,5 +80,10 @@ public class ParentImpl extends CrudServiceImpl<
 
             dto.setAccount(new EntityIdDto(accountDto.getId()));
         }
+    }
+
+    private String makePass(){
+        SecureRandom secureRandom = new SecureRandom();
+        return String.valueOf(10000 + secureRandom.nextInt(90000));
     }
 }

@@ -2,7 +2,11 @@ package com.owlet.api.dto.idm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.owlet.api.dto.BaseDto;
-import lombok.*;
+import com.owlet.api.dto.ref.ReferenceItemDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -33,5 +37,9 @@ public class AccountDto extends BaseDto<UUID> {
     private Boolean active;
 
     private Boolean locked;
+
+    private Boolean passwordMustChanged;
+
+    private ReferenceItemDto gender;
 
 }

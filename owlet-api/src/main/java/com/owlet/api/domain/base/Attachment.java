@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "attachment", schema = "base")
+@Filter(name = "deletedFilter")
 public class Attachment extends UuidEntity {
     @Size(max = 500)
     @NotNull

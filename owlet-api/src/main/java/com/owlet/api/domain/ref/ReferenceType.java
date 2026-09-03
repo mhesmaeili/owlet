@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Filter;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "reference_type", schema = "ref")
+@Filter(name = "deletedFilter")
 public class ReferenceType extends UuidEntity {
 
     @NotNull

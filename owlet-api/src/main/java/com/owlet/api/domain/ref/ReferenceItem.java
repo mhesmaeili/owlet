@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Filter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "reference_item", schema = "ref")
+@Filter(name = "deletedFilter")
 public class ReferenceItem extends UuidEntity {
 
     @NotNull

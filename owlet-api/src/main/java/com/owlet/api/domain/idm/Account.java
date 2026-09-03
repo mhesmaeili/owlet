@@ -93,4 +93,12 @@ public class Account extends UuidEntity {
     @SQLRestriction("deleted = false")
     private Set<AccountRole> accountRoles = new LinkedHashSet<>();
 
+    @Size(max = 10)
+    @Column(name = "password_plain", length = 10)
+    private String passwordPlain;
+
+    @ColumnDefault("false")
+    @Column(name = "password_must_changed")
+    private Boolean passwordMustChanged = false;
+
 }

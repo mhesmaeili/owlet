@@ -1,6 +1,7 @@
 package com.owlet.api.dto.idm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.owlet.api.service.base.helper.EntityIdDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -30,7 +31,7 @@ public class AccountUpdateRequest {
 
     private UUID avatarMediaId;
 
-    private UUID genderId;
+    private EntityIdDto gender;
 
     private LocalDate birthDate;
 

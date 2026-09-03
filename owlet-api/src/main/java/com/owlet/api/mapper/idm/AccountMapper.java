@@ -8,6 +8,7 @@ import com.owlet.api.mapper.base.BaseMapperConfig;
 import com.owlet.api.mapper.base.CrudMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = BaseMapperConfig.class)
 public interface AccountMapper extends CrudMapper<
@@ -25,6 +26,15 @@ public interface AccountMapper extends CrudMapper<
     @Mapping(target = "failedLoginCount", ignore = true)
     @Mapping(target = "lastLoginAt", ignore = true)
     @Mapping(target = "passwordChangedAt", ignore = true)
+    @Mapping(target = "gender",
+            source = "gender",
+            qualifiedByName = "toReference")
+    @Override
     Account toEntity(AccountCreateRequest request);
 
+    @Override
+    @Mapping(target = "gender",
+            source = "gender",
+            qualifiedByName = "toReference")
+    void update(AccountUpdateRequest accountUpdateRequest, @MappingTarget Account account);
 }

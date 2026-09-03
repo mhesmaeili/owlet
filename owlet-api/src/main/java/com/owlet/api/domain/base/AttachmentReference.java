@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
 
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "attachment_reference", schema = "base")
+@Filter(name = "deletedFilter")
 public class AttachmentReference extends UuidEntity {
     @Size(max = 100)
     @NotNull
