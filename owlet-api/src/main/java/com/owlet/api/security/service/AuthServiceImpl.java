@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                 request.getOldPass(),
                 account.getPasswordHash()
         )) {
-            throw new UnauthorizedException("Old password incorrect");
+            throw new UnauthorizedException("رمز قبلی شما صحیح نمی باشد");
         }
 
         account.setPasswordHash(passwordEncoder.encode(request.getNewPass()));
