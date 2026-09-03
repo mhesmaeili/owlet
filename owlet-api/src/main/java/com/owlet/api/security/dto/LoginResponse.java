@@ -15,4 +15,6 @@ public class LoginResponse {
 
     private long expiresIn;
 
+    private Boolean passwordMustChange;
+
 }

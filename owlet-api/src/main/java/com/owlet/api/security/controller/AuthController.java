@@ -3,6 +3,7 @@ package com.owlet.api.security.controller;
 
 import com.owlet.api.dto.idm.RoleDto;
 import com.owlet.api.security.CurrentUserService;
+import com.owlet.api.security.dto.ChangePassword;
 import com.owlet.api.security.dto.LoginRequest;
 import com.owlet.api.security.dto.LoginResponse;
 import com.owlet.api.security.service.AuthService;
@@ -31,6 +32,15 @@ public class AuthController {
     ) {
 
         return authService.login(request);
+
+    }
+
+    @PutMapping("/changePassword")
+    public ApiResponse<Boolean> changePass(
+            @Valid @RequestBody ChangePassword request
+    ) {
+
+        return ApiResponse.success(authService.changePassword(request));
 
     }
 

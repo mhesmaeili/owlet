@@ -7,6 +7,7 @@ import com.owlet.api.dto.idm.AccountUpdateRequest;
 import com.owlet.api.security.permission.annotation.CrudPermission;
 import com.owlet.api.security.permission.enums.Module;
 import com.owlet.api.service.idm.AccountService;
+import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +26,11 @@ public class AccountController extends CrudController<
 
     public AccountController(AccountService service) {
         super(service);
+    }
+
+    @Override
+    public ApiResponse<AccountDto> create(AccountCreateRequest dto) {
+        dto.setPasswordMustChanged(false);
+        return super.create(dto);
     }
 }
