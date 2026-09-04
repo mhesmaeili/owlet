@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Getter
@@ -39,5 +40,13 @@ public class ProductCreateRequest {
     private String educationalConcepts;
 
     private Map<String, Object> developedSkills;
+
+    private Integer inventory;
+
+    private Long price;
+
+    private Long discountPrice;
+
+    private OffsetDateTime discountActivationDate;
 
 }

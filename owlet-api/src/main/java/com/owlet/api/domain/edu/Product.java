@@ -12,6 +12,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Getter
@@ -53,5 +55,18 @@ public class Product extends UuidEntity {
     @Column(name = "developed_skills")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> developedSkills;
+
+    @Column(name = "inventory")
+    private Integer inventory;
+
+    @Column(name = "price")
+    private Long price;
+
+    @Column(name = "discount_price")
+    private Long discountPrice;
+
+
+    @Column(name = "discount_activation_date")
+    private OffsetDateTime discountActivationDate;
 
 }
