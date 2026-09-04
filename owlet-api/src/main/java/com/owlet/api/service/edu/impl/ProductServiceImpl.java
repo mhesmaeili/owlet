@@ -37,4 +37,14 @@ public class ProductServiceImpl extends CrudServiceImpl<
     protected Class<Product> entityClass() {
         return Product.class;
     }
+
+
+    @Override
+    protected String[] getSearchableFields() {
+        return new String[]{
+                "title",
+                "code",
+                "shortDescription"
+        };
+    }
 }

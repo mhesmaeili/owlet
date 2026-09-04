@@ -27,11 +27,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    // ۱. تزریق رجیستری
+    private final PublicEndpointRegistry publicEndpointRegistry;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,43 +46,41 @@ public class SecurityConfig {
             DaoAuthenticationProvider authenticationProvider
     ) throws Exception {
 
+        // ۲. واکشی آدرس‌های دارای انوتیشن @PublicEndpoint
+        String[] dynamicPublicEndpoints = publicEndpointRegistry.getPublicEndpoints();
+
         http
-
                 .csrf(AbstractHttpConfigurer::disable)
-
                 .cors(Customizer.withDefaults())
-
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-
                         .accessDeniedHandler(jwtAccessDeniedHandler))
                 .authenticationProvider(authenticationProvider)
-
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(
-                                "/",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
-                                "/api/auth/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/accounts")
-                        .permitAll()
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                            .requestMatchers(
+                                    "/",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/v3/api-docs/**",
+                                    "/api/auth/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/accounts").permitAll();
 
-                        .anyRequest()
-                        .authenticated()
+                    // ۳. اگر متدی انوتیشن داشت، دسترسی آزاد می‌شود
+                    if (dynamicPublicEndpoints != null && dynamicPublicEndpoints.length > 0) {
+                        auth.requestMatchers(dynamicPublicEndpoints).permitAll();
+                    }
 
-                );
+                    auth.anyRequest().authenticated();
+                });
 
         return http.build();
-
     }
 
     @Bean
@@ -88,24 +88,15 @@ public class SecurityConfig {
             CustomUserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder
     ) {
-
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider();
-
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-
         provider.setPasswordEncoder(passwordEncoder);
-
         return provider;
-
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration)
-            throws Exception {
-
+            AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-
     }
 }

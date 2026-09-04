@@ -1,5 +1,6 @@
 package com.owlet.api.controller.edu;
 
+import com.owlet.api.annotation.PublicEndpoint;
 import com.owlet.api.controller.base.CrudController;
 import com.owlet.api.dto.edu.ProductCreateRequest;
 import com.owlet.api.dto.edu.ProductDto;
@@ -9,6 +10,7 @@ import com.owlet.common.response.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +29,17 @@ public class ProductController extends CrudController<
         super(service);
     }
 
+    @PublicEndpoint
     @Override
     @GetMapping("/search")
     public ApiResponse<PageResponse<ProductDto>> search(String keyword, Pageable pageable) {
         return super.search(keyword, pageable);
+    }
+
+    @PublicEndpoint
+    @Override
+    @GetMapping("/{id}")
+    public ApiResponse<ProductDto> get(@PathVariable UUID id) {
+        return super.get(id);
     }
 }

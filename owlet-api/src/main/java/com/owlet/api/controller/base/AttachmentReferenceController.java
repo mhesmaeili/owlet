@@ -1,5 +1,6 @@
 package com.owlet.api.controller.base;
 
+import com.owlet.api.annotation.PublicEndpoint;
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
 import com.owlet.api.dto.base.AttachmentUrlDto;
@@ -144,6 +145,7 @@ public class AttachmentReferenceController extends CrudController<
                 (attachmentReferenceService.generatePresignedUrl(attachmentReferenceDto));
     }
 
+    @PublicEndpoint
     @GetMapping("/entityId/{id}")
     public ApiResponse<List<AttachmentUrlDto>> getByEntityId(
             @PathVariable UUID id) {
