@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @ComponentScan(basePackages = {"com.owlet.common", "com.owlet.api"})

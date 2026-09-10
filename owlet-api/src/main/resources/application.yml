@@ -3,7 +3,7 @@ server:
 
 security:
   jwt:
-    secret: QCyNB5+K56YTzblZMbUVrQED3twWo/mm1LcAic+Y/DB3NwaaGNSpFcC5Ef0/pNyoiUjX3hHQFhX09iKYc8AKqQ==
+    secret: C6EdTT8jr2B0W1G0Mkhh4kTUJMZsTw0vPUm3WIAFBpcJzd8K4RkZZhkFD8am7bOh4EFVu9inJzmHlFB2x+QXvA==
     access-token-expiration: 60
 
 spring:
