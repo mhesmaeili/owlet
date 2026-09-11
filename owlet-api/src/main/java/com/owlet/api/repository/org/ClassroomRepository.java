@@ -25,4 +25,9 @@ public interface ClassroomRepository
 
     Long countBySchoolIdAndTeacherAccountIdAndActiveTrue(UUID school_id, UUID teacherAccount_id);
 
+    @Query("SELECT distinct s.classroom " +
+            "FROM TrainingCourse s " +
+            "WHERE s.classroom.school.id=:schoolId And s.active = true")
+    List<Classroom> teacherSteamClassroom(@Param("schoolId") UUID schoolId);
+
 }

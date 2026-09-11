@@ -10,10 +10,9 @@ import com.owlet.api.mapper.org.SchoolMapper;
 import com.owlet.api.mapper.profile.school.TeacherSchoolMapper;
 import com.owlet.api.repository.org.SchoolRepository;
 import com.owlet.api.security.AuditableService;
+import com.owlet.api.security.CurrentUserService;
 import com.owlet.api.service.base.CrudServiceImpl;
-import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.org.SchoolService;
-import com.owlet.api.service.org.TeacherClassroomService;
 import com.owlet.api.service.ses.TrainingCourseService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -36,15 +35,17 @@ public class SchoolServiceImpl extends CrudServiceImpl<
     public SchoolServiceImpl(
             SchoolRepository repository,
             SchoolMapper mapper,
-            AuditableService auditableService, TeacherSchoolMapper teacherSchoolMapper, TrainingCourseService trainingCourseService) {
+            AuditableService auditableService, TeacherSchoolMapper teacherSchoolMapper, TrainingCourseService trainingCourseService, CurrentUserService currentUserService) {
 
         super(repository, mapper, auditableService);
         this.teacherSchoolMapper = teacherSchoolMapper;
         this.trainingCourseService = trainingCourseService;
+        this.currentUserService = currentUserService;
     }
 
     protected final TeacherSchoolMapper teacherSchoolMapper;
     protected final TrainingCourseService trainingCourseService;
+    private final CurrentUserService currentUserService;
 
     @Override
     protected String[] getSearchableFields() {
@@ -62,7 +63,12 @@ public class SchoolServiceImpl extends CrudServiceImpl<
 
     @Override
     public List<TeacherSchoolDto> teacherSteamWorkWithSchool() {
-        List<School> list = repository.findSchoolByTeacherId(auditableService.currentUserId(), RoleConst.ROLE_STEAM_TEACHER);
+        List<School> list = null;
+        if (currentUserService.hasRole("ROLE_" + RoleConst.OWLET_ADMIN)) {
+            list = repository.findAllByActiveTrue();
+        } else {
+            list = repository.findSchoolByTeacherId(auditableService.currentUserId(), RoleConst.ROLE_STEAM_TEACHER);
+        }
         List<TeacherSchoolDto> dtos = teacherSchoolMapper.toDto(list);
         dtos.forEach(teacherSchoolDto -> {
             teacherSchoolDto.setActiveClasses(trainingCourseService.countOfActiveClasses(teacherSchoolDto.getId()));

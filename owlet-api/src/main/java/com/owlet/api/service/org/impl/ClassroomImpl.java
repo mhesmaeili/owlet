@@ -1,5 +1,6 @@
 package com.owlet.api.service.org.impl;
 
+import com.owlet.api.constant.RoleConst;
 import com.owlet.api.domain.org.Classroom;
 import com.owlet.api.dto.org.ClassroomCreateRequest;
 import com.owlet.api.dto.org.ClassroomDto;
@@ -8,6 +9,7 @@ import com.owlet.api.mapper.org.ClassroomMapper;
 import com.owlet.api.mapper.profile.school.ProfileTeacherClassroomMapper;
 import com.owlet.api.repository.org.ClassroomRepository;
 import com.owlet.api.security.AuditableService;
+import com.owlet.api.security.CurrentUserService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.org.ClassroomService;
 import com.owlet.api.service.ses.SessionStudentService;
@@ -32,16 +34,17 @@ public class ClassroomImpl extends CrudServiceImpl<
     public ClassroomImpl(
             ClassroomRepository repository,
             ClassroomMapper mapper,
-            AuditableService auditableService, ProfileTeacherClassroomMapper profileTeacherClassroomMapper, SessionStudentService sessionStudentService) {
+            AuditableService auditableService, ProfileTeacherClassroomMapper profileTeacherClassroomMapper, SessionStudentService sessionStudentService, CurrentUserService currentUserService) {
 
         super(repository, mapper, auditableService);
         this.profileTeacherClassroomMapper = profileTeacherClassroomMapper;
         this.sessionStudentService = sessionStudentService;
+        this.currentUserService = currentUserService;
     }
 
     private final ProfileTeacherClassroomMapper profileTeacherClassroomMapper;
     private final SessionStudentService sessionStudentService;
-
+    private final CurrentUserService currentUserService;
 
     @Override
     protected Class<Classroom> entityClass() {
@@ -56,7 +59,12 @@ public class ClassroomImpl extends CrudServiceImpl<
 
     @Override
     public List<ProfileTeacherClassroomDto> teacherSteamClassroom(UUID schoolId) {
-        List<Classroom> list = repository.teacherSteamClassroom(auditableService.currentUserId(), schoolId);
+        List<Classroom> list = null;
+        if (currentUserService.hasRole("ROLE_" + RoleConst.OWLET_ADMIN)) {
+            list = repository.teacherSteamClassroom(schoolId);
+        } else {
+            list = repository.teacherSteamClassroom(auditableService.currentUserId(), schoolId);
+        }
         List<ProfileTeacherClassroomDto> dtos = profileTeacherClassroomMapper.toDto(list);
 
         dtos.forEach(dto -> {

@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponse.builder()
                 .accessToken(token)
                 .tokenType("Bearer")
-                .expiresIn(7200L)
+                .expiresIn(5L * 24 * 60 * 60)
                 .passwordMustChange(account.getPasswordMustChanged())
                 .build();
 

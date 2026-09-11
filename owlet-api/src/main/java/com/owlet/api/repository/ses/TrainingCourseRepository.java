@@ -21,11 +21,24 @@ public interface TrainingCourseRepository
             "order by s.startTime")
     List<Session> teacherSteamCourse(@Param("accountId") UUID accountId,@Param("classroomId") UUID classroomId);
 
+    @Query("SELECT distinct s " +
+            "FROM Session s " +
+            "WHERE s.trainingCourse.classroom.id = :classroomId " +
+            "And s.trainingCourse.active = true " +
+            "order by s.startTime")
+    List<Session> teacherSteamCourse(@Param("classroomId") UUID classroomId);
+
     @Query("SELECT count (distinct s.classroom) " +
             "FROM TrainingCourse s " +
             "WHERE s.classroom.school.id = :schoolId " +
             "And s.active=true And s.teacherAccount.id = :teacherId")
     Long countDistinctClassroomsBySchoolAndTeacher(UUID schoolId, UUID teacherId);
+
+    @Query("SELECT count (distinct s.classroom) " +
+            "FROM TrainingCourse s " +
+            "WHERE s.classroom.school.id = :schoolId " +
+            "And s.active=true ")
+    Long countDistinctClassroomsBySchoolAndTeacher(UUID schoolId);
 
     @Query("SELECT distinct t " +
             "FROM TrainingCourse t " +

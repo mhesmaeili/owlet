@@ -17,4 +17,6 @@ public interface SchoolRepository
             "FROM SchoolMember s " +
             "WHERE s.account.id = :accountId And s.role.code=:roleCode And s.active = true")
     List<School> findSchoolByTeacherId(@Param("accountId") UUID accountId , @Param("roleCode") String roleCode);
+
+    List<School> findAllByActiveTrue();
 }

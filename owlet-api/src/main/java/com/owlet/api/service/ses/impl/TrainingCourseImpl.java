@@ -2,6 +2,7 @@ package com.owlet.api.service.ses.impl;
 
 import com.owlet.api.constant.ReferenceItemCode;
 import com.owlet.api.constant.ReferenceType;
+import com.owlet.api.constant.RoleConst;
 import com.owlet.api.domain.ses.Session;
 import com.owlet.api.domain.ses.TrainingCourse;
 import com.owlet.api.dto.base.AttachmentUrlDto;
@@ -14,6 +15,7 @@ import com.owlet.api.mapper.ses.SessionMapper;
 import com.owlet.api.mapper.ses.TrainingCourseMapper;
 import com.owlet.api.repository.ses.TrainingCourseRepository;
 import com.owlet.api.security.AuditableService;
+import com.owlet.api.security.CurrentUserService;
 import com.owlet.api.service.base.AttachmentReferenceService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.helper.EntityIdDto;
@@ -44,7 +46,7 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     public TrainingCourseImpl(
             TrainingCourseRepository repository,
             TrainingCourseMapper mapper,
-            AuditableService auditableService, SessionMapper sessionMapper, SessionService sessionService, ReferenceItemService referenceItemService, AttachmentReferenceService attachmentReferenceService, EntityManager entityManager) {
+            AuditableService auditableService, SessionMapper sessionMapper, SessionService sessionService, ReferenceItemService referenceItemService, AttachmentReferenceService attachmentReferenceService, EntityManager entityManager, CurrentUserService currentUserService) {
 
         super(repository, mapper, auditableService);
         this.sessionMapper = sessionMapper;
@@ -52,6 +54,7 @@ public class TrainingCourseImpl extends CrudServiceImpl<
         this.referenceItemService = referenceItemService;
         this.attachmentReferenceService = attachmentReferenceService;
         this.entityManager = entityManager;
+        this.currentUserService = currentUserService;
     }
 
     private final SessionMapper sessionMapper;
@@ -59,7 +62,7 @@ public class TrainingCourseImpl extends CrudServiceImpl<
     private final ReferenceItemService referenceItemService;
     private final AttachmentReferenceService attachmentReferenceService;
     private final EntityManager entityManager;
-
+    private final CurrentUserService currentUserService;
 
     @Override
     protected Class<TrainingCourse> entityClass() {
@@ -68,13 +71,21 @@ public class TrainingCourseImpl extends CrudServiceImpl<
 
     @Override
     public List<SessionDto> teacherSteamCourse(UUID classroomId) {
-        List<Session> list = repository.teacherSteamCourse(auditableService.currentUserId(), classroomId);
+        List<Session> list = null;
+        if (currentUserService.hasRole("ROLE_" + RoleConst.OWLET_ADMIN)) {
+            list = repository.teacherSteamCourse(classroomId);
+        } else {
+            list = repository.teacherSteamCourse(auditableService.currentUserId(), classroomId);
+        }
         list.sort(Comparator.comparing(s -> s.getSessionType().getSortOrder()));
         return sessionMapper.toDto(list);
     }
 
     @Override
     public Long countOfActiveClasses(UUID schoolId) {
+        if (currentUserService.hasRole("ROLE_" + RoleConst.OWLET_ADMIN)) {
+            return repository.countDistinctClassroomsBySchoolAndTeacher(schoolId);
+        }
         return repository.countDistinctClassroomsBySchoolAndTeacher(schoolId, auditableService.currentUserId());
     }
 
