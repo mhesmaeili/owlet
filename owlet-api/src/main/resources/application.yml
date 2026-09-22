@@ -3,7 +3,7 @@ server:
 
 security:
   jwt:
-    secret: C6EdTT8jr2B0W1G0Mkhh4kTUJMZsTw0vPUm3WIAFBpcJzd8K4RkZZhkFD8am7bOh4EFVu9inJzmHlFB2x+QXvA==
+    secret: Qv95GNWyzPkDEYKAjiLyNLxSbKkskzrbfxgl/uyDfJ9QyMJT/qEJJz96aELT0I+X170rHKVYMDaZQxChx6qH4g==
     access-token-expiration: 60
 
 spring:
@@ -71,3 +71,6 @@ storage:
     secret-key: minioadmin123
     bucket: attachments
     secure: false
+    public:
+      base:
+        url: http://localhost:9000

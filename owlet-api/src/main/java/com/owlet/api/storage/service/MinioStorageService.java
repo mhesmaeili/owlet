@@ -6,6 +6,8 @@ import com.owlet.common.exception.StorageException;
 import io.minio.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import java.net.URI;
 
 import java.security.DigestInputStream;
 import java.time.Duration;
@@ -16,6 +18,8 @@ public class MinioStorageService implements StorageService {
 
     private final MinioClient minioClient;
     private final MinioProperties properties;
+    @Value("${storage.minio.public.base.url}")
+    private String publicBaseUrl;
 
     @Override
     public String upload(
@@ -127,23 +131,44 @@ public class MinioStorageService implements StorageService {
             Duration duration) {
 
         try {
-
-            return minioClient.getPresignedObjectUrl(
-
+            // امضا با همان کلاینت و آدرس داخلی MinIO تولید می‌شود.
+            String signedUrl = minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
                             .method(Http.Method.GET)
                             .bucket(properties.bucket())
                             .object(objectKey)
-                            .expiry((int) duration.toSeconds())
+                            .expiry(Math.toIntExact(duration.toSeconds()))
                             .build());
 
-        } catch (Exception ex) {
+            URI signedUri = URI.create(signedUrl);
 
+            String baseUrl = publicBaseUrl.trim()
+                    .replaceAll("/+$", "");
+
+            URI publicUri = URI.create(baseUrl);
+
+            if ((! "https".equalsIgnoreCase(publicUri.getScheme())
+                    && ! "http".equalsIgnoreCase(publicUri.getScheme()))
+                    || publicUri.getHost() == null
+                    || publicUri.getRawUserInfo() != null
+                    || publicUri.getRawQuery() != null
+                    || publicUri.getRawFragment() != null) {
+
+                throw new IllegalArgumentException(
+                        "Invalid storage.minio.public-base-url");
+            }
+
+            // مسیر و query بدون decode یا encode مجدد منتقل می‌شوند.
+            return baseUrl
+                    + signedUri.getRawPath()
+                    + (signedUri.getRawQuery() == null
+                    ? ""
+                    : "?" + signedUri.getRawQuery());
+
+        } catch (Exception ex) {
             throw new StorageException(
                     "Cannot generate url",
                     ex);
-
         }
-
     }
 }

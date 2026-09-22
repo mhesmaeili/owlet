@@ -18,4 +18,7 @@
                 path="liquibase/scripts/V1__insert_role_permissions_for_super_admin.sql"
                 relativeToChangelogFile="false"/>
     </changeSet>
+
+    <!-- خواندن خودکار تمام فایل‌های xml یا sql داخل پوشه changesets -->
+    <includeAll path="liquibase/changesets/" relativeToChangelogFile="false"/>
 </databaseChangeLog>
