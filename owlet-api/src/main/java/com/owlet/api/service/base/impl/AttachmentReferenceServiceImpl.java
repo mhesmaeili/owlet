@@ -137,4 +137,9 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     public List<AttachmentUrlDto> findByEntityId(UUID entityId) {
         return generatePresignedUrlGroup(toDto(repository.findByEntityIdAndDeletedFalse(entityId)));
     }
+
+    @Override
+    public List<AttachmentReferenceDto> findBySessionId(UUID sessionId) {
+        return mapper.toDto(repository.findGalleryOfSession(sessionId));
+    }
 }

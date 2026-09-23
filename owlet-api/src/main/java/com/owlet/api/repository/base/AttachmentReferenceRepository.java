@@ -56,4 +56,19 @@ public interface AttachmentReferenceRepository extends BaseRepository<Attachment
     );
 
     List<AttachmentReference> findByEntityIdAndDeletedFalse(UUID entityId);
+
+    @Query("""
+    SELECT a
+    FROM AttachmentReference a
+    WHERE a.entityClass = 'SessionStudent'
+      AND a.entityId IN (
+          SELECT ss.id
+          FROM SessionStudent ss
+          WHERE ss.session.id = :sessionId
+      )
+    ORDER BY a.createdAt DESC
+    """)
+    List<AttachmentReference> findGalleryOfSession(
+            UUID sessionId
+    );
 }

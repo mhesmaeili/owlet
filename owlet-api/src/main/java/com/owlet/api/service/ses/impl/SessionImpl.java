@@ -3,12 +3,14 @@ package com.owlet.api.service.ses.impl;
 import com.owlet.api.constant.ReferenceType;
 import com.owlet.api.domain.ses.Session;
 import com.owlet.api.domain.ses.TrainingCourse;
+import com.owlet.api.dto.base.AttachmentUrlDto;
 import com.owlet.api.dto.ref.ReferenceItemDto;
 import com.owlet.api.dto.ses.SessionCreateRequest;
 import com.owlet.api.dto.ses.SessionDto;
 import com.owlet.api.mapper.ses.SessionMapper;
 import com.owlet.api.repository.ses.SessionRepository;
 import com.owlet.api.security.AuditableService;
+import com.owlet.api.service.base.AttachmentReferenceService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.service.ref.ReferenceItemService;
@@ -38,15 +40,18 @@ public class SessionImpl extends CrudServiceImpl<
     public SessionImpl(
             SessionRepository repository,
             SessionMapper mapper,
-            AuditableService auditableService, ReferenceItemService referenceItemService, SessionStudentService sessionStudentService) {
+            AuditableService auditableService, ReferenceItemService referenceItemService, SessionStudentService sessionStudentService, AttachmentReferenceService attachmentReferenceService) {
 
         super(repository, mapper, auditableService);
         this.referenceItemService = referenceItemService;
         this.sessionStudentService = sessionStudentService;
+        this.attachmentReferenceService = attachmentReferenceService;
     }
 
     private final ReferenceItemService referenceItemService;
     private final SessionStudentService sessionStudentService;
+
+    private final AttachmentReferenceService attachmentReferenceService;
 
 
     @Override
@@ -99,5 +104,10 @@ public class SessionImpl extends CrudServiceImpl<
         }
 
         return mapper.toDto(entity);
+    }
+
+    @Override
+    public List<AttachmentUrlDto> galleryBySessionId(UUID sessionId) {
+        return attachmentReferenceService.generatePresignedUrlGroup(attachmentReferenceService.findBySessionId(sessionId));
     }
 }

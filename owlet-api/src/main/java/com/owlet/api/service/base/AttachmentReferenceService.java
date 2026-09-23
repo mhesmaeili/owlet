@@ -36,4 +36,6 @@ public interface AttachmentReferenceService extends CrudService<
 
     List<AttachmentUrlDto> findByEntityId(UUID entityId);
 
+    List<AttachmentReferenceDto> findBySessionId(UUID sessionId);
+
 }
