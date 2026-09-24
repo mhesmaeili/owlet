@@ -17,13 +17,13 @@ import java.util.UUID;
 public class ReferenceItemDto extends BaseDto<UUID> {
 
     private String code;
-    @NotBlank
+
     private String title;
-    @NotBlank
+
     private String titleFa;
-    @NotBlank
+
     private Integer sortOrder;
-    @NotBlank
+
     ReferenceTypeDto referenceType;
 
     private String icon;

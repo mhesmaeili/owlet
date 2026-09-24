@@ -17,8 +17,8 @@ import java.util.UUID;
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReferenceTypeDto extends BaseDto<UUID> {
-    @NotNull
+
     private String code;
-    @NotNull
+
     private String title;
 }
