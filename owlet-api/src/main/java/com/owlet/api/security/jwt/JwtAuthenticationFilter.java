@@ -20,24 +20,33 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtAuthenticationProvider authenticationProvider;
+    private final RefreshEndpointPaths refreshEndpointPaths;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        // این دو مسیر به Access Token معتبر نیاز ندارند.
+        return refreshEndpointPaths.matches(request);
+    }
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        String header = request.getHeader(SecurityConstants.HEADER_NAME);
+        String header = request.getHeader(
+                SecurityConstants.HEADER_NAME
+        );
 
         if (StringUtils.hasText(header)
                 && header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
 
-            String token =
-                    header.substring(SecurityConstants.TOKEN_PREFIX.length());
+            String token = header.substring(
+                    SecurityConstants.TOKEN_PREFIX.length()
+            );
 
             try {
-
                 Authentication authentication =
                         authenticationProvider.authenticate(token);
 
@@ -47,9 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
 
             } catch (AuthenticationException ex) {
-
                 SecurityContextHolder.clearContext();
-
             }
         }
 

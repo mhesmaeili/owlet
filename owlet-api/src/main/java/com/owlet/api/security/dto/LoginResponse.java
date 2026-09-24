@@ -8,13 +8,15 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class LoginResponse {
-
     private String accessToken;
-
     private String tokenType;
-
     private long expiresIn;
-
     private Boolean passwordMustChange;
+    private String refreshToken;
+    private Long refreshExpiresIn;
 
+    public LoginResponse(String accessToken, String tokenType, long expiresIn,
+                         Boolean passwordMustChange) {
+        this(accessToken, tokenType, expiresIn, passwordMustChange, null, null);
+    }
 }
