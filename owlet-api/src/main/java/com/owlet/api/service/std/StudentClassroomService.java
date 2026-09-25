@@ -20,4 +20,6 @@ public interface StudentClassroomService extends CrudService<
     void updateBatchStatus(List<UUID> ids, Boolean active);
 
     Classroom getClassroomByStudentId(UUID studentId);
+
+    List<UUID> getActiveStudentIds();
 }

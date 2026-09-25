@@ -8,11 +8,9 @@ import com.owlet.api.service.std.StudentClassroomService;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "StudentClassroomController")
@@ -36,5 +34,10 @@ public class StudentClassroomController extends CrudController<
         studentClassroomService.updateBatchStatus(request.getIds(), request.getActive());
 
         return ApiResponse.success(null);
+    }
+
+    @GetMapping("/active-student-ids")
+    public ApiResponse<List<UUID>> getActiveStudentIds() {
+        return ApiResponse.success(studentClassroomService.getActiveStudentIds());
     }
 }

@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -44,7 +45,7 @@ public class StudentClassroomImpl extends CrudServiceImpl<
 
     @Override
     public List<StudentClassroomDto> findByClassroomId(UUID classroomId) {
-        return mapper.toDto(repository.findAllByClassroom_Id(classroomId));
+        return mapper.toDto(repository.findByClassroomIdAndDeletedFalse(classroomId));
     }
 
     @Transactional
@@ -60,7 +61,33 @@ public class StudentClassroomImpl extends CrudServiceImpl<
 
     @Override
     protected List<StudentClassroom> beforeCreateSaveAll(List<StudentClassroom> studentClassrooms, List<StudentClassroomCreateRequest> list) {
-        studentClassrooms.forEach(sc -> sc.setActive(true));
-        return super.beforeCreateSaveAll(studentClassrooms, list);
+        List<UUID> studentIds = studentClassrooms.stream()
+                .map(sc -> sc.getStudent() != null ? sc.getStudent().getId() : null)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        if (!studentIds.isEmpty()) {
+            repository.deactivatePreviousAssignments(studentIds);
+        }
+        return studentClassrooms;
     }
+
+    @Override
+    protected String[] getSearchableFields() {
+        return new String[]{
+                "student.firstName",
+                "student.lastName",
+                "student.nationalCode",
+                "classroom.title",
+                "classroom.school.title"
+        };
+    }
+
+    // متد دریافت شناسه‌های تمام دانش‌آموزانی که در هر کلاسی فعال هستند
+    @Override
+    public List<UUID> getActiveStudentIds() {
+        return repository.findActiveStudentIds();
+    }
+
 }

@@ -39,4 +39,14 @@ public class StudentImpl extends CrudServiceImpl<
     protected Class<Student> entityClass() {
         return Student.class;
     }
+
+
+    @Override
+    protected String[] getSearchableFields() {
+        return new String[]{
+                "firstName",
+                "lastName",
+                "school.title"
+        };
+    }
 }

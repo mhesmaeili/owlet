@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public abstract class CrudController<
@@ -123,6 +125,24 @@ public abstract class CrudController<
 
         return ApiResponse.success(service.create(dto));
 
+    }
+
+    @GetMapping("/search-advanced")
+    public ApiResponse<PageResponse<DTO>> searchAdvanced(
+            @RequestParam(required = false) String keyword,
+            @RequestParam Map<String, String> allParams,
+            Pageable pageable) {
+
+        Map<String, Object> filterMap = new HashMap<>(allParams);
+        filterMap.remove("page");
+        filterMap.remove("size");
+        filterMap.remove("sort");
+        filterMap.remove("keyword");
+
+        // فراخوانی مستقیم متد search که اکنون با Map سازگار است
+        Page<DTO> page = service.search(keyword, filterMap, pageable);
+
+        return ApiResponse.success(PageResponse.of(page));
     }
 
 }

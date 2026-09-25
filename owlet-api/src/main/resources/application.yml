@@ -5,6 +5,8 @@ security:
   jwt:
     secret: Qv95GNWyzPkDEYKAjiLyNLxSbKkskzrbfxgl/uyDfJ9QyMJT/qEJJz96aELT0I+X170rHKVYMDaZQxChx6qH4g==
     access-token-expiration: 60
+    login-access-token-expiration: 7200
+    refresh-token-expiration-days: 30
 
 spring:
   application:

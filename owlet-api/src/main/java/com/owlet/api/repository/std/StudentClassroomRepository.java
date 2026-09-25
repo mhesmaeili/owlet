@@ -20,4 +20,15 @@ public interface StudentClassroomRepository
     void updateStatusByIds(@Param("ids") List<UUID> ids, @Param("active") Boolean active);
 
     StudentClassroom findByStudentIdAndActiveTrue(UUID studentId);
+
+    // دریافت شناسه‌های تمام دانش‌آموزانی که در حال حاضر در هر کلاسی فعال هستند
+    @Query("select distinct sc.student.id from StudentClassroom sc where sc.active = true and sc.deleted = false")
+    List<UUID> findActiveStudentIds();
+
+    // غیرفعال‌سازی کلاس‌های فعال قبلی یک لیست از دانش‌آموزان
+    @Modifying
+    @Query("update StudentClassroom sc set sc.active = false where sc.student.id in :studentIds and sc.active = true and sc.deleted = false")
+    void deactivatePreviousAssignments(@Param("studentIds") List<UUID> studentIds);
+
+    List<StudentClassroom> findByClassroomIdAndDeletedFalse(UUID classroomId);
 }
