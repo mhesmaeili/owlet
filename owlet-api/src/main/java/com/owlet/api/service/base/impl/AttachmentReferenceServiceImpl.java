@@ -90,14 +90,18 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public AttachmentUrlDto generatePresignedUrl(AttachmentReferenceDto attachmentReferenceDto) {
-        Duration duration = Duration.ofMinutes(5);
+    public AttachmentUrlDto generatePresignedUrl(
+            AttachmentReferenceDto attachmentReferenceDto) {
 
-        String url = attachmentService.generatePresignedUrl(
-                attachmentReferenceDto.getAttachment().getObjectKey(),
-                duration);
+        Duration duration = Duration.ofHours(1);
+        Instant issuedAt = Instant.now();
 
         AttachmentDto attachment = attachmentReferenceDto.getAttachment();
+
+        String url = attachmentService.generatePresignedUrl(
+                attachment.getObjectKey(),
+                duration
+        );
 
         return AttachmentUrlDto.builder()
                 .attachmentId(attachment.getId())
@@ -105,10 +109,9 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
                 .filename(attachment.getFilename())
                 .contentType(attachment.getMimeType())
                 .size(attachment.getSize())
-                .expiresAt(Instant.now().plus(duration))
+                .expiresAt(issuedAt.plus(duration))
                 .url(url)
                 .build();
-
     }
 
     @Override
@@ -134,12 +137,53 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public List<AttachmentUrlDto> findByEntityId(UUID entityId) {
-        return generatePresignedUrlGroup(toDto(repository.findByEntityIdAndDeletedFalse(entityId)));
+    public List<AttachmentReferenceDto> findBySessionId(UUID sessionId) {
+        return mapper.toDto(repository.findGalleryOfSession(sessionId));
     }
 
     @Override
-    public List<AttachmentReferenceDto> findBySessionId(UUID sessionId) {
-        return mapper.toDto(repository.findGalleryOfSession(sessionId));
+    public List<AttachmentUrlDto> findByEntityId(UUID entityId) {
+        return findByEntityId(entityId, null);
+    }
+
+    @Override
+    public List<AttachmentUrlDto> findByEntityId(
+            UUID entityId,
+            Integer limit) {
+
+        if (entityId == null) {
+            throw new IllegalArgumentException(
+                    "entityId must not be null"
+            );
+        }
+
+        if (limit != null && limit < 1) {
+            throw new IllegalArgumentException(
+                    "limit must be greater than zero"
+            );
+        }
+
+        Pageable pageable = limit == null
+                ? Pageable.unpaged()
+                : PageRequest.of(0, limit);
+
+        List<AttachmentReference> references =
+                repository
+                        .findByEntityIdAndDeletedFalseOrderByCreatedAtAscIdAsc(
+                                entityId,
+                                pageable
+                        );
+
+        return generatePresignedUrlGroup(toDto(references));
+    }
+
+    @Override
+    public AttachmentUrlDto findPrimaryByEntityId(UUID entityId) {
+        List<AttachmentUrlDto> attachments =
+                findByEntityId(entityId, 1);
+
+        return attachments.isEmpty()
+                ? null
+                : attachments.get(0);
     }
 }

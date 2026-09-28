@@ -10,12 +10,10 @@ import com.owlet.api.storage.StorageObject;
 import com.owlet.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -148,9 +146,29 @@ public class AttachmentReferenceController extends CrudController<
     @PublicEndpoint
     @GetMapping("/entityId/{id}")
     public ApiResponse<List<AttachmentUrlDto>> getByEntityId(
-            @PathVariable UUID id) {
+            @PathVariable("id") UUID id,
+            @RequestParam(name = "limit", required = false) Integer limit) {
 
-        return ApiResponse.success(attachmentReferenceService.findByEntityId(id));
+        if (limit != null && limit < 1) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "limit must be greater than zero"
+            );
+        }
+
+        return ApiResponse.success(
+                attachmentReferenceService.findByEntityId(id, limit)
+        );
+    }
+
+    @PublicEndpoint
+    @GetMapping("/entityId/{id}/primary")
+    public ApiResponse<AttachmentUrlDto> getPrimaryByEntityId(
+            @PathVariable("id") UUID id) {
+
+        return ApiResponse.success(
+                attachmentReferenceService.findPrimaryByEntityId(id)
+        );
     }
 
 }

@@ -55,7 +55,20 @@ public interface AttachmentReferenceRepository extends BaseRepository<Attachment
             UUID courseId
     );
 
-    List<AttachmentReference> findByEntityIdAndDeletedFalse(UUID entityId);
+    List<AttachmentReference>
+    findByEntityIdAndDeletedFalseOrderByCreatedAtAscIdAsc(
+            UUID entityId,
+            Pageable pageable
+    );
+
+    default List<AttachmentReference> findByEntityIdAndDeletedFalse(
+            UUID entityId) {
+
+        return findByEntityIdAndDeletedFalseOrderByCreatedAtAscIdAsc(
+                entityId,
+                Pageable.unpaged()
+        );
+    }
 
     @Query("""
     SELECT a

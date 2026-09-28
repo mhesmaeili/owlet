@@ -34,8 +34,14 @@ public interface AttachmentReferenceService extends CrudService<
 
     List<AttachmentReferenceDto> findByStudentIdAndCourseId(UUID studentId, UUID courseId);
 
-    List<AttachmentUrlDto> findByEntityId(UUID entityId);
-
     List<AttachmentReferenceDto> findBySessionId(UUID sessionId);
 
+    List<AttachmentUrlDto> findByEntityId(UUID entityId);
+
+    List<AttachmentUrlDto> findByEntityId(
+            UUID entityId,
+            Integer limit
+    );
+
+    AttachmentUrlDto findPrimaryByEntityId(UUID entityId);
 }
