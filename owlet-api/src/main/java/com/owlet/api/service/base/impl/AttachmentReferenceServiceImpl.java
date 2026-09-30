@@ -1,5 +1,6 @@
 package com.owlet.api.service.base.impl;
 
+import com.owlet.api.domain.base.Attachment;
 import com.owlet.api.domain.base.AttachmentReference;
 import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
@@ -13,6 +14,7 @@ import com.owlet.api.service.base.AttachmentService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.helper.EntityIdDto;
 import com.owlet.api.storage.StorageObject;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -39,14 +41,16 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
         implements AttachmentReferenceService {
 
     private final AttachmentService attachmentService;
+    private final EntityManager entityManager;
 
     public AttachmentReferenceServiceImpl(
             AttachmentReferenceRepository repository,
             AttachmentReferenceMapper mapper,
-            AuditableService auditableService, AttachmentService attachmentService) {
+            AuditableService auditableService, AttachmentService attachmentService, EntityManager entityManager) {
 
         super(repository, mapper, auditableService);
         this.attachmentService = attachmentService;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -103,6 +107,17 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
                 duration
         );
 
+        String thumbnailUrl = null;
+        if (attachment.getThumbnailId() != null) {
+            Attachment thumbnail = entityManager.getReference(Attachment.class, attachment.getThumbnailId());
+
+            thumbnailUrl = attachmentService.generatePresignedUrl(
+                    thumbnail.getObjectKey(),
+                    duration
+            );
+
+        }
+
         return AttachmentUrlDto.builder()
                 .attachmentId(attachment.getId())
                 .attachmentReferenceId(attachmentReferenceDto.getId())
@@ -111,6 +126,7 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
                 .size(attachment.getSize())
                 .expiresAt(issuedAt.plus(duration))
                 .url(url)
+                .thumbnailUrl(thumbnailUrl)
                 .build();
     }
 

@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Filter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -34,4 +37,11 @@ public class Attachment extends UuidEntity {
     @Size(max = 1024)
     @Column(name = "sha256", length = 1024)
     private String sha256;
+
+    @Column(name = "thumbnail_id")
+    private UUID thumbnailId;
+
+    @ColumnDefault("false")
+    @Column(name = "is_thumbnail", nullable = false)
+    private boolean thumbnail = false;
 }

@@ -7,6 +7,8 @@ import io.minio.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.io.InputStream;
 import java.net.URI;
 
 import java.security.DigestInputStream;
@@ -23,31 +25,29 @@ public class MinioStorageService implements StorageService {
 
     @Override
     public String upload(
-            DigestInputStream dis,
+            InputStream input,
             long size,
             String objectKey,
             String contentType) {
 
         try {
-
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(properties.bucket())
                             .object(objectKey)
-                            .stream(dis, size, 10L * 1024 * 1024)
+                            .stream(input, size, 10L * 1024 * 1024)
                             .contentType(contentType)
-                            .build());
+                            .build()
+            );
 
             return objectKey;
 
         } catch (Exception ex) {
-
-            throw new RuntimeException(
+            throw new StorageException(
                     "Cannot upload file to MinIO",
-                    ex);
-
+                    ex
+            );
         }
-
     }
 
     @Override

@@ -8,4 +8,8 @@ import java.util.UUID;
 public interface AttachmentRepository extends BaseRepository<Attachment, UUID> {
 
     Optional<Attachment> findBySha256AndDeletedFalse(String sha256);
+
+    Optional<Attachment> findFirstBySha256AndDeletedFalseAndThumbnailFalse(
+            String sha256
+    );
 }

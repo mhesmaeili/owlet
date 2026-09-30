@@ -2,16 +2,18 @@ package com.owlet.api.storage.service;
 
 import com.owlet.api.storage.StorageObject;
 
+import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.time.Duration;
 
 public interface StorageService {
 
     String upload(
-            DigestInputStream dis,
+            InputStream input,
             long size,
             String objectKey,
-            String contentType);
+            String contentType
+    );
 
     StorageObject download(
             String objectKey);

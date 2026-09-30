@@ -26,4 +26,6 @@ public class AttachmentDto extends BaseDto<UUID> {
 
     private String objectKey;
 
+    private UUID thumbnailId;
+
 }
