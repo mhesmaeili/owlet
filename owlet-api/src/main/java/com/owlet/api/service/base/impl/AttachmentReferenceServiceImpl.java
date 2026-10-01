@@ -6,6 +6,7 @@ import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
 import com.owlet.api.dto.base.AttachmentUrlDto;
+import com.owlet.api.dto.edu.ProductDto;
 import com.owlet.api.mapper.base.AttachmentReferenceMapper;
 import com.owlet.api.repository.base.AttachmentReferenceRepository;
 import com.owlet.api.security.AuditableService;
@@ -13,6 +14,7 @@ import com.owlet.api.service.base.AttachmentReferenceService;
 import com.owlet.api.service.base.AttachmentService;
 import com.owlet.api.service.base.CrudServiceImpl;
 import com.owlet.api.service.base.helper.EntityIdDto;
+import com.owlet.api.service.edu.ProductService;
 import com.owlet.api.storage.StorageObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,15 +44,17 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
 
     private final AttachmentService attachmentService;
     private final EntityManager entityManager;
+    private final ProductService productService;
 
     public AttachmentReferenceServiceImpl(
             AttachmentReferenceRepository repository,
             AttachmentReferenceMapper mapper,
-            AuditableService auditableService, AttachmentService attachmentService, EntityManager entityManager) {
+            AuditableService auditableService, AttachmentService attachmentService, EntityManager entityManager, ProductService productService) {
 
         super(repository, mapper, auditableService);
         this.attachmentService = attachmentService;
         this.entityManager = entityManager;
+        this.productService = productService;
     }
 
     @Override
@@ -134,6 +138,42 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     }
 
     @Override
+    public AttachmentUrlDto generatePresignedUrl(
+            UUID attachmentId) {
+
+        AttachmentDto attachment = attachmentService.get(attachmentId);
+
+        Duration duration = Duration.ofHours(1);
+        Instant issuedAt = Instant.now();
+
+        String url = attachmentService.generatePresignedUrl(
+                attachment.getObjectKey(),
+                duration
+        );
+
+        String thumbnailUrl = null;
+        if (attachment.getThumbnailId() != null) {
+            Attachment thumbnail = entityManager.getReference(Attachment.class, attachment.getThumbnailId());
+
+            thumbnailUrl = attachmentService.generatePresignedUrl(
+                    thumbnail.getObjectKey(),
+                    duration
+            );
+
+        }
+
+        return AttachmentUrlDto.builder()
+                .attachmentId(attachment.getId())
+                .filename(attachment.getFilename())
+                .contentType(attachment.getMimeType())
+                .size(attachment.getSize())
+                .expiresAt(issuedAt.plus(duration))
+                .url(url)
+                .thumbnailUrl(thumbnailUrl)
+                .build();
+    }
+
+    @Override
     public List<AttachmentUrlDto> generatePresignedUrlGroup(List<AttachmentReferenceDto> attachmentReferenceDtoList) {
         List<AttachmentUrlDto> list = new ArrayList<>();
         attachmentReferenceDtoList.forEach(attachmentReferenceDto -> {
@@ -197,7 +237,12 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     }
 
     @Override
-    public AttachmentUrlDto findPrimaryByEntityId(UUID entityId) {
+    public AttachmentUrlDto findPrimaryByProductId(UUID entityId) {
+        ProductDto productDto = productService.get(entityId);
+        if (productDto.getMainAttachmentId() != null) {
+            return generatePresignedUrl(productDto.getMainAttachmentId());
+        }
+
         List<AttachmentUrlDto> attachments =
                 findByEntityId(entityId, 1);
 

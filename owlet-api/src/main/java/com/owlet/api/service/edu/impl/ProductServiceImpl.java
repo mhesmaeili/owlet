@@ -47,4 +47,11 @@ public class ProductServiceImpl extends CrudServiceImpl<
                 "shortDescription"
         };
     }
+
+    @Override
+    public ProductDto fillMainImageId(UUID productId, UUID attachmentId) {
+        Product entity = findEntity(productId);
+        entity.setMainAttachmentId(attachmentId);
+        return toDto(saveEntity(entity));
+    }
 }

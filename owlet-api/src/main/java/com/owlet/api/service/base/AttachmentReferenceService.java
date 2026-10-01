@@ -1,5 +1,6 @@
 package com.owlet.api.service.base;
 
+import com.owlet.api.dto.base.AttachmentDto;
 import com.owlet.api.dto.base.AttachmentReferenceCreateRequest;
 import com.owlet.api.dto.base.AttachmentReferenceDto;
 import com.owlet.api.dto.base.AttachmentUrlDto;
@@ -43,5 +44,7 @@ public interface AttachmentReferenceService extends CrudService<
             Integer limit
     );
 
-    AttachmentUrlDto findPrimaryByEntityId(UUID entityId);
+    AttachmentUrlDto findPrimaryByProductId(UUID entityId);
+
+    AttachmentUrlDto generatePresignedUrl(UUID attachmentId);
 }

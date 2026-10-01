@@ -11,4 +11,5 @@ public interface ProductService extends CrudService<
         ProductDto,
         ProductCreateRequest,
         ProductCreateRequest> {
+    ProductDto fillMainImageId(UUID productId, UUID attachmentId);
 }

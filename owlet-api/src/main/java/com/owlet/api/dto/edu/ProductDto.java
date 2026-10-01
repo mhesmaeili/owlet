@@ -47,4 +47,6 @@ public class ProductDto extends BaseDto<UUID> {
 
     private OffsetDateTime discountActivationDate;
 
+    private UUID mainAttachmentId;
+
 }

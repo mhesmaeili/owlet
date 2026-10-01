@@ -163,11 +163,19 @@ public class AttachmentReferenceController extends CrudController<
 
     @PublicEndpoint
     @GetMapping("/entityId/{id}/primary")
-    public ApiResponse<AttachmentUrlDto> getPrimaryByEntityId(
+    public ApiResponse<AttachmentUrlDto> getPrimaryProductByEntityId(
             @PathVariable("id") UUID id) {
 
         return ApiResponse.success(
-                attachmentReferenceService.findPrimaryByEntityId(id)
+                attachmentReferenceService.findPrimaryByProductId(id)
+        );
+    }
+
+    @GetMapping("/attachment/{id}")
+    public ApiResponse<AttachmentUrlDto> getByAttachmentId(
+            @PathVariable("id") UUID id) {
+        return ApiResponse.success(
+                attachmentReferenceService.generatePresignedUrl(id)
         );
     }
 

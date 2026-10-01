@@ -9,10 +9,7 @@ import com.owlet.common.response.ApiResponse;
 import com.owlet.common.response.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -25,9 +22,12 @@ public class ProductController extends CrudController<
         ProductCreateRequest,
         ProductCreateRequest> {
 
-    public ProductController(ProductService service) {
+    public ProductController(ProductService service, ProductService productService) {
         super(service);
+        this.productService = productService;
     }
+
+    private final ProductService productService;
 
     @PublicEndpoint
     @Override
@@ -41,5 +41,11 @@ public class ProductController extends CrudController<
     @GetMapping("/{id}")
     public ApiResponse<ProductDto> get(@PathVariable UUID id) {
         return super.get(id);
+    }
+
+
+    @PostMapping("/mainImage/{productId}/{attachmentId}")
+    public ApiResponse<ProductDto> fillMainImageId(@PathVariable UUID productId, @PathVariable UUID attachmentId) {
+        return ApiResponse.success(productService.fillMainImageId(productId, attachmentId));
     }
 }
