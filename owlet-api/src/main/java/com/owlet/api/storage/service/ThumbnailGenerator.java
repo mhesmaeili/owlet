@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -18,13 +19,21 @@ import java.util.Optional;
 @Component
 public class ThumbnailGenerator {
 
-    private static final int MAX_WIDTH = 320;
-    private static final int MAX_HEIGHT = 320;
+    private static final int TARGET_SIZE = 320;
 
-    // جلوگیری از decode تصاویر با ابعاد بسیار بزرگ
+    // فایل‌های کم‌حجم نیازی به thumbnail ندارند.
+    private static final long MIN_SOURCE_BYTES = 32L * 1024;
+
     private static final long MAX_SOURCE_PIXELS = 40_000_000L;
 
-    public Optional<byte[]> generate(MultipartFile file) throws IOException {
+    public Optional<byte[]> generate(MultipartFile file)
+            throws IOException {
+
+        long sourceBytes = file.getSize();
+
+        if (file.isEmpty() || sourceBytes < MIN_SOURCE_BYTES) {
+            return Optional.empty();
+        }
 
         try (InputStream input = file.getInputStream();
              ImageInputStream imageInput =
@@ -51,13 +60,23 @@ public class ThumbnailGenerator {
 
                 if (width <= 0 || height <= 0
                         || (long) width * height > MAX_SOURCE_PIXELS) {
-
                     throw new IOException(
                             "Image dimensions exceed the allowed limit"
                     );
                 }
 
-                // برای تصاویر متحرک، فقط فریم اول
+                // برای پرکردن مربع، هر دو ضلع باید کافی باشند.
+                // تصاویر کوچک را بزرگ نمی‌کنیم.
+                if (Math.min(width, height) < TARGET_SIZE) {
+                    return Optional.empty();
+                }
+
+                // تصویر از قبل اندازه مناسب دارد.
+                if (width <= TARGET_SIZE && height <= TARGET_SIZE) {
+                    return Optional.empty();
+                }
+
+                // برای تصاویر متحرک فقط فریم اول
                 BufferedImage source = reader.read(0);
 
                 if (source == null) {
@@ -65,7 +84,15 @@ public class ThumbnailGenerator {
                 }
 
                 try {
-                    return Optional.of(resize(source));
+                    byte[] thumbnail = createThumbnail(source);
+
+                    // خروجی فقط وقتی ارزش ذخیره‌سازی دارد که کوچک‌تر باشد.
+                    if (thumbnail.length >= sourceBytes) {
+                        return Optional.empty();
+                    }
+
+                    return Optional.of(thumbnail);
+
                 } finally {
                     source.flush();
                 }
@@ -76,36 +103,95 @@ public class ThumbnailGenerator {
         }
     }
 
-    private byte[] resize(BufferedImage source) throws IOException {
+    private byte[] createThumbnail(BufferedImage source)
+            throws IOException {
 
-        double scale = Math.min(
-                1.0,
-                Math.min(
-                        (double) MAX_WIDTH / source.getWidth(),
-                        (double) MAX_HEIGHT / source.getHeight()
-                )
+        int side = Math.min(
+                source.getWidth(),
+                source.getHeight()
         );
 
-        int width = Math.max(
-                1,
-                (int) Math.round(source.getWidth() * scale)
+        int x = (source.getWidth() - side) / 2;
+        int y = (source.getHeight() - side) / 2;
+
+        // مربع مرکزی؛ بدون تغییر نسبت ابعاد
+        BufferedImage cropped = source.getSubimage(
+                x,
+                y,
+                side,
+                side
         );
 
-        int height = Math.max(
-                1,
-                (int) Math.round(source.getHeight() * scale)
-        );
+        BufferedImage thumbnail = resizeProgressively(cropped);
 
-        BufferedImage thumbnail = new BufferedImage(
-                width,
-                height,
+        try {
+            try (ByteArrayOutputStream output =
+                         new ByteArrayOutputStream()) {
+
+                if (!ImageIO.write(thumbnail, "png", output)) {
+                    throw new IOException("PNG writer is unavailable");
+                }
+
+                return output.toByteArray();
+            }
+        } finally {
+            thumbnail.flush();
+        }
+    }
+
+    private BufferedImage resizeProgressively(BufferedImage source) {
+
+        BufferedImage current = source;
+
+        try {
+            // کاهش اندازه مرحله‌ای؛ هیچ مرحله‌ای بزرگ‌نمایی نمی‌کند.
+            // در حالت 320×320 نیز یک تصویر مستقل می‌سازیم.
+            do {
+                int nextSize = Math.max(
+                        TARGET_SIZE,
+                        current.getWidth() / 2
+                );
+
+                BufferedImage next = resizeStep(
+                        current,
+                        nextSize
+                );
+
+                if (current != source) {
+                    current.flush();
+                }
+
+                current = next;
+
+            } while (current.getWidth() > TARGET_SIZE);
+
+            return current;
+
+        } catch (RuntimeException | Error exception) {
+            if (current != source) {
+                current.flush();
+            }
+
+            throw exception;
+        }
+    }
+
+    private BufferedImage resizeStep(
+            BufferedImage source,
+            int size) {
+
+        BufferedImage target = new BufferedImage(
+                size,
+                size,
                 BufferedImage.TYPE_INT_ARGB
         );
 
         try {
-            Graphics2D graphics = thumbnail.createGraphics();
+            Graphics2D graphics = target.createGraphics();
 
             try {
+                graphics.setComposite(AlphaComposite.Src);
+
                 graphics.setRenderingHint(
                         RenderingHints.KEY_INTERPOLATION,
                         RenderingHints.VALUE_INTERPOLATION_BICUBIC
@@ -120,8 +206,8 @@ public class ThumbnailGenerator {
                         source,
                         0,
                         0,
-                        width,
-                        height,
+                        size,
+                        size,
                         null
                 );
 
@@ -129,18 +215,11 @@ public class ThumbnailGenerator {
                 graphics.dispose();
             }
 
-            try (ByteArrayOutputStream output =
-                         new ByteArrayOutputStream()) {
+            return target;
 
-                if (!ImageIO.write(thumbnail, "png", output)) {
-                    throw new IOException("PNG writer is unavailable");
-                }
-
-                return output.toByteArray();
-            }
-
-        } finally {
-            thumbnail.flush();
+        } catch (RuntimeException | Error exception) {
+            target.flush();
+            throw exception;
         }
     }
 }

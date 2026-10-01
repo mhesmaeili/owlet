@@ -91,6 +91,9 @@ public class AttachmentReferenceServiceImpl extends CrudServiceImpl<
     @Override
     protected void afterDelete(AttachmentReference entity) {
         attachmentService.delete(entity.getAttachment().getId());
+        if (entity.getAttachment().getThumbnailId() != null) {
+            attachmentService.delete(entity.getAttachment().getThumbnailId());
+        }
     }
 
     @Override
