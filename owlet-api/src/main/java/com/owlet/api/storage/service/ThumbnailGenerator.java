@@ -16,6 +16,14 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Optional;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+
+import java.awt.geom.AffineTransform;
+import java.io.BufferedInputStream;
+
 @Component
 public class ThumbnailGenerator {
 
@@ -84,7 +92,9 @@ public class ThumbnailGenerator {
                 }
 
                 try {
-                    byte[] thumbnail = createThumbnail(source);
+                    int orientation = readOrientation(file);
+                    byte[] thumbnail = createThumbnail(source, orientation);
+
 
                     // خروجی فقط وقتی ارزش ذخیره‌سازی دارد که کوچک‌تر باشد.
                     if (thumbnail.length >= sourceBytes) {
@@ -103,8 +113,9 @@ public class ThumbnailGenerator {
         }
     }
 
-    private byte[] createThumbnail(BufferedImage source)
-            throws IOException {
+    private byte[] createThumbnail(
+            BufferedImage source,
+            int orientation) throws IOException {
 
         int side = Math.min(
                 source.getWidth(),
@@ -122,7 +133,14 @@ public class ThumbnailGenerator {
                 side
         );
 
-        BufferedImage thumbnail = resizeProgressively(cropped);
+        BufferedImage resized = resizeProgressively(cropped);
+        BufferedImage thumbnail;
+
+        try {
+            thumbnail = applyOrientation(resized, orientation);
+        } finally {
+            resized.flush();
+        }
 
         try {
             try (ByteArrayOutputStream output =
@@ -211,6 +229,96 @@ public class ThumbnailGenerator {
                         null
                 );
 
+            } finally {
+                graphics.dispose();
+            }
+
+            return target;
+
+        } catch (RuntimeException | Error exception) {
+            target.flush();
+            throw exception;
+        }
+    }
+
+    private int readOrientation(MultipartFile file) throws IOException {
+        try (InputStream input =
+                     new BufferedInputStream(file.getInputStream())) {
+
+            Metadata metadata = ImageMetadataReader.readMetadata(input);
+
+            ExifIFD0Directory directory =
+                    metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
+            if (directory == null) {
+                return 1;
+            }
+
+            Integer orientation =
+                    directory.getInteger(ExifIFD0Directory.TAG_ORIENTATION);
+
+            return orientation != null
+                    && orientation >= 1
+                    && orientation <= 8
+                    ? orientation
+                    : 1;
+
+        } catch (ImageProcessingException exception) {
+            throw new IOException("Cannot read image orientation", exception);
+        }
+    }
+
+    /**
+     * ورودی این متد thumbnail مربعی است.
+     * هر ۸ حالت EXIF، شامل حالت‌های آینه‌ای، پشتیبانی می‌شوند.
+     */
+    private BufferedImage applyOrientation(
+            BufferedImage source,
+            int orientation) {
+
+        int size = source.getWidth();
+
+        AffineTransform transform;
+
+        switch (orientation) {
+            case 2:
+                transform = new AffineTransform(-1, 0, 0, 1, size, 0);
+                break;
+            case 3:
+                transform = new AffineTransform(-1, 0, 0, -1, size, size);
+                break;
+            case 4:
+                transform = new AffineTransform(1, 0, 0, -1, 0, size);
+                break;
+            case 5:
+                transform = new AffineTransform(0, 1, 1, 0, 0, 0);
+                break;
+            case 6:
+                // ۹۰ درجه ساعت‌گرد
+                transform = new AffineTransform(0, 1, -1, 0, size, 0);
+                break;
+            case 7:
+                transform = new AffineTransform(0, -1, -1, 0, size, size);
+                break;
+            case 8:
+                transform = new AffineTransform(0, -1, 1, 0, 0, size);
+                break;
+            default:
+                transform = new AffineTransform();
+        }
+
+        BufferedImage target = new BufferedImage(
+                size,
+                size,
+                BufferedImage.TYPE_INT_ARGB
+        );
+
+        try {
+            Graphics2D graphics = target.createGraphics();
+
+            try {
+                graphics.setComposite(AlphaComposite.Src);
+                graphics.drawImage(source, transform, null);
             } finally {
                 graphics.dispose();
             }
